@@ -1,4 +1,29 @@
+using BusinessObject.Models;
+using DataAccessLayer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddIdentity<User, Role>(options =>
+    {
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireDigit = true;
+    })
+    .AddEntityFrameworkStores<DiamondShopDbContext>()
+    .AddDefaultTokenProviders()
+    .AddUserStore<UserStore<User, Role
+        , DiamondShopDbContext, Guid>>()
+    .AddRoleStore<RoleStore<Role, DiamondShopDbContext, Guid>>();
+
+builder.Services.AddDbContext<DiamondShopDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 // Add services to the container.
 builder.Services.AddRazorPages();
