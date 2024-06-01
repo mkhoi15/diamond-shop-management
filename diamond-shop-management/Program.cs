@@ -1,10 +1,14 @@
 using BusinessObject.Models;
 using DataAccessLayer;
+using DataAccessLayer.Abstraction;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddRazorPages();
 
 builder.Services.AddIdentity<User, Role>(options =>
     {
@@ -25,8 +29,7 @@ builder.Services.AddDbContext<DiamondShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
