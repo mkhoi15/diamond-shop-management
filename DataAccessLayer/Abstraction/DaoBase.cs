@@ -37,11 +37,16 @@ public class DaoBase<TEntity> : IDaoBase<TEntity>
 
     public void Add(TEntity entity)
     {
+        entity.Id = Guid.NewGuid();
         _context.Set<TEntity>().Add(entity);
     }
 
-    public void AddRange(IReadOnlyCollection<TEntity> entities)
+    public void AddRange(ICollection<TEntity> entities)
     {
+        foreach (var entity in entities)
+        {
+            entity.Id = Guid.NewGuid();
+        }
         _context.Set<TEntity>().AddRange(entities);
     }
 

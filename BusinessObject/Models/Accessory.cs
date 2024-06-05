@@ -8,7 +8,7 @@ public class Accessory : Entity
     public Guid? PromotionId { get; set; }
     
     public Media? Media { get; set; }
-    public ICollection<DiamondAccessory>? DiamondAccessories { get; set; }
+    public ICollection<DiamondAccessory> DiamondAccessories { get; set; } = new List<DiamondAccessory>();
     public Promotion? Promotion { get; set; }
     
 }

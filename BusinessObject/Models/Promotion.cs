@@ -7,7 +7,7 @@ public class Promotion : Entity
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
     public bool? IsActive { get; set; }
-    
-    public ICollection<Diamond>? Diamonds { get; set; }
-    public ICollection<Accessory>? Accessories { get; set; }
+
+    public ICollection<Diamond> Diamonds { get; set; } = new List<Diamond>();
+    public ICollection<Accessory> Accessories { get; set; } = new List<Accessory>();
 }
