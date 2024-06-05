@@ -4,8 +4,8 @@ namespace BusinessObject.Models;
 
 public class User : IdentityUser<Guid>
 {
-    public string? UserName { get; set; }
-    
-    public ICollection<Order>? Orders { get; set; }
-    public ICollection<Delivery>? Deliveries { get; set; }
+    public string? FullName { get; set; }
+
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
 }

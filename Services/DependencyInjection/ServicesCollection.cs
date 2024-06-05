@@ -10,6 +10,8 @@ public static class ServicesCollection
     public static IServiceCollection AddServices(this IServiceCollection collection)
     {
         collection.AddScoped<IUserServices, UserServices>()
+            .AddScoped<IOrderServices, OrderServices>()
+            .AddScoped<IOrderDetailServices, OrderDetailServices>()
             .AddConfigureAutoMapper();
         return collection;
     }

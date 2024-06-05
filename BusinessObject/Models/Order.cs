@@ -9,6 +9,6 @@ public class Order : Entity
     public DateTime Date { get; set; }
     
     public User? Customer { get; set; }
-    public ICollection<OrderDetail>? OrderDetails { get; set; }
-    public ICollection<Delivery>? Deliveries { get; set; }
+    public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+    public ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
 }

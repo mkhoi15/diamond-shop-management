@@ -1,10 +1,12 @@
 using BusinessObject.Models;
 using DataAccessLayer;
 using DataAccessLayer.Abstraction;
+using DataAccessLayer.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Repositories.DependencyInjection;
 using Services.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,8 +51,9 @@ builder.Services.AddDbContext<DiamondShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddServices();
+builder.Services.AddServices()
+    .AddDataAccessLayer()
+    .AddRepositories();
 
 var app = builder.Build();
 

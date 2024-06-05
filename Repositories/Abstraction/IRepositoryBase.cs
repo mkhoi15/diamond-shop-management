@@ -1,8 +1,8 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 
-namespace DataAccessLayer.Abstraction;
+namespace Repositories.Abstraction;
 
-public interface IDaoBase<TEntity>
+public interface IRepositoryBase<TEntity>
 {
     public IQueryable<TEntity> FindAll();
 
