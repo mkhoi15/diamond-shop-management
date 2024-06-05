@@ -1,6 +1,7 @@
 using BusinessObject.Models;
 using DataAccessLayer;
 using DataAccessLayer.Abstraction;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,23 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    })
+    .AddIdentityCookies(options =>
+    {
+        options.ApplicationCookie?.Configure(o =>
+        {
+            o.LoginPath = "/login";
+            o.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+            o.SlidingExpiration = true;
+            //options.AccessDeniedPath = "/Forbidden/";
+        });
+    });
+
 builder.Services.AddIdentity<User, Role>(options =>
     {
         options.Password.RequiredLength = 6;
@@ -20,10 +38,11 @@ builder.Services.AddIdentity<User, Role>(options =>
         options.Password.RequireDigit = true;
     })
     .AddEntityFrameworkStores<DiamondShopDbContext>()
-    .AddDefaultTokenProviders()
     .AddUserStore<UserStore<User, Role
         , DiamondShopDbContext, Guid>>()
-    .AddRoleStore<RoleStore<Role, DiamondShopDbContext, Guid>>();
+    .AddRoleStore<RoleStore<Role, DiamondShopDbContext, Guid>>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddDbContext<DiamondShopDbContext>(options =>
 {
@@ -48,6 +67,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
