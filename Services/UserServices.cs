@@ -59,6 +59,17 @@ public class UserServices : IUserServices
         
         var response = _mapper.Map<UserResponse>(newUser);
         return response;
+    }
 
+    public async Task<bool> ChangePassword(string username, string oldPassword, string newPassword)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user is null)
+        {
+            throw new AuthenticationException("User name or password wrong!!");
+        }
+        
+        var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+        return result.Succeeded;
     }
 }
