@@ -12,12 +12,14 @@ public class UserServices : IUserServices
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IMapper _mapper;
+    private readonly IEmailServices _emailServices;
 
-    public UserServices(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
+    public UserServices(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, IEmailServices emailServices)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _mapper = mapper;
+        _emailServices = emailServices;
     }
 
     public async Task<UserResponse> Login(string username, string password)
@@ -72,4 +74,26 @@ public class UserServices : IUserServices
         var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
         return result.Succeeded;
     }
+
+    public async Task<bool> ResetPassword(string username, string token, string newPassword)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user is null)
+        {
+            throw new AuthenticationException("User name does not exist!!");
+        }
+        var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+        return result.Succeeded;
+    }
+    
+       public async Task ForgotPassword(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user is null)
+            {
+                throw new AuthenticationException("User name or password wrong!!");
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _emailServices.SendForgotPasswordMail(user.Email!, token);
+        }
 }

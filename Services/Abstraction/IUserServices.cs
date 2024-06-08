@@ -11,4 +11,6 @@ public interface IUserServices
     Task SignOutAsync();
     Task<UserResponse> RegisterAsync(string username, string password, string fullname, string? phone);
     Task<bool> ChangePassword(string username, string oldPassword, string newPassword);
+    Task<bool> ResetPassword(string username, string token, string newPassword);
+    Task ForgotPassword(string username);
 }
