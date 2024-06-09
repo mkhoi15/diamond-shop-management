@@ -22,6 +22,12 @@ public class UserServices : IUserServices
         _emailServices = emailServices;
     }
 
+    public Task<bool> IsSignedInAsync(UserResponse user)
+    {
+        //_signInManager.IsSignedIn();
+        return Task.FromResult(true);
+    }
+
     public async Task<UserResponse> Login(string username, string password)
     {
         var user = await _userManager.FindByNameAsync(username);

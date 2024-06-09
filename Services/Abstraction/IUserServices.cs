@@ -7,6 +7,7 @@ namespace Services.Abstraction;
 
 public interface IUserServices
 {
+    Task<bool> IsSignedInAsync(UserResponse user);
     Task<UserResponse> Login(string username, string password);
     Task SignOutAsync();
     Task<UserResponse> RegisterAsync(string username, string password, string fullname, string? phone);

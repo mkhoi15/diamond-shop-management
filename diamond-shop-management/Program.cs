@@ -20,22 +20,22 @@ builder.Services.AddAuthentication(options =>
         options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
-    .AddIdentityCookies(options =>
+    .AddCookie(o =>
     {
-        options.ApplicationCookie?.Configure(o =>
-        {
-            o.LoginPath = "/login";
-            o.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-            o.SlidingExpiration = true;
-            //options.AccessDeniedPath = "/Forbidden/";
-        });
+        // options.ApplicationCookie?.Configure(o =>
+        // {
+        o.LoginPath = "/user/login";
+        o.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        o.SlidingExpiration = true;
+        //options.AccessDeniedPath = "/Forbidden/";
+        // });
     });
 
 builder.Services.AddIdentity<User, Role>(options =>
     {
         options.Password.RequiredLength = 6;
         options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireLowercase = true;
+        options.Password.RequireLowercase = false;
         options.Password.RequireUppercase = false;
         options.Password.RequireDigit = true;
     })
@@ -50,6 +50,8 @@ builder.Services.AddDbContext<DiamondShopDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DiamondShopDbContext>();
 
 builder.Services.AddServices()
     .AddDataAccessLayer()
