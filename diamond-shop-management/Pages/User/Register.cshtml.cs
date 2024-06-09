@@ -1,4 +1,5 @@
-﻿using DTO.UserDto;
+﻿using BusinessObject.Enum;
+using DTO.UserDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
@@ -30,7 +31,8 @@ public class Register : PageModel
         var user = await _userServices.RegisterAsync(RegisterDto.Username, 
             RegisterDto.Password, 
             RegisterDto.Email, 
-            RegisterDto.Phone);
+            RegisterDto.Phone,
+            Roles.User);
 
         var userLogin = await _userServices.Login(user.UserName!, RegisterDto.Password);
         

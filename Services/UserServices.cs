@@ -1,5 +1,6 @@
 ﻿using System.Security.Authentication;
 using AutoMapper;
+using BusinessObject.Enum;
 using BusinessObject.Models;
 using DTO.UserDto;
 using Microsoft.AspNetCore.Identity;
@@ -13,13 +14,15 @@ public class UserServices : IUserServices
     private readonly SignInManager<User> _signInManager;
     private readonly IMapper _mapper;
     private readonly IEmailServices _emailServices;
+    private readonly RoleManager<Role> _roleManager;
 
-    public UserServices(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, IEmailServices emailServices)
+    public UserServices(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, IEmailServices emailServices, RoleManager<Role> roleManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _mapper = mapper;
         _emailServices = emailServices;
+        _roleManager = roleManager;
     }
 
     public Task<bool> IsSignedInAsync(UserResponse user)
@@ -48,7 +51,8 @@ public class UserServices : IUserServices
         await _signInManager.SignOutAsync();
     }
 
-    public async Task<UserResponse> RegisterAsync(string username, string password, string fullname, string? phone)
+    public async Task<UserResponse> RegisterAsync(string username, string password, string fullname, 
+        string? phone, Roles roles)
     {
         var user = await _userManager.FindByNameAsync(username);
         if (user is not null)
@@ -56,6 +60,16 @@ public class UserServices : IUserServices
             throw new AuthenticationException("User is exist!!");
         }
 
+        if (!await _roleManager.RoleExistsAsync(roles.ToString()))
+        {
+            var role = new Role()
+            {
+                Name = roles.ToString()
+            };
+            var roleResult = await _roleManager.CreateAsync(role);
+            if (!roleResult.Succeeded) throw new Exception("Error when creating role!!");
+        }
+        
         var newUser = new User()
         {
             UserName = username,
@@ -64,6 +78,7 @@ public class UserServices : IUserServices
 
         var result = await _userManager.CreateAsync(newUser, password);
         if (!result.Succeeded) throw new Exception("Error when creating user!!");
+        await _userManager.AddToRoleAsync(newUser, roles.ToString());
         
         var response = _mapper.Map<UserResponse>(newUser);
         return response;
