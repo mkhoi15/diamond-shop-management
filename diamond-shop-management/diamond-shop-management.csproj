@@ -107,6 +107,11 @@
       <Content Remove="Pages\Areas\Identity\Pages\Account\ConfirmEmailChange.cshtml" />
       <Content Remove="Pages\Areas\Identity\Pages\Account\ConfirmEmail.cshtml" />
       <Content Remove="Pages\Areas\Identity\Pages\Account\AccessDenied.cshtml" />
+      <Content Remove="Areas\Identity\Pages\_ViewImports.cshtml" />
+      <Content Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
+      <Content Remove="Areas\Identity\Pages\_ValidationScriptsPartial.cshtml" />
+      <Content Remove="Areas\Identity\Pages\Account\_ViewImports.cshtml" />
+      <Content Remove="Areas\Identity\Pages\Account\Register.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -140,6 +145,13 @@
       <Compile Remove="Pages\Areas\Identity\Pages\Account\ConfirmEmailChange.cshtml.cs" />
       <Compile Remove="Pages\Areas\Identity\Pages\Account\ConfirmEmail.cshtml.cs" />
       <Compile Remove="Pages\Areas\Identity\Pages\Account\AccessDenied.cshtml.cs" />
+      <Compile Remove="Areas\Identity\Pages\Account\Register.cshtml.cs" />
+      <Compile Remove="Areas\Identity\Pages\Account\Logout.cshtml.cs" />
+      <Compile Remove="Areas\Identity\Pages\Account\Login.cshtml.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="ScaffoldingReadMe.txt" />
     </ItemGroup>
 
 </Project>

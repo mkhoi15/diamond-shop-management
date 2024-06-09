@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DTO.UserDto;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.User;
 
-[Authorize]
 public class Login : PageModel
 {
     private readonly IUserServices _userServices;
-    public string Username { get; set; }
-    public string Password { get; set; }
+    
+    [BindProperty]
+    public LoginDto LoginDto { get; set; }
     
     public Login(IUserServices userServices)
     {
@@ -20,8 +22,10 @@ public class Login : PageModel
     {
     }
 
-    public async Task OnPost()
+    public async Task<IActionResult> OnPost()
     {
-        await _userServices.Login(Username, Password);
+        await _userServices.Login(LoginDto.Username, LoginDto.Password);
+        
+        return RedirectToPage("/Index");
     }
 }
