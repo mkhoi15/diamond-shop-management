@@ -12,6 +12,7 @@ public static class ServicesCollection
         collection.AddScoped<IUserServices, UserServices>()
             .AddScoped<IOrderServices, OrderServices>()
             .AddScoped<IOrderDetailServices, OrderDetailServices>()
+            .AddScoped<IEmailServices, EmailServices>()
             .AddConfigureAutoMapper();
         return collection;
     }

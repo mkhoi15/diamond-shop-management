@@ -13,10 +13,145 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.6" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\AccessDenied.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ConfirmEmail.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ConfirmEmailChange.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ExternalLogin.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ForgotPassword.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ForgotPasswordConfirmation.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Lockout.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Login.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\LoginWith2fa.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\LoginWithRecoveryCode.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Logout.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\ChangePassword.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\DeletePersonalData.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\Disable2fa.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\DownloadPersonalData.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\Email.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\EnableAuthenticator.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\ExternalLogins.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\GenerateRecoveryCodes.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\PersonalData.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\ResetAuthenticator.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\SetPassword.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\ShowRecoveryCodes.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\TwoFactorAuthentication.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_Layout.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_StatusMessage.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Register.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\RegisterConfirmation.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ResendEmailConfirmation.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ResetPassword.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ResetPasswordConfirmation.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_StatusMessage.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_ViewImports.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ValidationScriptsPartial.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewImports.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Pages\Shared\_LoginPartial.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\_ViewStart.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\_ViewImports.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\_ValidationScriptsPartial.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\_ViewImports.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\_StatusMessage.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\ResetPasswordConfirmation.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\ResetPassword.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\ResendEmailConfirmation.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\RegisterConfirmation.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Register.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\_StatusMessage.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\_Layout.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\TwoFactorAuthentication.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\ShowRecoveryCodes.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\SetPassword.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\ResetAuthenticator.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\PersonalData.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\Index.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\GenerateRecoveryCodes.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\ExternalLogins.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\EnableAuthenticator.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\Email.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\DownloadPersonalData.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\Disable2fa.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Manage\DeletePersonalData.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Logout.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\LoginWithRecoveryCode.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\LoginWith2fa.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Login.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\Lockout.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\ForgotPasswordConfirmation.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\ForgotPassword.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\ExternalLogin.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\ConfirmEmailChange.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\ConfirmEmail.cshtml" />
+      <Content Remove="Pages\Areas\Identity\Pages\Account\AccessDenied.cshtml" />
+      <Content Remove="Areas\Identity\Pages\_ViewImports.cshtml" />
+      <Content Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
+      <Content Remove="Areas\Identity\Pages\_ValidationScriptsPartial.cshtml" />
+      <Content Remove="Areas\Identity\Pages\Account\_ViewImports.cshtml" />
+      <Content Remove="Areas\Identity\Pages\Account\Register.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\ResetPassword.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\ResendEmailConfirmation.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\RegisterConfirmation.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Register.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\TwoFactorAuthentication.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\ShowRecoveryCodes.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\SetPassword.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\ResetAuthenticator.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\PersonalData.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\ManageNavPages.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\Index.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\GenerateRecoveryCodes.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\ExternalLogins.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\EnableAuthenticator.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\Email.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\DownloadPersonalData.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\Disable2fa.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\DeletePersonalData.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Manage\ChangePassword.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Logout.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\LoginWithRecoveryCode.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Login.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\Lockout.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\ForgotPasswordConfirmation.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\ForgotPassword.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\ExternalLogin.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\ConfirmEmailChange.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\ConfirmEmail.cshtml.cs" />
+      <Compile Remove="Pages\Areas\Identity\Pages\Account\AccessDenied.cshtml.cs" />
+      <Compile Remove="Areas\Identity\Pages\Account\Register.cshtml.cs" />
+      <Compile Remove="Areas\Identity\Pages\Account\Logout.cshtml.cs" />
+      <Compile Remove="Areas\Identity\Pages\Account\Login.cshtml.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="ScaffoldingReadMe.txt" />
     </ItemGroup>
 
 </Project>
