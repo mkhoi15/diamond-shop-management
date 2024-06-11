@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Abstraction
+namespace Repositories.Abstraction
 {
-	public interface DiamondAccessoriesDAO : IDaoBase<DiamondAccessory>
+	public interface IDiamondAccessoryRepository : IRepositoryBase<DiamondAccessory>
 	{
 	}
 }

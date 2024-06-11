@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Abstraction
 {
-	public interface AccessoriesDAO : IDaoBase<Accessory>
+	public interface IAccessoryDAO : IDaoBase<Accessory>
 	{
 	}
 }

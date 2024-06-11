@@ -9,6 +9,8 @@ public static class ServicesCollection
     {
         collection.AddScoped<IOrderRepository, OrderRepository>();
         collection.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+        collection.AddScoped<IAccessoryRepository, AccessoryRepository>();
+        collection.AddScoped<IDiamondAccessoryRepository, DiamondAccessoryRepository>();
         return collection;
     }
 }
