@@ -1,3 +1,4 @@
+using DataAccessLayer.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories.Abstraction;
 
@@ -9,6 +10,7 @@ public static class ServicesCollection
     {
         collection.AddScoped<IOrderRepository, OrderRepository>();
         collection.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+        collection.AddDataAccessLayer();
         return collection;
     }
 }
