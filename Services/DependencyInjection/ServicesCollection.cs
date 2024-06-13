@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Repositories.DependencyInjection;
 using Services.Abstraction;
 using Services.Mapper;
 
@@ -13,6 +14,7 @@ public static class ServicesCollection
             .AddScoped<IOrderServices, OrderServices>()
             .AddScoped<IOrderDetailServices, OrderDetailServices>()
             .AddScoped<IEmailServices, EmailServices>()
+            .AddRepositories()
             .AddConfigureAutoMapper();
         return collection;
     }
