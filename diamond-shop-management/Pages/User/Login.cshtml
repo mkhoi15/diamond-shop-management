@@ -1,0 +1,34 @@
+﻿@page
+@model Login
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+
+    <div class="row flex justify-content-center align-items-center">
+        <div class="col-md-6 justify-content-center align-items-center">
+            <form method="post">
+                <h4>Đăng nhập</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="LoginDto.Username"></label>
+                    <input asp-for="LoginDto.Username" class="form-control" />
+                    <span asp-validation-for="LoginDto.Username" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="LoginDto.Password"></label>
+                    <input type="password" asp-for="LoginDto.Password" class="form-control" />
+                    <span asp-validation-for="LoginDto.Password" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
