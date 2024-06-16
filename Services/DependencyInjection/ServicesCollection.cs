@@ -13,6 +13,9 @@ public static class ServicesCollection
             .AddScoped<IOrderServices, OrderServices>()
             .AddScoped<IOrderDetailServices, OrderDetailServices>()
             .AddScoped<IEmailServices, EmailServices>()
+            .AddScoped<IPromotionServices, PromotionServices>()
+            .AddScoped<IDiamondServices, DiamondServices>()
+            .AddScoped<IPaperworkServices, PaperworkServices>()
             .AddConfigureAutoMapper();
         return collection;
     }
