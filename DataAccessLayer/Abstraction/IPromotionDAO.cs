@@ -1,6 +1,8 @@
-﻿namespace DataAccessLayer.Abstraction
+﻿using BusinessObject.Models;
+
+namespace DataAccessLayer.Abstraction
 {
-    public interface IPromotionDAO
+    public interface IPromotionDAO : IDaoBase<Promotion>
     {
     }
 }
