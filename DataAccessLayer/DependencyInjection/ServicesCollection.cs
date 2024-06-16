@@ -10,6 +10,9 @@ public static class ServicesCollection
         collection.AddScoped<IUnitOfWork, UnitOfWork>();
         collection.AddScoped<IOrderDAO, OrderDAO>();
         collection.AddScoped<IOrderDetailDAO, OrderDetailDAO>();
+        collection.AddScoped<IDiamondDAO, DiamondDAO>();
+        collection.AddScoped<IPaperworkDAO, PaperworkDAO>();
+        collection.AddScoped<IPromotionDAO, PromotionDAO>();
         return collection;
     }
 }
