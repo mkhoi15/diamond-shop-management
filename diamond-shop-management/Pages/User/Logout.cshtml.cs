@@ -7,6 +7,7 @@ using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.User;
 
+[Authorize]
 public class Logout : PageModel
 {
     private readonly IUserServices _userServices;
@@ -27,11 +28,9 @@ public class Logout : PageModel
         {
             return LocalRedirect(returnUrl);
         }
-        else
-        {
-            // This needs to be a redirect so that the browser performs a new
-            // request and the identity for the user gets updated.
-            return RedirectToPage();
-        }
+
+        // This needs to be a redirect so that the browser performs a new
+        // request and the identity for the user gets updated.
+        return RedirectToPage();
     }
 }

@@ -1,3 +1,4 @@
+using DataAccessLayer.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories.Abstraction;
 
@@ -12,6 +13,7 @@ public static class ServicesCollection
         collection.AddScoped<IDiamondRepository, DiamondRepository>();
         collection.AddScoped<IPromotionRepository, PromotionRepository>();
         collection.AddScoped<IPaperworkRepository, PaperworkRepository>();
+        collection.AddDataAccessLayer();
         return collection;
     }
 }

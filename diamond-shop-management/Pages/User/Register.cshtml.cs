@@ -36,6 +36,6 @@ public class Register : PageModel
 
         var userLogin = await _userServices.Login(user.UserName!, RegisterDto.Password);
         
-        return Page();
+        return Redirect("/Index");
     }
 }

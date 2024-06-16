@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Repositories.DependencyInjection;
 using Services.Abstraction;
 using Services.Mapper;
 
@@ -16,6 +17,7 @@ public static class ServicesCollection
             .AddScoped<IPromotionServices, PromotionServices>()
             .AddScoped<IDiamondServices, DiamondServices>()
             .AddScoped<IPaperworkServices, PaperworkServices>()
+            .AddRepositories()
             .AddConfigureAutoMapper();
         return collection;
     }

@@ -51,9 +51,7 @@ builder.Services.AddDbContext<DiamondShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddServices()
-    .AddDataAccessLayer()
-    .AddRepositories();
+builder.Services.AddServices();
 
 var app = builder.Build();
 
