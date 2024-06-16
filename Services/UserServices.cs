@@ -39,9 +39,14 @@ public class UserServices : IUserServices
             throw new AuthenticationException("User name or password wrong!!");
         }
 
-        await _signInManager.PasswordSignInAsync(user, password, 
+        var result = await _signInManager.PasswordSignInAsync(user, password, 
             isPersistent: false, 
             lockoutOnFailure: false);
+        
+        if (!result.Succeeded)
+        {
+            throw new AuthenticationException("User name or password wrong!!");
+        }
         
         return _mapper.Map<UserResponse>(user);
     }

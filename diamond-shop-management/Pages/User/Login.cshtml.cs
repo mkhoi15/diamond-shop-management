@@ -24,8 +24,17 @@ public class Login : PageModel
 
     public async Task<IActionResult> OnPost()
     {
-        await _userServices.Login(LoginDto.Username, LoginDto.Password);
+        try
+        {
+            await _userServices.Login(LoginDto.Username, LoginDto.Password);
+            
+            return RedirectToPage("/Index");
+        }
+        catch (Exception e)
+        {
+            ModelState.AddModelError("Error", e.Message);
+            return Page();
+        }
         
-        return RedirectToPage("/Index");
     }
 }
