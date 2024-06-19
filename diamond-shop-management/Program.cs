@@ -52,6 +52,7 @@ builder.Services.AddDbContext<DiamondShopDbContext>(options =>
 });
 
 builder.Services.AddServices();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

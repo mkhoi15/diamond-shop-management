@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8"/>
@@ -8,59 +10,60 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/diamond_shop_management.styles.css" asp-append-version="true"/>
     <!-- bootstrap core css -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css"/>
     <!-- font awesome style -->
-    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/font-awesome.min.css" rel="stylesheet"/>
     <!-- Custom styles for this template -->
-    <link href="css/style.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet"/>
     <!-- responsive style -->
-    <link href="css/responsive.css" rel="stylesheet" />
+    <link href="~/css/responsive.css" rel="stylesheet"/>
 </head>
 <body>
-<div>
-<header>
-    <header class="header_section">
-        <div class="container-fluid">
-            <nav class="navbar navbar-expand-lg custom_nav-container">
-                <a class="navbar-brand" asp-page="index">
-          <span>
-            VKTP Diamond Shop
-          </span>
-                </a>
-                <div class="" id="">
-
-                    <div class="custom_menu-btn">
-                        <button onclick="openNav()">
-                            <span class="s-1"> </span>
-                            <span class="s-2"> </span>
-                            <span class="s-3"> </span>
-                        </button>
-                        <div id="myNav" class="overlay">
-                            <div class="overlay-content">
-                                <a asp-page="index">Home</a>
-                                <a href="about.html">About</a>
-                                <a href="shop.html">Shop</a>
-                                <a href="blog.html">Blog</a>
-
-                                @if (!User.Identity?.IsAuthenticated ?? true)
-                                {
+<div class="container-fluid px-md-0">
+    <header class="header_section pl-4">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" asp-area="" asp-page="/Index">
+                @if (HttpContextAccessor.HttpContext?.Request.Path == "/" || HttpContextAccessor.HttpContext?.Request.Path == "/Index")
+                {
+                    <span>
+                        VKTP Diamond Shop
+                    </span>
+                }
+                else
+                {
+                    <span class="text-dark">
+                        VKTP Diamond Shop
+                    </span>
+                }
+            </a>
+            <div class="" id="">
+                <div class="custom_menu-btn">
+                    <button onclick="openNav()">
+                        <span class="s-1"> </span>
+                        <span class="s-2"> </span>
+                        <span class="s-3"> </span>
+                    </button>
+                    <div id="myNav" class="overlay">
+                        <div class="overlay-content">
+                            <a asp-page="/Index">Home</a>
+                            <a asp-page="/About">About</a>
+                            <a asp-page="/Shop">Shop</a>
+                            <a asp-page="/Blog">Blog</a>
+                            @if (!User.Identity?.IsAuthenticated ?? true)
+                            {
                                 <a asp-page="/User/Login">Login</a>
                                 <a asp-page="/User/Register">Register</a>
-                                }
-                                else
-                                {
+                            }
+                            else
+                            {
                                 <a asp-page="/User/Logout">Logout</a>
-                                }
-                            </div>
+                            }
                         </div>
                     </div>
-
                 </div>
-            </nav>
-        </div>
+            </div>
+        </nav>
     </header>
-</header>
-
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
@@ -76,7 +79,7 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 <!-- custom js -->
-<script src="js/custom.js"></script>
+<script src="~/js/custom.js"></script>
 
 @await RenderSectionAsync("Scripts", required: false)
 </body>
