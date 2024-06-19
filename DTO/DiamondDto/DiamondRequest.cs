@@ -17,7 +17,7 @@ namespace DTO.DiamondDto
         public string Clarity { get; set; }
 
         [Required(ErrorMessage = "Weight is required")]
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Weight must be a number with up to two decimal places")]
+        [RegularExpression(@"^\d+(\.\d{1,2})$", ErrorMessage = "Weight must be a number with one or two decimal places")]
         public string Weight { get; set; }
 
         [Required(ErrorMessage = "Price is required")]

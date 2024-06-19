@@ -17,6 +17,8 @@ namespace diamond_shop_management.Pages.DiamondManagement
         [BindProperty]
         public DiamondRequest DiamondRequest { get; set; }
 
+        public string? Message { get; set; }
+
         public CreateModel(IDiamondServices diamondServices, IMapper mapper)
         {
             _diamondServices = diamondServices;
@@ -29,14 +31,26 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    return Page();
+                }
+
+                await _diamondServices.CreateDiamondAsync(DiamondRequest);
+
+                Message = "Create successfully!";
+                ModelState.AddModelError(string.Empty, "Create successfully!");
+
                 return Page();
             }
-
-            await _diamondServices.CreateDiamondAsync(DiamondRequest);
-
-            return RedirectToPage("/DiamondManagement/ViewDiamond");
+            catch(Exception ex)
+            {
+                Message = "Create failed!\n" + ex.Message;
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return Page();
+            }
         }
     }
 }

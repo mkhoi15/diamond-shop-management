@@ -64,10 +64,20 @@ namespace Services
                 Items = diamondResponses,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalItems = diamonds.Count()
+                TotalItems = GetAllAsync(cancellationToken).Result.Count()
             };
 
             return pagedResult;
+        }
+
+        public async Task<DiamondResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var diamond = await _diamondRepository.FindById(
+                id,
+                cancellationToken,
+                diamond => diamond.Promotion
+                );
+            return _mapper.Map<DiamondResponse>(diamond);
         }
     }
 }
