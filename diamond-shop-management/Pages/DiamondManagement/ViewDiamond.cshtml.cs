@@ -22,7 +22,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
         {
             _diamondServices = diamondServices;
             _mapper = mapper;
-            PageSize = 10;
+            PageSize = 8;
         }
 
         public async Task OnGetAsync(int? pageNumber, CancellationToken cancellationToken)

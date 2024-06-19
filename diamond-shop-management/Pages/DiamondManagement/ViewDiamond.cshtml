@@ -28,7 +28,7 @@
                     {
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <div class="box">
-                                <a href="#">
+                                <a asp-page="/DiamondManagement/DiamondDetail" asp-route-diamondId="@diamond.Id">
                                     <div class="img-box">
                                         @if (!string.IsNullOrEmpty(diamond.MediaUrl))
                                         {
@@ -65,7 +65,7 @@
             </div> *@
             <div class="container">
 
-                <nav aria-label="Page navigation">
+                <nav aria-label="Page navigation" style="margin-top: 2%">
                     <ul class="pagination justify-content-center">
                         @if (Model.PageNumber > 1)
                         {
@@ -74,12 +74,9 @@
                             </li>
                         }
 
-                        @for (int i = 1; i <= Model.TotalPages; i++)
-                        {
-                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
-                                <a class="page-link" asp-page="./ViewDiamond" asp-route-pageNumber="@i">@i</a>
-                            </li>
-                        }
+                        <li class="page-item active">
+                            <a class="page-link" asp-page="./ViewDiamond" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                        </li>
 
                         @if (Model.PageNumber < Model.TotalPages)
                         {
