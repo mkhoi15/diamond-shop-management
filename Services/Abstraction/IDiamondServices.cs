@@ -1,4 +1,5 @@
-﻿using DTO.DiamondDto;
+﻿using DTO;
+using DTO.DiamondDto;
 
 namespace Services.Abstraction
 {
@@ -7,5 +8,6 @@ namespace Services.Abstraction
         Task<DiamondResponse> CreateDiamondAsync(DiamondRequest diamondRequest);
 
         Task<IEnumerable<DiamondResponse>> GetAllAsync(CancellationToken cancellationToken);
+        Task<PagedResult<DiamondResponse>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
     }
 }

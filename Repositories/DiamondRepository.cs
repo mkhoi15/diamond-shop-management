@@ -39,6 +39,16 @@ namespace Repositories
             return await _diamondDao.FindById(id, cancellationToken, includeProperties);
         }
 
+        public async Task<IEnumerable<Diamond>> FindPaged(
+            int skip,
+            int pageSize,
+            Expression<Func<Diamond, bool>> predicate,
+            CancellationToken cancellationToken = default,
+            params Expression<Func<Diamond, object?>>[] includeProperties)
+        {
+            return await _diamondDao.FindPagedAsync(predicate, skip, pageSize, cancellationToken, includeProperties);
+        }
+
         public void Remove(Diamond entity)
         {
             _diamondDao.Remove(entity);
