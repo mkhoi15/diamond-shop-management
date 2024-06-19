@@ -44,7 +44,16 @@
                     <span asp-validation-for="DiamondRequest.Price" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Create</button>
+                @if (!string.IsNullOrEmpty(Model.Message)) {
+                    <div class="alert alert-danger" id="message" role="alert">
+                        @Model.Message
+                    </div>
+                }
+
+                <div class="flex-start">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a asp-page="/DiamondManagement/ViewDiamond" class="btn btn-secondary">Back to List</a>
+                </div>
             </form>
         </div>
     </div>
@@ -168,5 +177,29 @@
 </footer>
 <!-- footer section -->
 @section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const errorMessage = document.getElementById("message");
+            if (errorMessage) {
+                const message = errorMessage.textContent.trim();
+                if (message !== "") {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                        const form = document.querySelector("form");
+                        if (form) {
+                            const inputs = form.querySelectorAll("input[type='text'], input[type='email'], input[type='number'], input[type='password'], textarea");
+                            inputs.forEach(function (input) {
+                                input.value = "";
+                            });
+                        }
+                    }, 1000);
+                } else {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                    }, 1000);
+                }
+            }
+        });
+    </script>
     <partial name="_ValidationScriptsPartial" />
 }
