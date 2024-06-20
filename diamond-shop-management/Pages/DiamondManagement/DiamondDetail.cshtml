@@ -1,75 +1,51 @@
-﻿@inject IHttpContextAccessor HttpContextAccessor
+﻿@page
+@model diamond_shop_management.Pages.DiamondManagement.DiamondDetailModel
+@{
+    ViewData["Title"] = "Diamond Detail";
+}
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - diamond_shop_management</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/diamond_shop_management.styles.css" asp-append-version="true"/>
-    <!-- bootstrap core css -->
-    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css"/>
-    <!-- font awesome style -->
-    <link href="~/css/font-awesome.min.css" rel="stylesheet"/>
-    <!-- Custom styles for this template -->
-    <link href="~/css/style.css" rel="stylesheet"/>
-    <!-- responsive style -->
-    <link href="~/css/responsive.css" rel="stylesheet"/>
-</head>
-<body>
-<div class="container-fluid px-md-0">
-    <header class="header_section pl-4">
-        <nav class="navbar navbar-expand-lg custom_nav-container">
-            <a class="navbar-brand" asp-area="" asp-page="/Index">
-                @if (HttpContextAccessor.HttpContext?.Request.Path == "/" || HttpContextAccessor.HttpContext?.Request.Path == "/Index")
-                {
-                    <span>
-                        VKTP Diamond Shop
-                    </span>
-                }
-                else
-                {
-                    <span class="text-dark">
-                        VKTP Diamond Shop
-                    </span>
-                }
-            </a>
-            <div class="" id="">
-                <div class="custom_menu-btn">
-                    <button onclick="openNav()">
-                        <span class="s-1"> </span>
-                        <span class="s-2"> </span>
-                        <span class="s-3"> </span>
-                    </button>
-                    <div id="myNav" class="overlay">
-                        <div class="overlay-content">
-                            <a asp-page="/Index">Home</a>
-                            <a asp-page="/About">About</a>
-                            <a asp-page="/DiamondManagement/ViewDiamond">Shop</a>
-                            <a asp-page="/Blog">Blog</a>
-                            @if (!User.Identity?.IsAuthenticated ?? true)
-                            {
-                                <a asp-page="/User/Login">Login</a>
-                                <a asp-page="/User/Register">Register</a>
-                            }
-                            else
-                            {
-                                <a asp-page="/User/Logout">Logout</a>
-                            }
-                        </div>
-                    </div>
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Detail
+            </h2>
+        </div>
+        <div class="row">
+            <form>
+                <div class="form-group">
+                    <label asp-for="Diamond.Origin"></label>
+                    <input asp-for="Diamond.Origin" class="form-control" readonly style="pointer-events:none"/>
                 </div>
+                <div class="form-group">
+                    <label asp-for="Diamond.Color"></label>
+                    <input asp-for="Diamond.Color" class="form-control" readonly style="pointer-events:none" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Diamond.Cut"></label>
+                    <input asp-for="Diamond.Cut" class="form-control" readonly style="pointer-events:none" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Diamond.Clarity"></label>
+                    <input asp-for="Diamond.Clarity" class="form-control" readonly style="pointer-events:none" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Diamond.Weight"></label>
+                    <input asp-for="Diamond.Weight" class="form-control" readonly style="pointer-events:none" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Diamond.Price"></label>
+                    <input asp-for="Diamond.Price" class="form-control" readonly style="pointer-events:none" />
+                </div>
+            </form>
+            <div class="flex-start">
+                <a asp-page="/DiamondManagement/ViewDiamond" class="btn btn-primary">Back to List</a>
             </div>
-        </nav>
-    </header>
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
+        </div>
+    </div>
+</section>
 
-
+<!-- end shop section -->
 <!-- info section -->
 <section class="info_section layout_padding2">
     <div class="container">
@@ -120,7 +96,7 @@
                     </h4>
                     <div class="insta_box">
                         <div class="img-box">
-                            <img src="~/images/p1.png" alt="">
+                            <img src="images/p1.png" alt="">
                         </div>
                         <p>
                             long established fact that a reader
@@ -128,7 +104,7 @@
                     </div>
                     <div class="insta_box">
                         <div class="img-box">
-                            <img src="~/images/p2.png" alt="">
+                            <img src="images/p2.png" alt="">
                         </div>
                         <p>
                             long established fact that a reader
@@ -176,8 +152,6 @@
 </section>
 
 <!-- end info_section -->
-
-
 <!-- footer section -->
 <footer class="footer_section">
     <div class="container">
@@ -188,14 +162,6 @@
     </div>
 </footer>
 <!-- footer section -->
-
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-<!-- custom js -->
-<script src="~/js/custom.js"></script>
-
-@await RenderSectionAsync("Scripts", required: false)
-</body>
-</html>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
