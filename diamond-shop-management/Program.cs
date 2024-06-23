@@ -1,3 +1,4 @@
+using BusinessObject.Enum;
 using BusinessObject.Models;
 using DataAccessLayer;
 using DataAccessLayer.Abstraction;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Repositories.DependencyInjection;
+using Services.Abstraction;
 using Services.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -79,5 +81,30 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 app.MapRazorPages();
+
+app.Lifetime.ApplicationStarted.Register(async () =>
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    var user = await userManager.FindByNameAsync("admin");
+    if (user is not null) return;
+    var newUser = new User()
+    {
+        UserName = "admin",
+        PhoneNumber = "0123456789",
+        Email = "lqviet455@gmail.com",
+        FullName = "Le Quoc Viet"
+    };
+    var result = await userManager.CreateAsync(newUser, "Admin@123");
+    if (result.Succeeded)
+    {
+        await roleManager.CreateAsync(new Role()
+        {
+            Name = Roles.Admin.ToString()
+        });
+        await userManager.AddToRoleAsync(newUser, Roles.Admin.ToString());
+    }
+});
 
 app.Run();
