@@ -1,9 +1,12 @@
-﻿using DTO.UserDto;
+﻿using BusinessObject.Enum;
+using DTO.UserDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.Admin;
 
+[Authorize(Roles = nameof(Roles.Admin))]
 public class Index : PageModel
 {
     public IList<UserResponse> Users { get; set; } = new List<UserResponse>();
