@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BusinessObject.Models;
 using DTO.DiamondDto;
+using DTO.AccessoryDto;
+using DTO.DiamondAccessoryDto;
 using DTO.OrderDto;
 using DTO.PaperworkDto;
 using DTO.UserDto;
@@ -24,6 +26,11 @@ public class MapperProfile : Profile
         CreateMap<PaperworkRequest, PaperWork>()
             .ReverseMap();
         CreateMap<PaperWork,PaperworkResponse>()
+        CreateMap<AccessoryRequest, Accessory>()
+            .ReverseMap();
+        CreateMap<Accessory, AccessoryResponse>()
+            .ReverseMap();
+        CreateMap<DiamondAccessory, DiamondAccessoryResponse>()
             .ReverseMap();
     }
 }
