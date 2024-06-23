@@ -5,13 +5,18 @@ namespace DTO.PaperworkDto
 {
     public class PaperworkRequest
     {
-        [Required]
-        public string Type { get; set; }
+        [Required(ErrorMessage = "Please enter a type Certificate or Warranty")]
+        public string? Type { get; set; }
 
-        [Required]
-        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "diamond id is required")]
+        public Guid DiamondId { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        [Required(ErrorMessage = "Please select a date")]
+        [DataType(DataType.DateTime)]
         public DateTime ExpirationDate { get; set; }
 
-        public Guid? MediaId { get; set; }
+        public string? Status { get; set; }
     }
 }

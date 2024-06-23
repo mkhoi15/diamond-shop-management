@@ -17,18 +17,24 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public DiamondResponse Diamond { get; set; }
 
+        public string? Message { get; set; }
+
         public async Task<IActionResult> OnGetAsync(Guid? diamondId)
         {
             if (diamondId == null)
             {
-                return NotFound();
+                Message = "Diamond Id is not found";
+                ModelState.AddModelError(string.Empty, Message);
+                return Page();
             }
 
             Diamond = await _diamondService.GetByIdAsync(diamondId.Value, default);
 
             if (Diamond == null)
             {
-                return NotFound();
+                Message = "Diamond is not found";
+                ModelState.AddModelError(string.Empty, Message);
+                return Page();
             }
 
             return Page();
