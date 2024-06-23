@@ -43,6 +43,10 @@ public class UserServices : IUserServices
         foreach (var user in users)
         {
             var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Any(r => r == nameof(Roles.Admin)))
+            {
+                continue;
+            }
             var userResponse = _mapper.Map<UserResponse>(user);
             userResponse.Role = roles.FirstOrDefault();
             response.Add(userResponse);
