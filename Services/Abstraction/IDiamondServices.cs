@@ -1,0 +1,15 @@
+﻿using DTO;
+using DTO.DiamondDto;
+
+namespace Services.Abstraction
+{
+    public interface IDiamondServices
+    {
+        Task<DiamondResponse> CreateDiamondAsync(DiamondRequest diamondRequest);
+
+        Task<IEnumerable<DiamondResponse>> GetAllAsync(CancellationToken cancellationToken);
+        Task<PagedResult<DiamondResponse>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
+
+        Task<DiamondResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    }
+}

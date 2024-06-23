@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Repositories.DependencyInjection;
 using Services.Abstraction;
 using Services.Mapper;
 
@@ -12,6 +13,11 @@ public static class ServicesCollection
         collection.AddScoped<IUserServices, UserServices>()
             .AddScoped<IOrderServices, OrderServices>()
             .AddScoped<IOrderDetailServices, OrderDetailServices>()
+            .AddScoped<IEmailServices, EmailServices>()
+            .AddScoped<IPromotionServices, PromotionServices>()
+            .AddScoped<IDiamondServices, DiamondServices>()
+            .AddScoped<IPaperworkServices, PaperworkServices>()
+            .AddRepositories()
             .AddScoped<IAccessoryServices, AccessoryServices>()
             .AddScoped<IDiamondAccessoryServices, DiamondAccessoryServices>()
             .AddConfigureAutoMapper();
