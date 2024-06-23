@@ -26,6 +26,7 @@ public class MapperProfile : Profile
         CreateMap<PaperworkRequest, PaperWork>()
             .ReverseMap();
         CreateMap<PaperWork,PaperworkResponse>()
+            .ReverseMap();
         CreateMap<AccessoryRequest, Accessory>()
             .ReverseMap();
         CreateMap<Accessory, AccessoryResponse>()
