@@ -1,13 +1,16 @@
 ﻿using BusinessObject.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Repositories.Abstraction
 {
-	public interface IAccessoryRepository: IRepositoryBase<Accessory>
+    public interface IAccessoryRepository: IRepositoryBase<Accessory>
 	{
-	}
+        Task<IEnumerable<Accessory>> FindPaged(
+            int skip,
+            int pageSize,
+            Expression<Func<Accessory, bool>> predicate,
+            CancellationToken cancellationToken = default,
+            params Expression<Func<Accessory, object?>>[] includeProperties
+        );
+    }
 }

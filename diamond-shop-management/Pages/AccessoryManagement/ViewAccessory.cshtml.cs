@@ -1,0 +1,37 @@
+using AutoMapper;
+using BusinessObject.Models;
+using DTO.AccessoryDto;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Services.Abstraction;
+
+namespace diamond_shop_management.Pages.AccessoryManagement
+{
+    public class ViewAccessoryModel : PageModel
+    {
+        private readonly IAccessoryServices _accessoryServices;
+        private readonly IMapper _mapper;
+
+        public List<AccessoryResponse> Accessories { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public int TotalItems { get; set; }
+        public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
+        public ViewAccessoryModel(IAccessoryServices accessoryServices, IMapper mapper)
+        {
+            _accessoryServices = accessoryServices;
+            _mapper = mapper;            
+            PageSize = 5;
+        }
+
+        public async Task OnGetAsync(int? pageNumber, CancellationToken cancellationToken)
+        {
+            PageNumber = pageNumber ?? 1;
+
+            var pageResult = await _accessoryServices.GetAccessoriesAsync(PageNumber, PageSize, cancellationToken);
+
+            Accessories = _mapper.Map<List<AccessoryResponse>>(pageResult.Items);
+            TotalItems = pageResult.TotalItems;
+        }
+    }
+}
