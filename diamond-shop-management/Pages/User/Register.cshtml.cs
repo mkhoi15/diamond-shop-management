@@ -30,7 +30,8 @@ public class Register : PageModel
         
         var user = await _userServices.RegisterAsync(RegisterDto.Username, 
             RegisterDto.Password, 
-            RegisterDto.Email, 
+            RegisterDto.Username,
+            RegisterDto.Email,
             RegisterDto.Phone,
             Roles.User);
 

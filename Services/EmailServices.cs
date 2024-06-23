@@ -1,4 +1,5 @@
-﻿using MailKit.Security;
+﻿using System.Web;
+using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 using MimeKit.Text;
@@ -36,8 +37,9 @@ public class EmailServices : IEmailServices
     
     public async Task SendForgotPasswordMail(string email, string resetToken)
     {
+        var token = HttpUtility.UrlEncode(resetToken);
         const string subject = "Reset Your Password";
-        var resetLink = $"https://yourapp.com/reset-password?token={resetToken}";
+        var resetLink = $"https://localhost:7003/user/resetpassword?token={token}&email={email}";
 
         var htmlMessage = $@"
         <!DOCTYPE html>
