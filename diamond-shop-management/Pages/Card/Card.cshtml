@@ -1,0 +1,90 @@
+@page
+@model diamond_shop_management.Pages.Card.Card
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Shopping Cart</h2>
+
+    @if (Model.CartItems.Count == 0)
+    {
+        <div class="alert alert-info" role="alert">
+            Your cart is empty.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        @* <th scope="col">Product</th> *@
+                        <th scope="col">Description (Origin, Color, Cut, Clarity) </th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <tr>
+                            <td>
+                                <div class="media">
+                                    @* <img src="@item.Diamond?.MediaUrl ?? '/images/Diamond.png'" class="mr-3" alt="Diamond Image" style="max-width: 100px;"> *@
+                                    <div class="media-body">
+                                        @* <h5 class="mt-0">@item.Diamond?.Name</h5> *@
+                                        <p>@item.Diamond?.Origin, @item.Diamond?.Color, @item.Diamond?.Cut, @item.Diamond?.Clarity</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>$@item.Diamond?.Price</td>
+                            <td>Quantity</td>
+                            @* <td>$@(item.Diamond?.Price * item.Quantity)</td>  *@
+                            <td>Total</td>
+                            <td>
+                                <form method="post" class="form-inline">
+                                    <input type="hidden" name="itemId" value="@item.Id" />
+                                    @* <input type="number" class="form-control mr-1" name="quantity" value="@item.Quantity" style="width: 60px;"> *@
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Update</button>
+                                </form>
+                            </td>
+                            
+                            <td>
+                                <form method="post" asp-page-handler="RemoveFromCart">
+                                    <input type="hidden" name="itemId" value="@item.Id" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 offset-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Cart Summary</h5>
+                        <hr>
+                        <dl class="row">
+                            <dt class="col-sm-8">Subtotal:</dt>
+                            @* <dd class="col-sm-4">$@Model.CartItems.Sum(i => i.Diamond?.Price * i.Quantity)</dd> *@
+                        </dl>
+                        <hr>
+                        <div class="text-center">
+                            <form method="post" asp-page-handler="ClearCart">
+                                <button type="submit" class="btn btn-warning mr-2">Clear Cart</button>
+                            </form>
+                            <a asp-page="/Orders/Create" class="btn btn-success">Proceed to Checkout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
