@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using DataAccessLayer.Abstraction;
 using Repositories.Abstraction;
 using System;
 using System.Collections.Generic;
@@ -11,39 +12,49 @@ namespace Repositories
 {
 	public class AccessoryRepository : IAccessoryRepository
 	{
+		private readonly IAccessoryDAO _accessoryDAO;
+		public AccessoryRepository(IAccessoryDAO accessoryDAO)
+		{
+			_accessoryDAO = accessoryDAO;
+		}
 		public void Add(Accessory entity)
 		{
-			throw new NotImplementedException();
+			_accessoryDAO.Add(entity);
 		}
 
 		public void AddRange(ICollection<Accessory> entities)
 		{
-			throw new NotImplementedException();
+			_accessoryDAO.AddRange(entities);
 		}
 
-		public Task<IEnumerable<Accessory>> Find(Expression<Func<Accessory, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<Accessory, object?>>[] includeProperties)
+		public async Task<IEnumerable<Accessory>> Find(Expression<Func<Accessory, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<Accessory, object?>>[] includeProperties)
 		{
-			throw new NotImplementedException();
+			return await _accessoryDAO.Find(predicate,cancellationToken,includeProperties);
 		}
 
 		public IQueryable<Accessory> FindAll()
 		{
-			throw new NotImplementedException();
+			return _accessoryDAO.FindAll();
 		}
 
-		public Task<Accessory?> FindById(Guid id, CancellationToken cancellationToken = default, params Expression<Func<Accessory, object?>>[] includeProperties)
+		public async Task<Accessory?> FindById(Guid id, CancellationToken cancellationToken = default, params Expression<Func<Accessory, object?>>[] includeProperties)
 		{
-			throw new NotImplementedException();
+            return await _accessoryDAO.FindById(id, cancellationToken, includeProperties);
 		}
 
-		public void Remove(Accessory entity)
+        public async Task<IEnumerable<Accessory>> FindPaged(int skip, int pageSize, Expression<Func<Accessory, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<Accessory, object?>>[] includeProperties)
+        {
+			return await _accessoryDAO.FindPagedAsync(predicate, skip, pageSize, cancellationToken, includeProperties);
+        }
+
+        public void Remove(Accessory entity)
 		{
-			throw new NotImplementedException();
+			_accessoryDAO.Remove(entity);	
 		}
 
 		public void Update(Accessory entity)
 		{
-			throw new NotImplementedException();
+			_accessoryDAO.Update(entity);
 		}
 	}
 }

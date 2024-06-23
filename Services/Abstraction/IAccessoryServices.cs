@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DTO.AccessoryDto;
+using DTO;
 
 namespace Services.Abstraction
 {
-	public interface IAccessoryServices
+    public interface IAccessoryServices
 	{
+		Task<AccessoryResponse> CreateAccessoryAsync(AccessoryRequest request);
+		Task<IEnumerable<AccessoryResponse>> GetAllAccessoriesAsync(CancellationToken cancellationToken);
+		Task<PagedResult<AccessoryResponse>> GetAccessoriesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
+		Task<AccessoryResponse> GetAccessoryByIdAsync(Guid accessoryId, CancellationToken cancellationToken);
 	}
 }
