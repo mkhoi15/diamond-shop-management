@@ -23,40 +23,41 @@
             }
             else
             {
-                <div class="row">
-                    @foreach (var diamond in Model.Diamonds)
-                    {
-                        <div class="col-sm-6 col-md-4 col-lg-3">
-                            <div class="box">
-                                <a asp-page="/DiamondManagement/DiamondDetail" asp-route-diamondId="@diamond.Id">
-                                    <div class="img-box">
-                                        @if (!string.IsNullOrEmpty(diamond.MediaUrl))
-                                        {
-                                            <img src="@diamond.MediaUrl" alt="Diamond Image">
-                                        }
-                                        else
-                                        {
-                                            <img src="/images/Diamond.png" alt="Diamond Image">
-                                        }
-                                    </div>
-                                    <div>
-                                        <div>Origin: @diamond.Origin</div>
-                                        <div>Color: @diamond.Color</div>
-                                        <div>Cut: @diamond.Cut</div>
-                                        <div>Clarity: @diamond.Clarity</div>
-                                        <div>Weight: @diamond.Weight</div>
-                                        <div>Price: $@diamond.Price</div>
-                                        <div>Status: @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "Sold" : "Available")</div>
-                                        @if (!string.IsNullOrEmpty(diamond.PromotionDescription))
-                                        {
-                                            <h6>Promotion: @diamond.PromotionDescription</h6>
-                                        }
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    }
-                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Origin</th>
+                            <th>Color</th>
+                            <th>Cut</th>
+                            <th>Clarity</th>
+                            <th>Weight</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            @* <th>Promotion</th> *@
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var diamond in Model.Diamonds)
+                        {
+                            <tr>
+                                <td>@diamond.Origin</td>
+                                <td>@diamond.Color</td>
+                                <td>@diamond.Cut</td>
+                                <td>@diamond.Clarity</td>
+                                <td>@diamond.Weight</td>
+                                <td>$@diamond.Price</td>
+                                <td>@(diamond.IsSold.HasValue && diamond.IsSold.Value ? "Sold" : "Available")</td>
+                                @* <td>@diamond.PromotionDescription</td> *@
+                                <td>
+                                    <a asp-page="/DiamondManagement/DiamondDetail" asp-route-diamondId="@diamond.Id" class="btn btn-info btn-sm">Detail</a>
+                                    <a asp-page="/DiamondManagement/Update" asp-route-diamondId="@diamond.Id" class="btn btn-warning btn-sm">Update</a>
+                                    <a asp-page="/DiamondManagement/Delete" asp-route-diamondId="@diamond.Id" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
             @* <div class="btn-box">
             <a href="">
