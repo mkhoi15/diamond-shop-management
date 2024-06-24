@@ -8,7 +8,7 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Shopping Cart</h2>
 
-    @if (Model.CartItems.Count == 0)
+    @if (Model.CartItems == null)
     {
         <div class="alert alert-info" role="alert">
             Your cart is empty.
@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.CartItems)
+                    @foreach (var item in Model.CartItems.Diamond)
                     {
                         <tr>
                             <td>
@@ -37,11 +37,11 @@
                                     @* <img src="@item.Diamond?.MediaUrl ?? '/images/Diamond.png'" class="mr-3" alt="Diamond Image" style="max-width: 100px;"> *@
                                     <div class="media-body">
                                         @* <h5 class="mt-0">@item.Diamond?.Name</h5> *@
-                                        <p>@item.Diamond?.Origin, @item.Diamond?.Color, @item.Diamond?.Cut, @item.Diamond?.Clarity</p>
+                                        <p>@item.Origin, @item.Color, @item.Cut, @item.Clarity</p>
                                     </div>
                                 </div>
                             </td>
-                            <td>$@item.Diamond?.Price</td>
+                            <td>$@item.Price</td>
                             <td>Quantity</td>
                             @* <td>$@(item.Diamond?.Price * item.Quantity)</td>  *@
                             <td>Total</td>

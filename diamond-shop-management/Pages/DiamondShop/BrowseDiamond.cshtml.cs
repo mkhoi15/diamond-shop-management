@@ -37,25 +37,23 @@ public class BrowseDiamond : PageModel
         TotalItems = pagedResult.TotalItems;
     }
 
-    public IActionResult OnPostAddToCart(Guid diamondId, CancellationToken cancellationToken)
+    public async Task<IActionResult> OnPostAddToCart(Guid diamondId, CancellationToken cancellationToken)
     {
-        var cart = HttpContext.Session.GetObjectFromJson<List<DiamondAccessory>>("Cart") ?? new List<DiamondAccessory>();
-
+        var cart = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
+        var item = new DTO.Card();
         if (diamondId != Guid.Empty)
         {
-            var diamond = _diamondServices.GetByIdAsync(diamondId, cancellationToken).Result;
-            var item = new DiamondAccessory
-            {
-                Id = Guid.NewGuid(),
-                DiamondId = diamondId,
-                Diamond = _mapper.Map<Diamond>(diamond)
-            };
-            cart.Add(item);
+            var diamond = await _diamondServices.GetByIdAsync(diamondId, cancellationToken);
+            var diamondResponse = _mapper.Map<DiamondResponse>(diamond);
+            
+            
+            item.Diamond.Add(diamondResponse);
         }
 
-        HttpContext.Session.SetObjectAsJson("Cart", cart);
+        HttpContext.Session.SetObjectAsJson("Cart", item);
+        var cart2 = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
 
         // Redirect to the cart page
-        return RedirectToPage("../Card/Card");
+        return RedirectToPage();
     }
 }
