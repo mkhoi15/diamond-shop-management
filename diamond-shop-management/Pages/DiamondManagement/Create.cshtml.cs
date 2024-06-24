@@ -1,13 +1,16 @@
 using AutoMapper;
+using BusinessObject.Enum;
 using BusinessObject.Models;
 using DTO.DiamondDto;
 using DTO.PaperworkDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.DiamondManagement
 {
+    [Authorize(Roles = nameof(Roles.Admin))]
     public class CreateModel : PageModel
     {
         private readonly IDiamondServices _diamondServices;

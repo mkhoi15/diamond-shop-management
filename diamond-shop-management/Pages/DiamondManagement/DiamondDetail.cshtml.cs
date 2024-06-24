@@ -1,4 +1,6 @@
+using BusinessObject.Enum;
 using DTO.DiamondDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services;
@@ -6,6 +8,7 @@ using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.DiamondManagement
 {
+    [Authorize(Roles = nameof(Roles.Admin))]
     public class DiamondDetailModel : PageModel
     {
         private readonly IDiamondServices _diamondService;
