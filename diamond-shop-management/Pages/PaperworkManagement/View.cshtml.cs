@@ -1,6 +1,8 @@
 using AutoMapper;
+using BusinessObject.Enum;
 using DTO.DiamondDto;
 using DTO.PaperworkDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services;
@@ -8,6 +10,7 @@ using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.PaperworkManagement
 {
+    [Authorize(Roles = nameof(Roles.Admin))]
     public class ViewModel : PageModel
     {
         private readonly IPaperworkServices _paperworkService;
