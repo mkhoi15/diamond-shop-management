@@ -1,0 +1,44 @@
+﻿@page
+@model diamond_shop_management.Pages.AccessoryManagement.CreateAccessoryModel
+@{
+    ViewData["Title"] = "CreateAccessory";
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Create Accessory
+            </h2>
+        </div>
+        <div class="row">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for=" AccessoryRequest.Name "></label>
+                    <input asp-for="AccessoryRequest.Name" class="form-control" />
+                    <span asp-validation-for="AccessoryRequest.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AccessoryRequest.Price"></label>
+                    <input asp-for="AccessoryRequest.Price" class="form-control" />
+                    <span asp-validation-for="AccessoryRequest.Price" class="text-danger"></span>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div class="alert alert-danger" id="message" role="alert">
+                        @Model.Message
+                    </div>
+                }
+
+                <div class="flex-start">
+                    <a asp-page="/AccessoryManagement/ViewAccessory" class="btn btn-secondary">Back to List</a>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

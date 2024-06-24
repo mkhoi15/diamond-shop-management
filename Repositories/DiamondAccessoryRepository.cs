@@ -1,15 +1,10 @@
 ﻿using BusinessObject.Models;
 using Repositories.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories
 {
-	internal class DiamondAccessoryRepository : IDiamondAccessoryRepository
+    internal class DiamondAccessoryRepository : IDiamondAccessoryRepository
 	{
 		public void Add(DiamondAccessory entity)
 		{

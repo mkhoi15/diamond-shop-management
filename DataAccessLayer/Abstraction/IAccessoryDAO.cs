@@ -1,13 +1,16 @@
 ﻿using BusinessObject.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace DataAccessLayer.Abstraction
 {
-	public interface IAccessoryDAO : IDaoBase<Accessory>
+    public interface IAccessoryDAO : IDaoBase<Accessory>
 	{
-	}
+        Task<IEnumerable<Accessory>> FindPagedAsync(
+            Expression<Func<Accessory, bool>> predicate,
+            int skip,
+            int pageSize,
+            CancellationToken cancellationToken = default,
+            params Expression<Func<Accessory, object?>>[] includeProperties
+        );
+    }
 }
