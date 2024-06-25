@@ -32,13 +32,17 @@ public class UserServices : IUserServices
     {
         var response = new List<UserResponse>();
 
-        var users = await _userManager.Users
+        var query = _userManager.Users
             .AsNoTracking()
+            .Where(u => u.IsDeleted == false);
+            
+        var users = await query
             .Take(limit)
             .Skip((page - 1) * limit)
             .ToListAsync();
         
-        var count = await _userManager.Users.CountAsync();
+        var count = await query
+            .CountAsync();
 
         var totalPage = (int)Math.Ceiling(decimal.Divide(count, limit));
         foreach (var user in users)
@@ -111,7 +115,8 @@ public class UserServices : IUserServices
             UserName = username,
             PhoneNumber = phone,
             Email = email,
-            FullName = fullname
+            FullName = fullname,
+            CreatedAt = DateTime.Now
         };
 
         var result = await _userManager.CreateAsync(newUser, password);
@@ -119,6 +124,53 @@ public class UserServices : IUserServices
         await _userManager.AddToRoleAsync(newUser, roles.ToString());
 
         var response = _mapper.Map<UserResponse>(newUser);
+        return response;
+    }
+
+    public async Task<UserResponse> GetUserByIdAsync(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null)
+        {
+            throw new AuthenticationException("User does not exist!!");
+        }
+        
+        var roles = await _userManager.GetRolesAsync(user);
+        
+        var userResponse = _mapper.Map<UserResponse>(user);
+        userResponse.Role = roles.FirstOrDefault();
+        
+        return userResponse;
+    }
+
+    public async Task<UserResponse> UpdateUserAsync(string id, string fullname, string email, string? phone, Roles roles)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null)
+        {
+            throw new AuthenticationException("User does not exist!!");
+        }
+        
+        user.FullName = fullname;
+        user.Email = email;
+        user.PhoneNumber = phone;
+        
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded) throw new Exception("Error when updating user!!");
+        
+        var userRoles = await _userManager.GetRolesAsync(user);
+        
+        if (userRoles.Any())
+        {
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
+        }
+        
+        var isSuccess = await _userManager.AddToRoleAsync(user, roles.ToString());
+        if (!isSuccess.Succeeded) throw new Exception("Error when updating user role!!");
+        
+        var response = _mapper.Map<UserResponse>(user);
+        response.Role = roles.ToString();
+        
         return response;
     }
 

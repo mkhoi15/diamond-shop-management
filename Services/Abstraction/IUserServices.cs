@@ -13,6 +13,8 @@ public interface IUserServices
     Task<UserResponse> Login(string username, string password);
     Task SignOutAsync();
     Task<UserResponse> RegisterAsync(string username, string password, string fullname, string email, string? phone, Roles roles);
+    Task<UserResponse> GetUserByIdAsync(string id);
+    Task<UserResponse> UpdateUserAsync(string id, string fullname, string email, string? phone, Roles roles);
     Task<bool> ChangePassword(string username, string oldPassword, string newPassword);
     Task<bool> ResetPassword(string email, string token, string newPassword);
     Task ForgotPassword(string username);

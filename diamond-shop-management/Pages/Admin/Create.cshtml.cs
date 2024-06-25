@@ -41,6 +41,6 @@ public class Create : PageModel
 
         //var userLogin = await _userServices.Login(user.UserName!, RegisterDto.Password);
 
-        return Redirect("admin/Index");
+        return RedirectToPage("./Index");
     }
 }
