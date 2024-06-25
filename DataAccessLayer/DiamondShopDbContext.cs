@@ -103,6 +103,9 @@ public class DiamondShopDbContext : IdentityDbContext<User, Role, Guid>
         builder.Entity<User>()
             .Property(u => u.IsDeleted)
             .HasDefaultValue(false);
+        builder.Entity<User>()
+            .Property(u => u.CreatedAt)
+            .HasDefaultValue(DateTime.Now);
         
         builder.Entity<Role>().ToTable(nameof(Roles));
         
