@@ -15,6 +15,7 @@ public interface IUserServices
     Task<UserResponse> RegisterAsync(string username, string password, string fullname, string email, string? phone, Roles roles);
     Task<UserResponse> GetUserByIdAsync(string id);
     Task<UserResponse> UpdateUserAsync(string id, string fullname, string email, string? phone, Roles roles);
+    Task<bool> DeleteUserAsync(string id);
     Task<bool> ChangePassword(string username, string oldPassword, string newPassword);
     Task<bool> ResetPassword(string email, string token, string newPassword);
     Task ForgotPassword(string username);
