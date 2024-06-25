@@ -34,29 +34,26 @@ public class UserServices : IUserServices
 
         var query = _userManager.Users
             .AsNoTracking()
-            .Where(u => u.IsDeleted == false);
-            
+            .Where(u => u.IsDeleted == false && u.UserName != "admin");
+
         var users = await query
-            .Take(limit)
+            .OrderByDescending(u => u.CreatedAt)
             .Skip((page - 1) * limit)
+            .Take(limit)
             .ToListAsync();
         
         var count = await query
             .CountAsync();
 
-        var totalPage = (int)Math.Ceiling(decimal.Divide(count, limit));
         foreach (var user in users)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            if (roles.Any(r => r == nameof(Roles.Admin)))
-            {
-                continue;
-            }
             var userResponse = _mapper.Map<UserResponse>(user);
             userResponse.Role = roles.FirstOrDefault();
             response.Add(userResponse);
         }
 
+        var totalPage = (int)Math.Ceiling(decimal.Divide(count, limit));
         return (response, totalPage);
     }
 
@@ -172,6 +169,19 @@ public class UserServices : IUserServices
         response.Role = roles.ToString();
         
         return response;
+    }
+
+    public async Task<bool> DeleteUserAsync(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null)
+        {
+            throw new AuthenticationException("User does not exist!!");
+        }
+        
+        user.IsDeleted = true;
+        var result = await _userManager.UpdateAsync(user);
+        return result.Succeeded;
     }
 
     public async Task<bool> ChangePassword(string username, string oldPassword, string newPassword)
