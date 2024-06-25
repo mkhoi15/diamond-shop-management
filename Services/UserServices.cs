@@ -37,6 +37,7 @@ public class UserServices : IUserServices
             .Take(limit)
             .Skip((page - 1) * limit)
             .ToListAsync();
+        
         var count = await _userManager.Users.CountAsync();
 
         var totalPage = (int)Math.Ceiling(decimal.Divide(count, limit));
