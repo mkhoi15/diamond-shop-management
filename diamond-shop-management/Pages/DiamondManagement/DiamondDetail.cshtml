@@ -6,46 +6,157 @@
 
 <section class="shop_section layout_padding">
     <div class="container">
+        @*  <div class="heading_container heading_center">
+        <h2>
+        Detail
+        </h2>
+        </div>
+        <div class="row">
+        <form>
+        <div class="form-group">
+        <label asp-for="Diamond.Origin"></label>
+        <input asp-for="Diamond.Origin" class="form-control" readonly style="pointer-events:none" />
+        </div>
+        <div class="form-group">
+        <label asp-for="Diamond.Color"></label>
+        <input asp-for="Diamond.Color" class="form-control" readonly style="pointer-events:none" />
+        </div>
+        <div class="form-group">
+        <label asp-for="Diamond.Cut"></label>
+        <input asp-for="Diamond.Cut" class="form-control" readonly style="pointer-events:none" />
+        </div>
+        <div class="form-group">
+        <label asp-for="Diamond.Clarity"></label>
+        <input asp-for="Diamond.Clarity" class="form-control" readonly style="pointer-events:none" />
+        </div>
+        <div class="form-group">
+        <label asp-for="Diamond.Weight"></label>
+        <input asp-for="Diamond.Weight" class="form-control" readonly style="pointer-events:none" />
+        </div>
+        <div class="form-group">
+        <label asp-for="Diamond.Price"></label>
+        <input asp-for="Diamond.Price" class="form-control" readonly style="pointer-events:none" />
+        </div>
+        <div class="form-group">
+        <a asp-page="/DiamondManagement/ViewDiamond" class="btn btn-secondary">Back to List</a>
+        <a asp-page="/PaperworkManagement/View" asp-route-diamondId="@Model.Diamond.Id" class="btn btn-primary">Paperwork</a>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+        <div style="color: red" id="error-message">@Model.Message</div>
+        }
+        </form>
+        </div> *@
+        <div class="text-Left mb-3">
+            <a asp-page="/DiamondManagement/ViewDiamond" asp-route-diamondId="@Model.Diamond.Id" class="btn btn-secondary">Back</a>
+            @* <a asp-page="/PaperworkManagement/Create" asp-route-diamondId="@Model.Diamond.Id" class="btn btn-primary">Create New Paperwork</a> *@
+        </div>
         <div class="heading_container heading_center">
             <h2>
                 Detail
             </h2>
         </div>
-        <div class="row">
-            <form>
-                <div class="form-group">
-                    <label asp-for="Diamond.Origin"></label>
-                    <input asp-for="Diamond.Origin" class="form-control" readonly style="pointer-events:none" />
+        <div class="row justify-content-center">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="box">
+                    <div class="img-box">
+                        @if (!string.IsNullOrEmpty(@Model.Diamond.MediaUrl))
+                        {
+                            <img src="~/@Model.Diamond.MediaUrl" alt="Diamond Image">
+                        }
+                        else
+                        {
+                            <img src="" alt="No image">
+                        }
+                    </div>
+                    <div class="text-center">
+                        <div>Origin: @Model.Diamond.Origin</div>
+                        <div>Color: @Model.Diamond.Color</div>
+                        <div>Cut: @Model.Diamond.Cut</div>
+                        <div>Clarity: @Model.Diamond.Clarity %</div>
+                        <div>Weight: @Model.Diamond.Weight carats</div>
+                        <div>Price: @Model.Diamond.Price $</div>
+                        <div>Status: @(Model.Diamond.IsSold.HasValue && Model.Diamond.IsSold.Value ? "Sold" : "Available")</div>
+                        @if (!string.IsNullOrEmpty(Model.Diamond.PromotionDescription))
+                        {
+                            <h6>Promotion: @Model.Diamond.PromotionDescription</h6>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Message))
+                        {
+                            <div style="color: red" id="error-message">@Model.Message</div>
+                        }
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Diamond.Color"></label>
-                    <input asp-for="Diamond.Color" class="form-control" readonly style="pointer-events:none" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Diamond.Cut"></label>
-                    <input asp-for="Diamond.Cut" class="form-control" readonly style="pointer-events:none" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Diamond.Clarity"></label>
-                    <input asp-for="Diamond.Clarity" class="form-control" readonly style="pointer-events:none" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Diamond.Weight"></label>
-                    <input asp-for="Diamond.Weight" class="form-control" readonly style="pointer-events:none" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Diamond.Price"></label>
-                    <input asp-for="Diamond.Price" class="form-control" readonly style="pointer-events:none" />
-                </div>
-                <div class="form-group">
-                    <a asp-page="/DiamondManagement/ViewDiamond" class="btn btn-secondary">Back to List</a>
-                    <a asp-page="/PaperworkManagement/View" asp-route-diamondId="@Model.Diamond.Id" class="btn btn-primary">Paperwork</a>
-                </div>
-                @if (!string.IsNullOrEmpty(Model.Message))
-                {
-                    <div style="color: red" id="error-message">@Model.Message</div>
-                }
-            </form>
+            </div>
+        </div>
+
+        <div class="heading_container heading_center" style="margin-top: 2%">
+            <h3>
+                List Paperwork of diamond
+            </h3>
+        </div>
+        @if (Model.Paperworks == null || !Model.Paperworks.Any())
+        {
+            <div class="alert alert-info text-center" role="alert">
+                There are no paperwork.
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Type</th>
+                            <th class="text-center">Created Date</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var paperwork in Model.Paperworks)
+                        {
+                            <tr>
+                                <td class="text-center">@paperwork.Type</td>
+                                <td class="text-center">@paperwork.CreatedDate.ToShortDateString()</td>
+                                @if (paperwork.Type.Trim().ToLower() != "certificate")
+                                {
+                                    <td class="text-center">@paperwork.ExpirationDate.ToShortDateString()</td>
+                                }
+                                <td class="text-center">@paperwork.Status</td>
+                                <td class="text-center">
+                                    <a asp-page="/PaperworkManagement/View" asp-route-paperworkId="@paperwork.Id" class="btn btn-info">Detail</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <div class="container">
+
+            <nav aria-label="Page navigation" style="margin-top: 2%">
+                <ul class="pagination justify-content-center">
+                    @if (Model.PageNumber > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-page="./View" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                        </li>
+                    }
+
+                    <li class="page-item active">
+                        <a class="page-link" asp-page="./View" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                    </li>
+
+                    @if (Model.PageNumber < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-page="./View" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
     </div>
 </section>
