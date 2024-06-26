@@ -17,6 +17,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
         {
             _diamondService = diamondService;
             _paperworkService = paperworkService;
+            PageSize = 8;
             _mapper = mapper;
         }
 
