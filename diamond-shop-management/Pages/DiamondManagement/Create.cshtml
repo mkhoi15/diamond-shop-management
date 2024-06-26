@@ -20,7 +20,7 @@
                     </div>
                 }
                 <div class="form-group">
-                    <label asp-for="ImageFile">Upload Image</label>
+                    <label asp-for="ImageFile">Image</label>
                     <input type="file" id="ImageFile" name="ImageFile" class="form-control" />
                     <span asp-validation-for="ImageFile" class="text-danger"></span>
                 </div>
@@ -63,7 +63,7 @@
                 <h4 style="margin-top: 5%">Certificate Of Diamond</h4>
                 <div class="form-group">
                     <label asp-for="PaperworkRequest.Type" class="control-label"></label>
-                    <input asp-for="PaperworkRequest.Type" value="certificate" class="form-control" readonly style="pointer-events: none" />
+                    <input asp-for="PaperworkRequest.Type" id="CertificateValue" value="certificate" class="form-control" readonly style="pointer-events: none" />
                     <span asp-validation-for="PaperworkRequest.Type" class="text-danger"></span>
                 </div>
 
@@ -87,15 +87,29 @@
                 const message = errorMessage.textContent.trim();
                 if (message !== "") {
                     setTimeout(function () {
-                        errorMessage.style.display = "none";
                         const form = document.querySelector("form");
                         if (form) {
                             const inputs = form.querySelectorAll("input[type='text'], input[type='email'], input[type='number'], input[type='password'], textarea");
                             inputs.forEach(function (input) {
                                 input.value = "";
                             });
+
+                            const selects = form.querySelectorAll("select");
+                            selects.forEach(function (select) {
+                                select.selectedIndex = 0;
+                            });
+
+                            const fileInput = document.getElementById("ImageFile");
+                            fileInput.value = "";
+
+                            const certificate = document.getElementById("CertificateValue");
+                            certificate.value = "certificate";
                         }
+                    });
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
                     }, 2000);
+
                 } else {
                     setTimeout(function () {
                         errorMessage.style.display = "none";
