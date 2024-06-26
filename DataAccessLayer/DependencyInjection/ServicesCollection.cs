@@ -13,6 +13,9 @@ public static class ServicesCollection
         collection.AddScoped<IDiamondDAO, DiamondDAO>();
         collection.AddScoped<IPaperworkDAO, PaperworkDAO>();
         collection.AddScoped<IPromotionDAO, PromotionDAO>();
+        collection.AddScoped<IAccessoryDAO, AccessoryDAO>();
+        collection.AddScoped<IDiamondAccessoryDAO, DiamondAccessoryDAO>();
+        collection.AddScoped<IMediaDAO, MediaDAO>();
         return collection;
     }
 }

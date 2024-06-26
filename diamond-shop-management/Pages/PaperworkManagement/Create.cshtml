@@ -1,0 +1,67 @@
+﻿@page "{diamondId:guid}"
+@model diamond_shop_management.Pages.PaperworkManagement.CreateModel
+@{
+    ViewData["Title"] = "Create Paperwork";
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Create Warranty
+            </h2>
+        </div>
+        <div class="row">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="PaperworkRequest.Type" class="control-label"></label>
+                    <input asp-for="PaperworkRequest.Type" class="form-control" readonly style="pointer-events: none"/>
+                    <span asp-validation-for="PaperworkRequest.Type" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PaperworkRequest.ExpirationDate" class="control-label"></label>
+                    <input asp-for="PaperworkRequest.ExpirationDate" class="form-control" />
+                    <span asp-validation-for="PaperworkRequest.ExpirationDate" class="text-danger"></span>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div class="alert alert-danger" id="message" role="alert">
+                        @Model.Message
+                    </div>
+                }
+
+                <input type="hidden" asp-for="PaperworkRequest.DiamondId" value="@Model.DiamondId" />
+                <a asp-page="/PaperworkManagement/View" asp-route-diamondId="@Model.DiamondId" class="btn btn-secondary">Back to List</a>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const errorMessage = document.getElementById("message");
+            if (errorMessage) {
+                const message = errorMessage.textContent.trim();
+                if (message !== "") {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                        const form = document.querySelector("form");
+                        if (form) {
+                            const inputs = form.querySelectorAll("input[type='text'], input[type='email'], input[type='number'], input[type='password'], input[type='datetime-local'], textarea");
+                            inputs.forEach(function (input) {
+                                input.value = "";
+                            });
+                        }
+                    }, 2000);
+                } else {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                    }, 1000);
+                }
+            }
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

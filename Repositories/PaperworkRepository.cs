@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using DataAccessLayer;
 using DataAccessLayer.Abstraction;
 using Repositories.Abstraction;
 using System.Linq.Expressions;
@@ -32,6 +33,16 @@ namespace Repositories
         public IQueryable<PaperWork> FindAll()
         {
             return _paperworkDao.FindAll();
+        }
+
+        public async Task<IEnumerable<PaperWork>> FindPaged(
+            int skip,
+            int pageSize,
+            Expression<Func<PaperWork, bool>> predicate,
+            CancellationToken cancellationToken = default,
+            params Expression<Func<PaperWork, object?>>[] includeProperties)
+        {
+            return await _paperworkDao.FindPagedAsync(predicate, skip, pageSize, cancellationToken, includeProperties);
         }
 
         public async Task<PaperWork?> FindById(Guid id, CancellationToken cancellationToken = default, params Expression<Func<PaperWork, object?>>[] includeProperties)

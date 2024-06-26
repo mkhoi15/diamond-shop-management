@@ -18,6 +18,9 @@ public static class ServicesCollection
             .AddScoped<IDiamondServices, DiamondServices>()
             .AddScoped<IPaperworkServices, PaperworkServices>()
             .AddRepositories()
+            .AddScoped<IAccessoryServices, AccessoryServices>()
+            .AddScoped<IDiamondAccessoryServices, DiamondAccessoryServices>()
+            .AddScoped<IMediaServices, MediaServices>()
             .AddConfigureAutoMapper();
         return collection;
     }

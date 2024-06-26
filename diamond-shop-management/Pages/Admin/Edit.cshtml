@@ -1,0 +1,56 @@
+﻿@page
+@using BusinessObject.Enum
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model diamond_shop_management.Pages.Admin.Edit
+
+@{
+    Layout = "Shared/_Layout";
+    ViewBag.Title = "Edit Account";
+}
+
+<h1 class="text-center mt-5" style="margin-top: 70px">Edit Account</h1>
+<div class="row align-items-center w-auto h-100 p-5 m-5">
+    <div class="col-md-6">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h4>Edit Account</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="UpdateUserDto.Id" />
+            <div class="form-group">
+                <label asp-for="UpdateUserDto.UserName"></label>
+                <input asp-for="UpdateUserDto.UserName" readonly="readonly" class="form-control" />
+                <span asp-validation-for="UpdateUserDto.UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UpdateUserDto.FullName"></label>
+                <input asp-for="UpdateUserDto.FullName" class="form-control" />
+                <span asp-validation-for="UpdateUserDto.FullName" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="UpdateUserDto.Phone"></label>
+                <input asp-for="UpdateUserDto.Phone" class="form-control" />
+                <span asp-validation-for="UpdateUserDto.Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdateUserDto.Email"></label>
+                <input asp-for="UpdateUserDto.Email" class="form-control" />
+                <span asp-validation-for="UpdateUserDto.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Role"></label>
+                <select asp-for="Role" class="form-control">
+                    <option value="@(Roles.Manager)">Manager</option>
+                    <option value="@(Roles.Delivery)">Delivery Staff</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

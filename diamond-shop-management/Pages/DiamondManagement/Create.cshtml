@@ -1,0 +1,108 @@
+﻿@page
+@model diamond_shop_management.Pages.DiamondManagement.CreateModel
+@{
+    ViewData["Title"] = "Create Diamond";
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Create
+            </h2>
+        </div>
+        <div class="row">
+            <form method="post" enctype="multipart/form-data">
+                <h3>Diamond Inforamtion</h3>
+                @if (!string.IsNullOrEmpty(Model.Message)) {
+                    <div class="alert alert-danger" id="message" role="alert">
+                        @Model.Message
+                    </div>
+                }
+                <div class="form-group">
+                    <label asp-for="ImageFile">Upload Image</label>
+                    <input type="file" id="ImageFile" name="ImageFile" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Origin"></label>
+                    <select asp-for="DiamondRequest.Origin" class="form-control" asp-items="@(new SelectList(Model.Countries))">
+                        <option value="">Select Origin</option>
+                    </select>
+                    <span asp-validation-for="DiamondRequest.Origin" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Color"></label>
+                    <select asp-for="DiamondRequest.Color" class="form-control" asp-items="@(new SelectList(Model.Colors))">
+                        <option value="">Select Color</option>
+                    </select>
+                    <span asp-validation-for="DiamondRequest.Color" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Cut">Cut</label>
+                    <select asp-for="DiamondRequest.Cut" class="form-control" asp-items="@(new SelectList(Model.Cuts))">
+                        <option value="">Select Cut type of diamond</option>
+                    </select>
+                    <span asp-validation-for="DiamondRequest.Cut" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Clarity">Clarity (%)</label>
+                    <input asp-for="DiamondRequest.Clarity" class="form-control" />
+                    <span asp-validation-for="DiamondRequest.Clarity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Weight">Weight (carats)</label>
+                    <input asp-for="DiamondRequest.Weight" class="form-control" />
+                    <span asp-validation-for="DiamondRequest.Weight" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Price">Price ($)</label>
+                    <input asp-for="DiamondRequest.Price" class="form-control" />
+                    <span asp-validation-for="DiamondRequest.Price" class="text-danger"></span>
+                </div>
+                <h4 style="margin-top: 5%">Certificate Of Diamond</h4>
+                <div class="form-group">
+                    <label asp-for="PaperworkRequest.Type" class="control-label"></label>
+                    <input asp-for="PaperworkRequest.Type" value="certificate" class="form-control" readonly style="pointer-events: none" />
+                    <span asp-validation-for="PaperworkRequest.Type" class="text-danger"></span>
+                </div>
+
+
+                <div class="flex-start">
+                    <a asp-page="/DiamondManagement/ViewDiamond" class="btn btn-secondary">Back to List</a>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- end shop section -->
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const errorMessage = document.getElementById("message");
+            if (errorMessage) {
+                const message = errorMessage.textContent.trim();
+                if (message !== "") {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                        const form = document.querySelector("form");
+                        if (form) {
+                            const inputs = form.querySelectorAll("input[type='text'], input[type='email'], input[type='number'], input[type='password'], textarea");
+                            inputs.forEach(function (input) {
+                                input.value = "";
+                            });
+                        }
+                    }, 2000);
+                } else {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                    }, 1000);
+                }
+            }
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

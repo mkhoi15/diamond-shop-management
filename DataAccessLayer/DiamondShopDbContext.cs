@@ -41,7 +41,14 @@ public class DiamondShopDbContext : IdentityDbContext<User, Role, Guid>
             .WithOne(m => m.Diamond)
             .HasForeignKey<Diamond>(d => d.MediaId)
             .OnDelete(DeleteBehavior.NoAction);
-        
+        builder.Entity<Diamond>()
+            .Property(d => d.CreatedAt)
+            .HasDefaultValue(DateTime.Now);
+        builder.Entity<Diamond>()
+            .Property(d => d.IsDeleted)
+            .HasDefaultValue(false);
+
+
         builder.Entity<Accessory>().ToTable(nameof(Accessories));
         builder.Entity<Accessory>()
             .HasMany<DiamondAccessory>(a => a.DiamondAccessories)
@@ -62,7 +69,13 @@ public class DiamondShopDbContext : IdentityDbContext<User, Role, Guid>
             .WithOne(m => m.PaperWork)
             .HasForeignKey<PaperWork>(pa => pa.MediaId)
             .OnDelete(DeleteBehavior.NoAction);
-        
+        builder.Entity<PaperWork>()
+            .Property(pa => pa.CreatedDate)
+            .HasDefaultValue(DateTime.Now);
+        builder.Entity<PaperWork>()
+            .Property(pa => pa.Status)
+            .HasDefaultValue("Active");
+
         builder.Entity<Media>().ToTable(nameof(Medias));
         
         builder.Entity<Promotion>().ToTable(nameof(Promotions));
@@ -100,6 +113,12 @@ public class DiamondShopDbContext : IdentityDbContext<User, Role, Guid>
             .WithOne(d => d.DeliveryMan)
             .HasForeignKey(u => u.DeliveryManId)
             .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<User>()
+            .Property(u => u.IsDeleted)
+            .HasDefaultValue(false);
+        builder.Entity<User>()
+            .Property(u => u.CreatedAt)
+            .HasDefaultValue(DateTime.Now);
         
         builder.Entity<Role>().ToTable(nameof(Roles));
         

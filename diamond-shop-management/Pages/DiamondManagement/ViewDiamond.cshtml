@@ -1,0 +1,95 @@
+﻿@page
+@model diamond_shop_management.Pages.DiamondManagement.ViewDiamondModel
+@{
+    ViewData["Title"] = "ViewDiamond";
+}
+
+<div class="text-center">
+    <section class="shop_section layout_padding">
+        <div class="container">
+            <div class="heading_container heading_center">
+                <h2>
+                    Diamond Management
+                </h2>
+            </div>
+            <div class="text-right mb-3">
+                <a asp-page="/DiamondManagement/Create" class="btn btn-primary">Create New Diamond</a>
+            </div>
+            @if (Model.Diamonds == null || !Model.Diamonds.Any())
+            {
+                <div class="alert alert-info" role="alert">
+                    There are no diamonds.
+                </div>
+            }
+            else
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Origin</th>
+                            <th>Color</th>
+                            <th>Cut</th>
+                            <th>Clarity</th>
+                            <th>Weight</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            @* <th>Promotion</th> *@
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var diamond in Model.Diamonds)
+                        {
+                            <tr>
+                                <td>@diamond.Origin</td>
+                                <td>@diamond.Color</td>
+                                <td>@diamond.Cut</td>
+                                <td>@diamond.Clarity %</td>
+                                <td>@diamond.Weight carats</td>
+                                <td>@diamond.Price $</td>
+                                <td>@(diamond.IsSold.HasValue && diamond.IsSold.Value ? "Sold" : "Available")</td>
+                                @* <td>@diamond.PromotionDescription</td> *@
+                                <td>
+                                    <a asp-page="/DiamondManagement/DiamondDetail" asp-route-diamondId="@diamond.Id" class="btn btn-info btn-sm">Detail</a>
+                                    <a asp-page="/DiamondManagement/Update" asp-route-diamondId="@diamond.Id" class="btn btn-warning btn-sm">Update</a>
+                                    <a asp-page="/DiamondManagement/Delete" asp-route-diamondId="@diamond.Id" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @* <div class="btn-box">
+            <a href="">
+            View All Products
+            </a>
+            </div> *@
+            <div class="container">
+
+                <nav aria-label="Page navigation" style="margin-top: 2%">
+                    <ul class="pagination justify-content-center">
+                        @if (Model.PageNumber > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-page="./ViewDiamond" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                            </li>
+                        }
+
+                        <li class="page-item active">
+                            <a class="page-link" asp-page="./ViewDiamond" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                        </li>
+
+                        @if (Model.PageNumber < Model.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-page="./ViewDiamond" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- end shop section -->
+</div>

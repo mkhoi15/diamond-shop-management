@@ -96,11 +96,18 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2024, 6, 26, 14, 31, 24, 455, DateTimeKind.Local).AddTicks(2817));
+
                     b.Property<string>("Cut")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<bool?>("IsSold")
                         .HasColumnType("bit");
@@ -241,12 +248,14 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2024, 6, 26, 14, 31, 24, 456, DateTimeKind.Local).AddTicks(1364));
 
                     b.Property<Guid>("DiamondId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("ExpirationDate")
+                    b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool?>("IsDeleted")
@@ -256,7 +265,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Active");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
@@ -342,6 +353,11 @@ namespace DataAccessLayer.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2024, 6, 26, 14, 31, 24, 457, DateTimeKind.Local).AddTicks(2573));
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -351,6 +367,11 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
