@@ -62,6 +62,11 @@
                 </div>
                 <h4 style="margin-top: 5%">Certificate Of Diamond</h4>
                 <div class="form-group">
+                    <label asp-for="PaperFile">Image</label>
+                    <input type="file" id="PaperFile" name="PaperFile" class="form-control" />
+                    <span asp-validation-for="PaperFile" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label asp-for="PaperworkRequest.Type" class="control-label"></label>
                     <input asp-for="PaperworkRequest.Type" id="CertificateValue" value="certificate" class="form-control" readonly style="pointer-events: none" />
                     <span asp-validation-for="PaperworkRequest.Type" class="text-danger"></span>
@@ -101,6 +106,9 @@
 
                             const fileInput = document.getElementById("ImageFile");
                             fileInput.value = "";
+
+                            const paperFile = document.getElementById("PaperFile");
+                            paperFile.value = "";
 
                             const certificate = document.getElementById("CertificateValue");
                             certificate.value = "certificate";

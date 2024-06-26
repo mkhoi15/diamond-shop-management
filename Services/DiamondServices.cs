@@ -28,15 +28,20 @@ namespace Services
         public async Task<DiamondResponse> CreateDiamondAsync(DiamondRequest diamondRequest)
         {
             var diamond = _mapper.Map<Diamond>(diamondRequest);
-            diamond.PaperWorks = _mapper.Map<List<PaperWork>>(diamondRequest.PaperworkRequests);
-            diamond.Media = _mapper.Map<Media>(diamondRequest.MediaRequest);
 
             _diamondRepository.Add(diamond);
-            _paperworkRepository.AddRange(diamond.PaperWorks);
+            /*foreach (var paperwork in diamond.PaperWorks)
+            {
+                _paperworkRepository.Add(paperwork);
+                if (paperwork.Media != null)
+                {
+                    _mediaRepository.Add(paperwork.Media);
+                }
+            }
             if (diamond.Media != null)
             {
                 _mediaRepository.Add(diamond.Media);
-            }
+            }*/
 
             await _unitOfWork.SaveChangeAsync();
 
