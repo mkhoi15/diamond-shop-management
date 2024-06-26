@@ -4,16 +4,19 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DataAccessLayer.Migrations
+namespace DataAccessLayer.migrations
 {
     [DbContext(typeof(DiamondShopDbContext))]
-    partial class DiamondShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240626011807_Adding_IsDelete_and_CreateAt_in_Diamond")]
+    partial class Adding_IsDelete_and_CreateAt_in_Diamond
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,7 +102,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 6, 26, 14, 31, 24, 455, DateTimeKind.Local).AddTicks(2817));
+                        .HasDefaultValue(new DateTime(2024, 6, 26, 8, 18, 5, 899, DateTimeKind.Local).AddTicks(4578));
 
                     b.Property<string>("Cut")
                         .HasColumnType("nvarchar(max)");
@@ -248,14 +251,12 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 6, 26, 14, 31, 24, 456, DateTimeKind.Local).AddTicks(1364));
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("DiamondId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("ExpirationDate")
+                    b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool?>("IsDeleted")
@@ -265,9 +266,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("Active");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
@@ -356,7 +355,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 6, 26, 14, 31, 24, 457, DateTimeKind.Local).AddTicks(2573));
+                        .HasDefaultValue(new DateTime(2024, 6, 26, 8, 18, 5, 900, DateTimeKind.Local).AddTicks(5765));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

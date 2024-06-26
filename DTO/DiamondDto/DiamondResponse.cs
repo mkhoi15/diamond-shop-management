@@ -1,4 +1,6 @@
-﻿namespace DTO.DiamondDto
+﻿using DTO.Media;
+
+namespace DTO.DiamondDto
 {
     public class DiamondResponse
     {

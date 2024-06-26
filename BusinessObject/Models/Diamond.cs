@@ -11,7 +11,8 @@ public class Diamond : Entity
     public Guid? MediaId { get; set; }
     public bool? IsSold { get; set; }
     public Guid? PromotionId { get; set; }
-    
+    public DateTime CreatedAt { get; set; }
+
     public Media? Media { get; set; }
     public ICollection<DiamondAccessory> DiamondAccessories { get; set; } = new List<DiamondAccessory>();
     public Promotion? Promotion { get; set; }
