@@ -32,26 +32,28 @@ public class UserServices : IUserServices
     {
         var response = new List<UserResponse>();
 
-        var users = await _userManager.Users
+        var query = _userManager.Users
             .AsNoTracking()
-            .Take(limit)
-            .Skip((page - 1) * limit)
-            .ToListAsync();
-        var count = await _userManager.Users.CountAsync();
+            .Where(u => u.IsDeleted == false && u.UserName != "admin");
 
-        var totalPage = (int)Math.Ceiling(decimal.Divide(count, limit));
+        var users = await query
+            .OrderByDescending(u => u.CreatedAt)
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+        
+        var count = await query
+            .CountAsync();
+
         foreach (var user in users)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            if (roles.Any(r => r == nameof(Roles.Admin)))
-            {
-                continue;
-            }
             var userResponse = _mapper.Map<UserResponse>(user);
             userResponse.Role = roles.FirstOrDefault();
             response.Add(userResponse);
         }
 
+        var totalPage = (int)Math.Ceiling(decimal.Divide(count, limit));
         return (response, totalPage);
     }
 
@@ -110,7 +112,8 @@ public class UserServices : IUserServices
             UserName = username,
             PhoneNumber = phone,
             Email = email,
-            FullName = fullname
+            FullName = fullname,
+            CreatedAt = DateTime.Now
         };
 
         var result = await _userManager.CreateAsync(newUser, password);
@@ -119,6 +122,66 @@ public class UserServices : IUserServices
 
         var response = _mapper.Map<UserResponse>(newUser);
         return response;
+    }
+
+    public async Task<UserResponse> GetUserByIdAsync(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null)
+        {
+            throw new AuthenticationException("User does not exist!!");
+        }
+        
+        var roles = await _userManager.GetRolesAsync(user);
+        
+        var userResponse = _mapper.Map<UserResponse>(user);
+        userResponse.Role = roles.FirstOrDefault();
+        
+        return userResponse;
+    }
+
+    public async Task<UserResponse> UpdateUserAsync(string id, string fullname, string email, string? phone, Roles roles)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null)
+        {
+            throw new AuthenticationException("User does not exist!!");
+        }
+        
+        user.FullName = fullname;
+        user.Email = email;
+        user.PhoneNumber = phone;
+        
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded) throw new Exception("Error when updating user!!");
+        
+        var userRoles = await _userManager.GetRolesAsync(user);
+        
+        if (userRoles.Any())
+        {
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
+        }
+        
+        var isSuccess = await _userManager.AddToRoleAsync(user, roles.ToString());
+        if (!isSuccess.Succeeded) throw new Exception("Error when updating user role!!");
+        
+        var response = _mapper.Map<UserResponse>(user);
+        response.Role = roles.ToString();
+        
+        return response;
+    }
+
+    public async Task<bool> DeleteUserAsync(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null)
+        {
+            throw new AuthenticationException("User does not exist!!");
+        }
+        
+        user.IsDeleted = true;
+        var result = await _userManager.UpdateAsync(user);
+        return result.Succeeded;
     }
 
     public async Task<bool> ChangePassword(string username, string oldPassword, string newPassword)

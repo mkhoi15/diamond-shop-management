@@ -4,16 +4,19 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DataAccessLayer.Migrations
+namespace DataAccessLayer.migrations
 {
     [DbContext(typeof(DiamondShopDbContext))]
-    partial class DiamondShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240625073945_Adding_isDelete_in_user")]
+    partial class Adding_isDelete_in_user
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -341,11 +344,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 6, 25, 15, 22, 45, 229, DateTimeKind.Local).AddTicks(4332));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

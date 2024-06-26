@@ -1,0 +1,57 @@
+﻿@page "/createAccount"
+@using BusinessObject.Enum
+@model diamond_shop_management.Pages.Admin.Create
+
+@{
+    Layout = "Shared/_Layout";
+    ViewBag.Title = "Create Account";
+}
+
+<h1 class="text-center mt-5" style="margin-top: 70px">Create Account</h1>
+<div class="row align-items-center w-auto h-100 p-5 m-5">
+    <div class="col-md-6">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h4>Create Account</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RegisterDto.Username"></label>
+                <input asp-for="RegisterDto.Username" class="form-control" />
+                <span asp-validation-for="RegisterDto.Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegisterDto.Phone"></label>
+                <input asp-for="RegisterDto.Phone" class="form-control" />
+                <span asp-validation-for="RegisterDto.Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegisterDto.Email"></label>
+                <input asp-for="RegisterDto.Email" class="form-control" />
+                <span asp-validation-for="RegisterDto.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Role"></label>
+                <select asp-for="Role" class="form-control">
+                    <option value="@(Roles.Manager)">Manager</option>
+                    <option value="@(Roles.Delivery)">Delivery Staff</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegisterDto.Password"></label>
+                <input asp-for="RegisterDto.Password" class="form-control" />
+                <span asp-validation-for="RegisterDto.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegisterDto.ConfirmPassword"></label>
+                <input asp-for="RegisterDto.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="RegisterDto.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

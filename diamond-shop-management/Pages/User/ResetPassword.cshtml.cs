@@ -56,5 +56,7 @@ public class ResetPassword : PageModel
         {
             ModelState.AddModelError("Error", "Cannot reset password");
         }
+        
+        RedirectToPage("/User/Login");
     }
 }
