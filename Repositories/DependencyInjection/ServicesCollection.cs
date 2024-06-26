@@ -16,6 +16,7 @@ public static class ServicesCollection
         collection.AddDataAccessLayer();
         collection.AddScoped<IAccessoryRepository, AccessoryRepository>();
         collection.AddScoped<IDiamondAccessoryRepository, DiamondAccessoryRepository>();
+        collection.AddScoped<IMediaRepository, MediaRepository>();
         return collection;
     }
 }
