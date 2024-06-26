@@ -1,33 +1,23 @@
 using AutoMapper;
-using BusinessObject.Enum;
-using BusinessObject.Models;
 using DTO.DiamondDto;
-using DTO.Media;
 using DTO.PaperworkDto;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services;
 using Services.Abstraction;
-using System.Drawing.Printing;
 
 namespace diamond_shop_management.Pages.DiamondManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
-    public class DiamondDetailModel : PageModel
+    public class UpdateModel : PageModel
     {
         private readonly IDiamondServices _diamondService;
         private readonly IPaperworkServices _paperworkService;
-        private readonly IMediaServices _mediaService;
         private readonly IMapper _mapper;
 
-        public DiamondDetailModel(IDiamondServices diamondService, IPaperworkServices paperworkService, IMapper mapper, IMediaServices mediaService)
+        public UpdateModel(IDiamondServices diamondService, IPaperworkServices paperworkService, IMapper mapper)
         {
             _diamondService = diamondService;
             _paperworkService = paperworkService;
-            PageSize = 8;
             _mapper = mapper;
-            _mediaService = mediaService;
         }
 
         public DiamondResponse Diamond { get; set; }
@@ -51,12 +41,6 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 return Page();
             }
 
-            if (Diamond.MediaId is not null)
-            {
-                var diamondMedia = await _mediaService.GetByIdAsync(Diamond.MediaId.Value, cancellationToken);
-                if (diamondMedia is not null)
-                    Diamond.MediaUrl = diamondMedia.Url;
-            }
             PageNumber = pageNumber ?? 1;
 
             var pagedResult = await _paperworkService.GetAllAsync(

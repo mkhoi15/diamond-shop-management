@@ -16,7 +16,7 @@ namespace DataAccessLayer
 
         public async Task<IEnumerable<PaperWork>> FindPagedAsync(Expression<Func<PaperWork, bool>> predicate, int skip, int pageSize, CancellationToken cancellationToken = default, params Expression<Func<PaperWork, object?>>[] includeProperties)
         {
-            IQueryable<PaperWork> query = _context.PaperWorks.Where(predicate);
+            IQueryable<PaperWork> query = _context.PaperWorks.Where(predicate).OrderByDescending(p => p.CreatedDate);
 
             foreach (var includeProperty in includeProperties)
             {

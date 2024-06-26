@@ -16,7 +16,7 @@ namespace DataAccessLayer
 
         public async Task<IEnumerable<Diamond>> FindPagedAsync(Expression<Func<Diamond, bool>> predicate, int skip, int pageSize, CancellationToken cancellationToken = default, params Expression<Func<Diamond, object?>>[] includeProperties)
         {
-            IQueryable<Diamond> query = _context.Diamonds.Where(predicate);
+            IQueryable<Diamond> query = _context.Diamonds.Where(predicate).OrderByDescending(d => d.CreatedAt);
 
             foreach (var includeProperty in includeProperties)
             {
