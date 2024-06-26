@@ -29,7 +29,7 @@ namespace DTO.DiamondDto
 
         public DateTime? CreatedAt { get; set; }
 
-        public ICollection<PaperworkRequest> PaperworkRequests { get; set; } = new List<PaperworkRequest>();
-        public MediaRequest? MediaRequest { get; set; }
+        public ICollection<PaperworkRequest> PaperWorks { get; set; } = new List<PaperworkRequest>();
+        public MediaRequest? Media { get; set; }
     }
 }

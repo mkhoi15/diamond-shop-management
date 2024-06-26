@@ -32,6 +32,9 @@ namespace diamond_shop_management.Pages.DiamondManagement
         [BindProperty]
         public IFormFile? ImageFile { get; set; }
 
+        [BindProperty]
+        public IFormFile? PaperFile { get; set; }
+
         public string? Message { get; set; }
 
         public CreateModel(IDiamondServices diamondServices, IPaperworkServices paperworkServices, IWebHostEnvironment environment, IMapper mapper)
@@ -51,6 +54,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
             try
             {
                 MediaRequest? media = await SaveMedia(ImageFile);
+                MediaRequest? paperMedia = await SaveMedia(PaperFile);
 
                 PaperworkRequest diamondCertificate = new PaperworkRequest
                 {
@@ -58,12 +62,19 @@ namespace diamond_shop_management.Pages.DiamondManagement
                     CreatedDate = DateTime.Now,
                     Status = "Active"
                 };
-                DiamondRequest.PaperworkRequests.Add(diamondCertificate);
+                if (paperMedia is not null)
+                {
+                    diamondCertificate.Media = paperMedia;
+                }
+                DiamondRequest.PaperWorks.Add(diamondCertificate);
+
+
                 if (media is not null)
                 {
-                    DiamondRequest.MediaRequest = media;
+                    DiamondRequest.Media = media;
                 }
                 DiamondRequest.CreatedAt = DateTime.Now;
+
                 await _diamondServices.CreateDiamondAsync(DiamondRequest);
 
                 Message = "Create successfully!";
