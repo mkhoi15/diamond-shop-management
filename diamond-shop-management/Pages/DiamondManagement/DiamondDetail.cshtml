@@ -105,31 +105,35 @@
         {
             <div class="row">
                 <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Type</th>
-                            <th class="text-center">Created Date</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var paperwork in Model.Paperworks)
-                        {
+                    @foreach (var paperwork in Model.Paperworks)
+                    {
+                        <thead>
                             <tr>
-                                <td class="text-center">@paperwork.Type</td>
-                                <td class="text-center">@paperwork.CreatedDate.ToShortDateString()</td>
+                                <th class="text-center">Type</th>
+                                <th class="text-center">Created Date</th>
                                 @if (paperwork.Type.Trim().ToLower() != "certificate")
                                 {
-                                    <td class="text-center">@paperwork.ExpirationDate.ToShortDateString()</td>
+                                    <th class="text-center">Expiration Date</th>
+                                }
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center">@paperwork.Type</td>
+                                <td class="text-center">@paperwork.CreatedDate</td>
+                                @if (paperwork.Type.Trim().ToLower() != "certificate")
+                                {
+                                    <td class="text-center">@paperwork.ExpirationDate</td>
                                 }
                                 <td class="text-center">@paperwork.Status</td>
                                 <td class="text-center">
                                     <a asp-page="/PaperworkManagement/View" asp-route-paperworkId="@paperwork.Id" class="btn btn-info">Detail</a>
                                 </td>
                             </tr>
-                        }
-                    </tbody>
+                        </tbody>
+                    }
                 </table>
             </div>
         }
