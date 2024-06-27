@@ -68,7 +68,8 @@ namespace Services
                 pageSize,
                 diamond => diamond.IsDeleted != true,
                 cancellationToken,
-                diamond => diamond.Promotion
+                diamond => diamond.Promotion,
+                diamond => diamond.Media
             );
 
             var diamondResponses = _mapper.Map<IEnumerable<DiamondResponse>>(diamonds);
