@@ -13,7 +13,9 @@ namespace DTO.AccessoryDto
         public required string Name { get; set; }
 
         [Required(ErrorMessage = "Price is required")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
+        [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive value.")]
         public decimal Price { get; set; }
+        public Guid? MediaId { get; set; }
+        public Guid? PromotionId { get; set; }
     }
 }

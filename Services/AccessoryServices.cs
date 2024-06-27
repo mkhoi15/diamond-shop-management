@@ -4,6 +4,7 @@ using DataAccessLayer.Abstraction;
 using DTO;
 using DTO.AccessoryDto;
 using DTO.DiamondDto;
+using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Repositories.Abstraction;
 using Services.Abstraction;
@@ -19,13 +20,27 @@ namespace Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAccessoryRepository _AccessoryRepository;
+        private readonly IDiamondAccessoryRepository _DiamondAccessoryRepository;
         private readonly IMapper _mapper;
 
-        public AccessoryServices(IUnitOfWork unitOfWork, IAccessoryRepository accessoryRepository, IMapper mapper)
+        public AccessoryServices(IUnitOfWork unitOfWork, IAccessoryRepository accessoryRepository, IDiamondAccessoryRepository diamondAccessoryRepository, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _AccessoryRepository = accessoryRepository;
+            _DiamondAccessoryRepository = diamondAccessoryRepository;
             _mapper = mapper;
+        }
+
+        public async Task AddDiamondToAccessoryAsync(Guid accessoryId, Guid diamondId)
+        {
+            var diamondAccessory = new DiamondAccessory
+            {
+                AccessoryId = accessoryId,
+                DiamondId = diamondId
+            };
+
+            _DiamondAccessoryRepository.Add(diamondAccessory);
+            await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task<AccessoryResponse> CreateAccessoryAsync(AccessoryRequest request)
@@ -44,6 +59,7 @@ namespace Services
             int skip = (pageNumber - 1) * pageSize;
 
             var accessories = await _AccessoryRepository.FindPaged(skip, pageSize, a => a.IsDeleted != true, cancellationToken, a => a.Promotion);
+
             var accessoryResponses = _mapper.Map<IEnumerable<AccessoryResponse>>(accessories);
 
             var pagedResult = new PagedResult<AccessoryResponse>
@@ -51,7 +67,8 @@ namespace Services
                 Items = accessoryResponses,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalItems = GetAllAccessoriesAsync(cancellationToken).Result.Count()
+                TotalItems = GetAllAccessoriesAsync(cancellationToken).Result.Count(),
+                
             };
 
             return pagedResult;
