@@ -10,6 +10,8 @@ public class Card : PageModel
 {
     public DTO.Card CartItems { get; private set; } 
     //public List<Card> CartItems { get; private set; }
+    
+    public decimal Total { get; private set; }
 
 
     public List<DiamondResponse> Diamonds { get; set; } = new List<DiamondResponse>();
@@ -17,7 +19,7 @@ public class Card : PageModel
     public void OnGet()
     {
         CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
-        
+        this.TotalPrice();
     }
     
     public IActionResult OnPostClearCart()
@@ -37,5 +39,25 @@ public class Card : PageModel
     //     }
     //     return RedirectToPage();
     // }
+
+
+    public void TotalPrice()
+    {
+        decimal total = 0;
+        if (this.CartItems.Diamond.Count > 0)
+        {
+            foreach (var diamond in this.CartItems.Diamond)
+            {
+                if (diamond.Price != null)
+                {
+                    total = total + decimal.Parse(diamond.Price.ToString()!);
+                }
+            }
+        }
+
+        this.Total = total;
+
+    } 
+    
     
 }

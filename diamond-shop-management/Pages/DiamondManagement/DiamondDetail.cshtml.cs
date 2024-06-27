@@ -51,12 +51,6 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 return Page();
             }
 
-            if (Diamond.MediaId is not null)
-            {
-                var diamondMedia = await _mediaService.GetByIdAsync(Diamond.MediaId.Value, cancellationToken);
-                if (diamondMedia is not null)
-                    Diamond.MediaUrl = diamondMedia.Url;
-            }
             PageNumber = pageNumber ?? 1;
 
             var pagedResult = await _paperworkService.GetAllAsync(

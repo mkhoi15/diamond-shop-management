@@ -16,5 +16,7 @@ namespace DTO.DiamondDto
         public Guid? PromotionId { get; set; }
         public string? MediaUrl { get; set; }
         public string? PromotionDescription { get; set; }
+
+        public MediaResponse? Media { get; set; }
     }
 }

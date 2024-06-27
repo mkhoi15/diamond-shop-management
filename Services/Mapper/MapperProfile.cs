@@ -31,12 +31,16 @@ public class MapperProfile : Profile
         CreateMap<AccessoryRequest, Accessory>()
             .ReverseMap();
         CreateMap<Accessory, AccessoryResponse>()
+            .ForMember(dest => dest.PromotionName, opt => opt.MapFrom(src => src.Promotion.Name))
+            .ForMember(dest => dest.MediaUrl, opt => opt.MapFrom(src => src.Media.Url))
             .ReverseMap();
         CreateMap<DiamondAccessory, DiamondAccessoryResponse>()
             .ReverseMap();
         CreateMap<MediaRequest, Media>()
             .ReverseMap();
         CreateMap<Media, MediaResponse>()
+            .ReverseMap();
+        CreateMap<DiamondAccessoryRequest, DiamondAccessory>()
             .ReverseMap();
     }
 }
