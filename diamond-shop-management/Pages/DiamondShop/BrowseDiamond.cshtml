@@ -27,9 +27,9 @@
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <div class="box">
                                 <div class="img-box">
-                                    @if (!string.IsNullOrEmpty(diamond.MediaUrl))
+                                    @if (@diamond.Media is not null)
                                     {
-                                        <img src="@diamond.MediaUrl" alt="Diamond Image">
+                                        <img src="~/@diamond.Media.Url" alt="Diamond Image">
                                     }
                                     else
                                     {
