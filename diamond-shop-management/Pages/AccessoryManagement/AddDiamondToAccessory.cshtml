@@ -1,0 +1,19 @@
+﻿@page
+@model diamond_shop_management.Pages.AccessoryManagement.AddDiamondToAccessoryModel
+@{
+    ViewData["Title"] = "AddDiamondToAccessory";
+}
+
+<h2>Add Diamond to Accessory</h2>
+
+<form method="post">
+    <div>
+        <label for="accessoryId">Accessory ID:</label>
+        <input type="text" id="accessoryId" name="accessoryId" />
+    </div>
+    <div>
+        <label for="diamondId">Diamond ID:</label>
+        <input type="text" id="diamondId" name="diamondId" />
+    </div>
+    <button type="submit">Add Diamond</button>
+</form>

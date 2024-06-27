@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using DataAccessLayer.Abstraction;
 using Repositories.Abstraction;
 using System.Linq.Expressions;
 
@@ -6,9 +7,15 @@ namespace Repositories
 {
     internal class DiamondAccessoryRepository : IDiamondAccessoryRepository
 	{
+		private readonly IDiamondAccessoryDAO _diamondAccessoryDAO;
+
+		public DiamondAccessoryRepository(IDiamondAccessoryDAO diamondAccessoryDAO)
+		{
+			_diamondAccessoryDAO = diamondAccessoryDAO;
+		}
 		public void Add(DiamondAccessory entity)
 		{
-			throw new NotImplementedException();
+			_diamondAccessoryDAO.Add(entity);
 		}
 
 		public void AddRange(ICollection<DiamondAccessory> entities)
