@@ -65,5 +65,15 @@ namespace Services
 
             return pagedResult;
         }
+
+        public async Task<PaperworkResponse?> GetByIdAsync(Guid? id, CancellationToken cancellationToken)
+        {
+            if (id is null)
+                return null;
+
+            var paperwork = await _paperworkRepository.FindById(id.Value, cancellationToken, p => p.Media);
+
+            return _mapper.Map<PaperworkResponse>(paperwork);
+        }
     }
 }
