@@ -23,7 +23,6 @@
                         @* <th scope="col">Product</th> *@
                         <th scope="col">Description (Origin, Color, Cut, Clarity) </th>
                         <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
                         <th scope="col">Total</th>
                         <th scope="col"></th>
                     </tr>
@@ -42,9 +41,7 @@
                                 </div>
                             </td>
                             <td>$@item.Price</td>
-                            <td>Quantity</td>
-                            @* <td>$@(item.Diamond?.Price * item.Quantity)</td>  *@
-                            <td>Total</td>
+                            <td>$@(item.Price * 1)</td> 
                             <td>
                                 <form method="post" class="form-inline">
                                     <input type="hidden" name="itemId" value="@item.Id" />
@@ -73,7 +70,7 @@
                         <hr>
                         <dl class="row">
                             <dt class="col-sm-8">Subtotal:</dt>
-                            @* <dd class="col-sm-4">$@Model.CartItems.Sum(i => i.Diamond?.Price * i.Quantity)</dd> *@
+                            <dd class="col-sm-4">$@Model.Total</dd>
                         </dl>
                         <hr>
                         <div class="text-center">
