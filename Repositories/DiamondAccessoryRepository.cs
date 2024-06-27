@@ -3,6 +3,7 @@ using DataAccessLayer.Abstraction;
 using Repositories.Abstraction;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using DataAccessLayer;
 
 namespace Repositories
 {
@@ -24,24 +25,24 @@ namespace Repositories
 			_diamondAccessoryDAO.AddRange(entities);
 		}
 
-		public Task<IEnumerable<DiamondAccessory>> Find(Expression<Func<DiamondAccessory, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<DiamondAccessory, object?>>[] includeProperties)
+		public async Task<IEnumerable<DiamondAccessory>> Find(Expression<Func<DiamondAccessory, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<DiamondAccessory, object?>>[] includeProperties)
 		{
-			throw new NotImplementedException();
+			return await _diamondAccessoryDAO.Find(predicate, cancellationToken, includeProperties);
 		}
 
 		public IQueryable<DiamondAccessory> FindAll()
 		{
-			throw new NotImplementedException();
+			 return _diamondAccessoryDAO.FindAll();
 		}
 
-		public Task<DiamondAccessory?> FindById(Guid id, CancellationToken cancellationToken = default, params Expression<Func<DiamondAccessory, object?>>[] includeProperties)
+		public async Task<DiamondAccessory?> FindById(Guid id, CancellationToken cancellationToken = default, params Expression<Func<DiamondAccessory, object?>>[] includeProperties)
 		{
-			throw new NotImplementedException();
+			return await _diamondAccessoryDAO.FindById(id, cancellationToken, includeProperties);
 		}
 
 		public void Remove(DiamondAccessory entity)
 		{
-			throw new NotImplementedException();
+			_diamondAccessoryDAO.Remove(entity);
 		}
 
 		public async Task<DiamondAccessory> GetProductByDiamondId(Guid diamondId)
@@ -60,7 +61,7 @@ namespace Repositories
 
 		public void Update(DiamondAccessory entity)
 		{
-			throw new NotImplementedException();
+			_diamondAccessoryDAO.Update(entity);
 		}
-	}
+    }
 }
