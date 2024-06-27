@@ -12,43 +12,66 @@
             </h2>
         </div>
         <div class="row">
-            <form method="post">
-                <div class="form-group">
-                    <label asp-for="DiamondRequest.Origin"></label>
-                    <input asp-for="DiamondRequest.Origin" class="form-control" />
-                    <span asp-validation-for="DiamondRequest.Origin" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DiamondRequest.Color"></label>
-                    <input asp-for="DiamondRequest.Color" class="form-control" />
-                    <span asp-validation-for="DiamondRequest.Color" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DiamondRequest.Cut"></label>
-                    <input asp-for="DiamondRequest.Cut" class="form-control" />
-                    <span asp-validation-for="DiamondRequest.Cut" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DiamondRequest.Clarity"></label>
-                    <input asp-for="DiamondRequest.Clarity" class="form-control" />
-                    <span asp-validation-for="DiamondRequest.Clarity" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DiamondRequest.Weight"></label>
-                    <input asp-for="DiamondRequest.Weight" class="form-control" />
-                    <span asp-validation-for="DiamondRequest.Weight" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DiamondRequest.Price"></label>
-                    <input asp-for="DiamondRequest.Price" class="form-control" />
-                    <span asp-validation-for="DiamondRequest.Price" class="text-danger"></span>
-                </div>
-
+            <form method="post" enctype="multipart/form-data">
+                <h3>Diamond Inforamtion</h3>
                 @if (!string.IsNullOrEmpty(Model.Message)) {
                     <div class="alert alert-danger" id="message" role="alert">
                         @Model.Message
                     </div>
                 }
+                <div class="form-group">
+                    <label asp-for="ImageFile">Image</label>
+                    <input type="file" id="ImageFile" name="ImageFile" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Origin"></label>
+                    <select asp-for="DiamondRequest.Origin" class="form-control" asp-items="@(new SelectList(Model.Countries))">
+                        <option value="">Select Origin</option>
+                    </select>
+                    <span asp-validation-for="DiamondRequest.Origin" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Color"></label>
+                    <select asp-for="DiamondRequest.Color" class="form-control" asp-items="@(new SelectList(Model.Colors))">
+                        <option value="">Select Color</option>
+                    </select>
+                    <span asp-validation-for="DiamondRequest.Color" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Cut">Cut</label>
+                    <select asp-for="DiamondRequest.Cut" class="form-control" asp-items="@(new SelectList(Model.Cuts))">
+                        <option value="">Select Cut type of diamond</option>
+                    </select>
+                    <span asp-validation-for="DiamondRequest.Cut" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Clarity">Clarity (%)</label>
+                    <input asp-for="DiamondRequest.Clarity" class="form-control" />
+                    <span asp-validation-for="DiamondRequest.Clarity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Weight">Weight (carats)</label>
+                    <input asp-for="DiamondRequest.Weight" class="form-control" />
+                    <span asp-validation-for="DiamondRequest.Weight" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondRequest.Price">Price ($)</label>
+                    <input asp-for="DiamondRequest.Price" class="form-control" />
+                    <span asp-validation-for="DiamondRequest.Price" class="text-danger"></span>
+                </div>
+                <h4 style="margin-top: 5%">Certificate Of Diamond</h4>
+                <div class="form-group">
+                    <label asp-for="PaperFile">Image</label>
+                    <input type="file" id="PaperFile" name="PaperFile" class="form-control" />
+                    <span asp-validation-for="PaperFile" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PaperworkRequest.Type" class="control-label"></label>
+                    <input asp-for="PaperworkRequest.Type" id="CertificateValue" value="certificate" class="form-control" readonly style="pointer-events: none" />
+                    <span asp-validation-for="PaperworkRequest.Type" class="text-danger"></span>
+                </div>
+
 
                 <div class="flex-start">
                     <a asp-page="/DiamondManagement/ViewDiamond" class="btn btn-secondary">Back to List</a>
@@ -69,15 +92,32 @@
                 const message = errorMessage.textContent.trim();
                 if (message !== "") {
                     setTimeout(function () {
-                        errorMessage.style.display = "none";
                         const form = document.querySelector("form");
                         if (form) {
                             const inputs = form.querySelectorAll("input[type='text'], input[type='email'], input[type='number'], input[type='password'], textarea");
                             inputs.forEach(function (input) {
                                 input.value = "";
                             });
+
+                            const selects = form.querySelectorAll("select");
+                            selects.forEach(function (select) {
+                                select.selectedIndex = 0;
+                            });
+
+                            const fileInput = document.getElementById("ImageFile");
+                            fileInput.value = "";
+
+                            const paperFile = document.getElementById("PaperFile");
+                            paperFile.value = "";
+
+                            const certificate = document.getElementById("CertificateValue");
+                            certificate.value = "certificate";
                         }
+                    });
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
                     }, 2000);
+
                 } else {
                     setTimeout(function () {
                         errorMessage.style.display = "none";

@@ -42,12 +42,12 @@ namespace diamond_shop_management.Pages.PaperworkManagement
             if (Diamond == null)
             {
                 Message = "Diamond is not found";
-                ModelState.AddModelError("DiamondId", Message);
+                ModelState.AddModelError(string.Empty, Message);
                 return;
             }
 
             var pagedResult = await _paperworkService.GetAllAsync(
-                paper => paper.DiamondId == diamondId, PageNumber, PageSize,cancellationToken);
+                paper => paper.DiamondId == diamondId && paper.Status == "Active", PageNumber, PageSize,cancellationToken);
 
             Paperworks = _mapper.Map<List<PaperworkResponse>>(pagedResult.Items);
 

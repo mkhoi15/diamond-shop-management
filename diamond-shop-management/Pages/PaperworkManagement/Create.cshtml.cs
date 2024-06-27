@@ -21,7 +21,7 @@ namespace diamond_shop_management.Pages.PaperworkManagement
             _diamondService = diamondService;
         }
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public PaperworkRequest PaperworkRequest { get; set; }
 
         [BindProperty(SupportsGet = true)]
@@ -38,20 +38,21 @@ namespace diamond_shop_management.Pages.PaperworkManagement
                 Message = "Diamond is not found to create its paperwork";
                 ModelState.AddModelError("DiamondId", Message);
             }
-            else 
+            else
             {
                 DiamondId = diamondId;
             }
+
+            PaperworkRequest.Type = "warranty";
         }
 
         public async Task<IActionResult> OnPost()
         {
             try
             {
-                if (PaperworkRequest.Type?.Trim().ToLower() != "certificate"
-                    && PaperworkRequest.Type?.Trim().ToLower() != "warranty")
+                if (PaperworkRequest.Type?.Trim().ToLower() != "warranty")
                 {
-                    Message = "Please enter a type Certificate or Warranty";
+                    Message = "Please enter a type Warranty";
                     ModelState.AddModelError(string.Empty, Message);
                     return Page();
                 }
@@ -65,24 +66,17 @@ namespace diamond_shop_management.Pages.PaperworkManagement
 
                 PaperworkRequest.CreatedDate = DateTime.Now;
                 PaperworkRequest.Status = "Active";
-                if (PaperworkRequest.Type.Trim().ToLower() == "certificate")
-                {
-                    PaperworkRequest.Type = "certificate";
-                }
-                else
-                {
-                    PaperworkRequest.Type = "warranty";
-                }
+                PaperworkRequest.Type = "warranty";
 
                 await _paperworkServices.AddAsync(PaperworkRequest);
 
-                Message = "Paperwork created successfully";
+                Message = "Warranty created successfully";
                 ModelState.AddModelError(string.Empty, Message);
                 return Page();
             }
             catch (Exception ex)
             {
-                Message = "Paperwork creation failed!\n" + ex.Message;
+                Message = "Warranty creation failed!\n" + ex.Message;
                 ModelState.AddModelError(string.Empty, Message);
                 return Page();
             }

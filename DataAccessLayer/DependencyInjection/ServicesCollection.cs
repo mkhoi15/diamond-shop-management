@@ -15,6 +15,7 @@ public static class ServicesCollection
         collection.AddScoped<IPromotionDAO, PromotionDAO>();
         collection.AddScoped<IAccessoryDAO, AccessoryDAO>();
         collection.AddScoped<IDiamondAccessoryDAO, DiamondAccessoryDAO>();
+        collection.AddScoped<IMediaDAO, MediaDAO>();
         return collection;
     }
 }

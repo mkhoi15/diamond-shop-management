@@ -13,14 +13,16 @@ namespace Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDiamondRepository _diamondRepository;
         private readonly IPaperworkRepository _paperworkRepository;
+        private readonly IMediaRepository _mediaRepository;
         private readonly IMapper _mapper;
 
-        public DiamondServices(IDiamondRepository diamondRepository, IPaperworkRepository paperworkRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public DiamondServices(IDiamondRepository diamondRepository, IPaperworkRepository paperworkRepository, IMapper mapper, IUnitOfWork unitOfWork, IMediaRepository mediaRepository)
         {
             _diamondRepository = diamondRepository;
             _paperworkRepository = paperworkRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _mediaRepository = mediaRepository;
         }
 
         public async Task<DiamondResponse> CreateDiamondAsync(DiamondRequest diamondRequest)
@@ -28,6 +30,18 @@ namespace Services
             var diamond = _mapper.Map<Diamond>(diamondRequest);
 
             _diamondRepository.Add(diamond);
+            /*foreach (var paperwork in diamond.PaperWorks)
+            {
+                _paperworkRepository.Add(paperwork);
+                if (paperwork.Media != null)
+                {
+                    _mediaRepository.Add(paperwork.Media);
+                }
+            }
+            if (diamond.Media != null)
+            {
+                _mediaRepository.Add(diamond.Media);
+            }*/
 
             await _unitOfWork.SaveChangeAsync();
 
@@ -75,7 +89,8 @@ namespace Services
             var diamond = await _diamondRepository.FindById(
                 id,
                 cancellationToken,
-                diamond => diamond.Promotion
+                diamond => diamond.Promotion,
+                diamond => diamond.Media
                 );
             return _mapper.Map<DiamondResponse>(diamond);
         }

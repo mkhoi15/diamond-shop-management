@@ -16,5 +16,6 @@ namespace Services.Abstraction
             CancellationToken cancellationToken,
             params Expression<Func<PaperWork, Object?>>[] includeProperties);
         Task<PaperworkResponse> AddAsync(PaperworkRequest paperworkRequest);
+        Task<PaperworkResponse?> GetByIdAsync(Guid? id, CancellationToken cancellationToken);
     }
 }

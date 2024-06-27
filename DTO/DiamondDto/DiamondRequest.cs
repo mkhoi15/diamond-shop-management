@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DTO.Media;
+using DTO.PaperworkDto;
+using System.ComponentModel.DataAnnotations;
 
 namespace DTO.DiamondDto
 {
@@ -14,14 +16,20 @@ namespace DTO.DiamondDto
         public string Cut { get; set; }
 
         [Required(ErrorMessage = "Clarity is required")]
+        [RegularExpression(@"^(?!0+(\.0*)?$)(\d{1,2}(\.\d+)?|100(\.0+)?)$", ErrorMessage = "Clarity must be a decimal number greater than 0 and less than 100")]
         public string Clarity { get; set; }
 
         [Required(ErrorMessage = "Weight is required")]
-        [RegularExpression(@"^\d+(\.\d{1,2})$", ErrorMessage = "Weight must be a number with one or two decimal places")]
+        [RegularExpression(@"^(?!0+(\.0*)?$)\d+(\.\d{1,})?$", ErrorMessage = "Weight must be a decimal number greater than 0")]
         public string Weight { get; set; }
 
         [Required(ErrorMessage = "Price is required")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
         public decimal Price { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
+
+        public ICollection<PaperworkRequest> PaperWorks { get; set; } = new List<PaperworkRequest>();
+        public MediaRequest? Media { get; set; }
     }
 }
