@@ -22,6 +22,7 @@ public class DaoBase<TEntity> : IDaoBase<TEntity>
         params Expression<Func<TEntity, object?>>[] includeProperties)
     {
         return await _context.Set<TEntity>()
+            .IncludeProperties(includeProperties)
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
