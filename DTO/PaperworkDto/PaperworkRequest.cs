@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DTO.DiamondDto;
+using DTO.Media;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace DTO.PaperworkDto
@@ -15,8 +17,12 @@ namespace DTO.PaperworkDto
 
         [Required(ErrorMessage = "Please select a date")]
         [DataType(DataType.DateTime)]
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
 
         public string? Status { get; set; }
+
+        public MediaRequest? Media { get; set; }
+
+        public DiamondRequest? Diamond { get; set; }
     }
 }

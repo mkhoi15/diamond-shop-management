@@ -155,4 +155,8 @@
       <None Remove="ScaffoldingReadMe.txt" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages\Orders\" />
+    </ItemGroup>
+
 </Project>

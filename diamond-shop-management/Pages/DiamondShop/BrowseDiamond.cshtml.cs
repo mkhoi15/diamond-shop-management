@@ -40,17 +40,17 @@ public class BrowseDiamond : PageModel
     public async Task<IActionResult> OnPostAddToCart(Guid diamondId, CancellationToken cancellationToken)
     {
         var cart = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
-        var item = new DTO.Card();
+        
         if (diamondId != Guid.Empty)
         {
             var diamond = await _diamondServices.GetByIdAsync(diamondId, cancellationToken);
             var diamondResponse = _mapper.Map<DiamondResponse>(diamond);
             
             
-            item.Diamond.Add(diamondResponse);
+            cart.Diamond.Add(diamondResponse);
         }
 
-        HttpContext.Session.SetObjectAsJson("Cart", item);
+        HttpContext.Session.SetObjectAsJson("Cart", cart);
         var cart2 = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
 
         // Redirect to the cart page
