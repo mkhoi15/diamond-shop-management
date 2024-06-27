@@ -13,13 +13,15 @@ public class OrderServices : IOrderServices
     private readonly IOrderRepository _orderRepository;
     private readonly IOrderDetailRepository _orderDetailRepository;
     private readonly IMapper _mapper;
+    private readonly IDiamondAccessoryRepository _diamondAccessoryRepository;
 
-    public OrderServices(IUnitOfWork unitOfWork, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper)
+    public OrderServices(IUnitOfWork unitOfWork, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IDiamondAccessoryRepository diamondAccessoryRepository)
     {
         _unitOfWork = unitOfWork;
         _orderRepository = orderRepository;
         _orderDetailRepository = orderDetailRepository;
         _mapper = mapper;
+        _diamondAccessoryRepository = diamondAccessoryRepository;
     }
 
     public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest)

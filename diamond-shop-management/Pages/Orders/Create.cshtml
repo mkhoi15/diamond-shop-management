@@ -21,33 +21,43 @@
             <span asp-validation-for="OrderRequest.Date" class="text-danger"></span>
         </div>
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Description (Origin, Color, Cut, Clarity)</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model.OrderRequest.OrderDetails)
-            {
-                <tr>
-                    <td>
-                        <div>@item.ProductId</div> <!-- Use appropriate description fields -->
-                    </td>
-                    <td>$@item.Price</td>
-                    <td>@item.Quantity</td>
-                    <td>$@(item.Price * item.Quantity)</td>
-                </tr>
-            }
-            </tbody>
-        </table>
+        <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                @* <th scope="col">Product</th> *@
+                                <th scope="col">Description (Origin, Color, Cut, Clarity) </th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CartItems.Diamond)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="media">
+                                            @* <img src="@item.Diamond?.MediaUrl ?? '/images/Diamond.png'" class="mr-3" alt="Diamond Image" style="max-width: 100px;"> *@
+                                            <div class="media-body">
+                                                @* <h5 class="mt-0">@item.Diamond?.Name</h5> *@
+                                                <p>@item.Origin, @item.Color, @item.Cut, @item.Clarity</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>$@item.Price</td>
+                                    <td>1</td>
+                                    <td>$@(item.Price * 1)</td> 
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
 
         <div class="form-group">
-            <label>Total Price: $@Model.OrderRequest.TotalPrice</label>
+            <label>Total Price: $@Model.Total</label>
         </div>
+        
+        <!-- Hidden field for TotalPrice -->
+        <input type="hidden" asp-for="OrderRequest.TotalPrice" />
 
         <button type="submit" class="btn btn-primary">Place Order</button>
     </form>

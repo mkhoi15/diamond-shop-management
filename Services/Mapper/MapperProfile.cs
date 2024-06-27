@@ -40,5 +40,7 @@ public class MapperProfile : Profile
             .ReverseMap();
         CreateMap<Media, MediaResponse>()
             .ReverseMap();
+        CreateMap<DiamondAccessoryRequest, DiamondAccessory>()
+            .ReverseMap();
     }
 }

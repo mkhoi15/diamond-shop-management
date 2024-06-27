@@ -2,6 +2,7 @@
 using DataAccessLayer.Abstraction;
 using Repositories.Abstraction;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repositories
 {
@@ -20,7 +21,7 @@ namespace Repositories
 
 		public void AddRange(ICollection<DiamondAccessory> entities)
 		{
-			throw new NotImplementedException();
+			_diamondAccessoryDAO.AddRange(entities);
 		}
 
 		public Task<IEnumerable<DiamondAccessory>> Find(Expression<Func<DiamondAccessory, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<DiamondAccessory, object?>>[] includeProperties)
@@ -42,6 +43,20 @@ namespace Repositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public async Task<DiamondAccessory> GetProductByDiamondId(Guid diamondId)
+		{
+			var diamondAccessory = await _diamondAccessoryDAO.FindAll()
+				.FirstOrDefaultAsync(x => x.DiamondId == diamondId);
+
+			if (diamondAccessory == null)
+			{
+				throw new Exception("Diamond Accessory not found");
+			}
+			
+			return diamondAccessory;
+		}
+
 
 		public void Update(DiamondAccessory entity)
 		{
