@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DTO.Media;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace DTO.PaperworkDto
         public DateTime? ExpirationDate { get; set; }
         public string? Status { get; set; }
         public string? MediaUrl { get; set; }
+
+        public MediaResponse? Media { get; set; }
     }
 }
