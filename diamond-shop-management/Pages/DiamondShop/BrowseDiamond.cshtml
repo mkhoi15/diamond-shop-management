@@ -44,10 +44,6 @@
                                     <div>Weight: @diamond.Weight</div>
                                     <div>Price: $@diamond.Price</div>
                                     <div>Status: @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "Sold" : "Available")</div>
-                                    @if (!string.IsNullOrEmpty(diamond.PromotionDescription))
-                                    {
-                                        <h6>Promotion: @diamond.PromotionDescription</h6>
-                                    }
                                 </div>
                                 <form method="post" asp-page-handler="AddToCart">
                                     <input type="hidden" name="diamondId" value="@diamond.Id" />

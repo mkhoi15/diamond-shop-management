@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessObject.Enum;
 using BusinessObject.Models;
+using DataAccessLayer.Abstraction;
 using DTO.DiamondDto;
 using DTO.Media;
 using DTO.PaperworkDto;
@@ -17,6 +18,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
     {
         private readonly IDiamondServices _diamondServices;
         private readonly IWebHostEnvironment _environment;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         [BindProperty]
@@ -37,11 +39,12 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public string? Message { get; set; }
 
-        public CreateModel(IDiamondServices diamondServices, IPaperworkServices paperworkServices, IWebHostEnvironment environment, IMapper mapper)
+        public CreateModel(IDiamondServices diamondServices, IPaperworkServices paperworkServices, IWebHostEnvironment environment, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _diamondServices = diamondServices;
             _environment = environment;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public void OnGet()
@@ -75,7 +78,8 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 }
                 DiamondRequest.CreatedAt = DateTime.Now;
 
-                await _diamondServices.CreateDiamondAsync(DiamondRequest);
+                _diamondServices.CreateDiamond(DiamondRequest);
+                await _unitOfWork.SaveChangeAsync();
 
                 Message = "Create successfully!";
                 ModelState.AddModelError(string.Empty, "Create successfully!");

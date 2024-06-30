@@ -12,5 +12,7 @@ namespace Repositories.Abstraction
             CancellationToken cancellationToken = default,
             params Expression<Func<Diamond, object?>>[] includeProperties
         );
+
+
     }
 }

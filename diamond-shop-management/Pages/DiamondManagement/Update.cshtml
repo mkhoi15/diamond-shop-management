@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{DiamondId}"
 @model diamond_shop_management.Pages.DiamondManagement.UpdateModel
 @{
     ViewData["Title"] = "Diamond Update";
@@ -9,38 +9,89 @@
     <div class="container">
         <div class="heading_container heading_center">
             <h2>
-                Detail
+                Diamond Update
             </h2>
         </div>
         <div class="row">
-            <form>
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group text-center">
+                    @if (@Model.Diamond != null && Model.Diamond.Media != null)
+                    {
+                        <img src="~/@Model.Diamond.Media.Url" alt="Diamond Image" width="50%">
+                    }
+                    else
+                    {
+                        <img src="" alt="No image" width="100%">
+                    }
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div class="alert alert-danger" id="message" role="alert">
+                        @Model.Message
+                    </div>
+                }
+                <div class="form-group">
+                    <label asp-for="ImageFile">Image</label>
+                    <input type="file" id="ImageFile" name="ImageFile" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
                 <div class="form-group">
                     <label asp-for="Diamond.Origin"></label>
-                    <input asp-for="Diamond.Origin" class="form-control" readonly style="pointer-events:none" />
+                    <select asp-for="Diamond.Origin" class="form-control" asp-items="@(new SelectList(Model.Countries))">
+                        <option value="">Select Origin</option>
+                    </select>
+                    <span asp-validation-for="Diamond.Origin" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Diamond.Color"></label>
-                    <input asp-for="Diamond.Color" class="form-control" readonly style="pointer-events:none" />
+                    <select asp-for="Diamond.Color" class="form-control" asp-items="@(new SelectList(Model.Colors))">
+                        <option value="">Select Color</option>
+                    </select>
+                    <span asp-validation-for="Diamond.Color" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Diamond.Cut"></label>
-                    <input asp-for="Diamond.Cut" class="form-control" readonly style="pointer-events:none" />
+                    <select asp-for="Diamond.Cut" class="form-control" asp-items="@(new SelectList(Model.Cuts))">
+                        <option value="">Select Cut type of diamond</option>
+                    </select>
+                    <span asp-validation-for="Diamond.Cut" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Diamond.Clarity">Clarity (%)</label>
-                    <input asp-for="Diamond.Clarity" class="form-control" readonly style="pointer-events:none" />
+                    <input asp-for="Diamond.Clarity" class="form-control" />
+                    <span asp-validation-for="Diamond.Clarity" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Diamond.Weight">Weight (carats)</label>
-                    <input asp-for="Diamond.Weight" class="form-control" readonly style="pointer-events:none" />
+                    <input asp-for="Diamond.Weight" class="form-control" />
+                    <span asp-validation-for="Diamond.Weight" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Diamond.Price">Price ($)</label>
-                    <input asp-for="Diamond.Price" class="form-control" readonly style="pointer-events:none" />
+                    <input asp-for="Diamond.Price" class="form-control" />
+                    <span asp-validation-for="Diamond.Price" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label>Status</label>
+                    @if (@Model.Diamond.IsSold != true)
+                    {
+                        <input value="Available" class="form-control" readonly style="pointer-events:none" />
+                    }
+                    else
+                    {
+                        <input value="Sold" class="form-control" readonly style="pointer-events:none" />
+                    }
+                    <span asp-validation-for="Diamond.Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Diamond.CreatedAt">Created At</label>
+                    <input asp-for="Diamond.CreatedAt" class="form-control" readonly style="pointer-events:none" />
+                    <span asp-validation-for="Diamond.Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Diamond.MediaId" />
                     <a asp-page="/DiamondManagement/ViewDiamond" class="btn btn-secondary">Back to List</a>
-                    <a asp-page="/PaperworkManagement/View" asp-route-diamondId="@Model.Diamond.Id" class="btn btn-primary">Paperwork</a>
+                    <button type="submit" asp-route-diamondId="@Model.Diamond.Id" class="btn btn-primary">Update</button>
                 </div>
                 @if (!string.IsNullOrEmpty(Model.Message))
                 {

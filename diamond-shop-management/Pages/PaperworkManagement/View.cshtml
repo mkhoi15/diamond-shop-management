@@ -17,9 +17,9 @@
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="box">
                         <div class="img-box">
-                            @if (!string.IsNullOrEmpty(@Model.Diamond.MediaUrl))
+                            @if (@Model.Diamond.Media is not null)
                             {
-                                <img src="@Model.Diamond.MediaUrl" alt="Diamond Image">
+                                <img src="~/@Model.Diamond.Media.Url" alt="Diamond Image">
                             }
                             else
                             {
@@ -34,10 +34,6 @@
                             <div>Weight: @Model.Diamond.Weight</div>
                             <div>Price: $@Model.Diamond.Price</div>
                             <div>Status: @(Model.Diamond.IsSold.HasValue && Model.Diamond.IsSold.Value ? "Sold" : "Available")</div>
-                            @if (!string.IsNullOrEmpty(Model.Diamond.PromotionDescription))
-                            {
-                                <h6>Promotion: @Model.Diamond.PromotionDescription</h6>
-                            }
                             @if (!string.IsNullOrEmpty(Model.Message))
                             {
                                 <div style="color: red" id="error-message">@Model.Message</div>

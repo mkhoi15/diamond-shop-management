@@ -5,7 +5,9 @@ namespace Services.Abstraction
 {
     public interface IDiamondServices
     {
-        Task<DiamondResponse> CreateDiamondAsync(DiamondRequest diamondRequest);
+        DiamondResponse CreateDiamond(DiamondRequest diamondRequest);
+
+        DiamondResponse UpdateDiamond(DiamondResponse diamondResponse);
 
         Task<IEnumerable<DiamondResponse>> GetAllAsync(CancellationToken cancellationToken);
         Task<PagedResult<DiamondResponse>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
