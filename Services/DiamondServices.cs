@@ -61,7 +61,7 @@ namespace Services
             var diamonds = await _diamondRepository.Find(
                 diamond => diamond.IsDeleted != true,
                 cancellationToken,
-                diamond => diamond.Promotion
+                diamond => diamond.Media
             );
 
             return _mapper.Map<IEnumerable<DiamondResponse>>(diamonds);

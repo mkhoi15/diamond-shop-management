@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
+using System.Text.Json;
 
 namespace diamond_shop_management.Pages.DiamondManagement
 {
@@ -17,11 +18,12 @@ namespace diamond_shop_management.Pages.DiamondManagement
     {
         private readonly IDiamondServices _diamondService;
         private readonly IPaperworkServices _paperworkService;
+        private readonly IMediaServices _mediaServices;
         private readonly IWebHostEnvironment _environment;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UpdateModel(IDiamondServices diamondService, IPaperworkServices paperworkService, IMapper mapper, IUnitOfWork unitOfWork, IWebHostEnvironment environment)
+        public UpdateModel(IDiamondServices diamondService, IPaperworkServices paperworkService, IMapper mapper, IUnitOfWork unitOfWork, IWebHostEnvironment environment, IMediaServices mediaServices)
         {
             _diamondService = diamondService;
             _paperworkService = paperworkService;
@@ -29,9 +31,10 @@ namespace diamond_shop_management.Pages.DiamondManagement
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _environment = environment;
+            _mediaServices = mediaServices;
         }
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public DiamondResponse Diamond { get; set; }
 
         [BindProperty]
@@ -53,12 +56,15 @@ namespace diamond_shop_management.Pages.DiamondManagement
             InitializeDiamondInfo();
             Diamond = await _diamondService.GetByIdAsync(diamondId, default);
 
+
             if (Diamond == null)
             {
                 Message = "Diamond is not found";
                 ModelState.AddModelError(string.Empty, Message);
                 return Page();
             }
+
+            TempData["Media"] = JsonSerializer.Serialize(Diamond.Media);
 
             PageNumber = pageNumber ?? 1;
 
@@ -70,19 +76,25 @@ namespace diamond_shop_management.Pages.DiamondManagement
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
+        public async Task<IActionResult> OnPostAsync(Guid diamondId, CancellationToken cancellationToken)
         {
             MediaResponse? media = await SaveMedia(ImageFile);
 
+            Diamond.Id = diamondId;
+
+
             if (media != null)
             {
-                Diamond.Media = media;
+                var jsonMedia = TempData["Media"] as string;
+                var updatedMedia = JsonSerializer.Deserialize<MediaResponse>(jsonMedia);
+                updatedMedia.Url = media.Url;
+                _mediaServices.Update(updatedMedia);
             }
             _diamondService.UpdateDiamond(Diamond);
             await _unitOfWork.SaveChangeAsync(cancellationToken);
 
             InitializeDiamondInfo();
-            return Page();
+            return RedirectToPage("/DiamondManagement/Update", Diamond.Id);
         }
 
         private async Task<MediaResponse?> SaveMedia(IFormFile imageFile)

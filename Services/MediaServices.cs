@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObject.Models;
 using DTO.Media;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,22 @@ namespace Services
             _mediaRepository = mediaRepository;
             _mapper = mapper;
             _env = env;
+        }
+
+        public MediaResponse Add(MediaResponse mediaResponse)
+        {
+            var media = _mapper.Map<Media>(mediaResponse);
+
+            _mediaRepository.Add(media);
+
+            return _mapper.Map<MediaResponse>(media);
+        }
+
+        public void Update(MediaResponse mediaResponse)
+        {
+            var media = _mapper.Map<Media>(mediaResponse);
+
+            _mediaRepository.Update(media);
         }
 
         public async Task<MediaResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -52,5 +69,6 @@ namespace Services
 
             return formFile;
         }
+
     }
 }

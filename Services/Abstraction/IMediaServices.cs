@@ -7,5 +7,9 @@ namespace Services.Abstraction
     {
         Task<MediaResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         IFormFile? GetFileFromUrl(string relativePath);
+
+        MediaResponse Add(MediaResponse mediaResponse);
+
+        void Update(MediaResponse mediaResponse);
     }
 }
