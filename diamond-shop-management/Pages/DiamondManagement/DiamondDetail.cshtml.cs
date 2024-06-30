@@ -54,7 +54,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
             PageNumber = pageNumber ?? 1;
 
             var pagedResult = await _paperworkService.GetAllAsync(
-                paper => paper.DiamondId == diamondId && paper.Status == "Active", PageNumber, PageSize, cancellationToken);
+                paper => paper.DiamondId == diamondId, PageNumber, PageSize, cancellationToken);
 
             Paperworks = _mapper.Map<List<PaperworkResponse>>(pagedResult.Items);
 

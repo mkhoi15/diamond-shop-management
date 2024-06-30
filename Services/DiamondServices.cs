@@ -25,7 +25,7 @@ namespace Services
             _mediaRepository = mediaRepository;
         }
 
-        public async Task<DiamondResponse> CreateDiamondAsync(DiamondRequest diamondRequest)
+        public DiamondResponse CreateDiamond(DiamondRequest diamondRequest)
         {
             var diamond = _mapper.Map<Diamond>(diamondRequest);
 
@@ -41,9 +41,17 @@ namespace Services
             if (diamond.Media != null)
             {
                 _mediaRepository.Add(diamond.Media);
-            }*/
-
+            }
             await _unitOfWork.SaveChangeAsync();
+            */
+
+            return _mapper.Map<DiamondResponse>(diamond);
+        }
+        public DiamondResponse UpdateDiamond(DiamondResponse diamondResponse)
+        {
+            var diamond = _mapper.Map<Diamond>(diamondResponse);
+
+            _diamondRepository.Update(diamond);
 
             return _mapper.Map<DiamondResponse>(diamond);
         }
@@ -95,5 +103,6 @@ namespace Services
                 );
             return _mapper.Map<DiamondResponse>(diamond);
         }
+
     }
 }
