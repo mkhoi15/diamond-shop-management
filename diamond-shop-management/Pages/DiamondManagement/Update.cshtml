@@ -17,11 +17,11 @@
                 <div class="form-group text-center">
                     @if (@Model.Diamond != null && Model.Diamond.Media != null)
                     {
-                        <img src="~/@Model.Diamond.Media.Url" alt="Diamond Image" width="50%">
+                        <img src="~/@Model.Diamond.Media.Url" alt="Diamond Image" width="30%">
                     }
                     else
                     {
-                        <img src="" alt="No image" width="100%">
+                        <img src="" alt="No image" width="30%">
                     }
                 </div>
                 @if (!string.IsNullOrEmpty(Model.Message))
