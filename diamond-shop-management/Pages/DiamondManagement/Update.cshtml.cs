@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace diamond_shop_management.Pages.DiamondManagement
@@ -81,7 +82,6 @@ namespace diamond_shop_management.Pages.DiamondManagement
             MediaResponse? media = await SaveMedia(ImageFile);
 
             Diamond.Id = diamondId;
-
 
             if (media != null)
             {

@@ -31,6 +31,9 @@ namespace DTO.DiamondDto
         public decimal? Price { get; set; }
 
         public Guid? MediaId { get; set; }
+
+        [Required(ErrorMessage = "Please enter IsSold status")]
+        [RegularExpression(@"^(?i:true|false)$", ErrorMessage = "IsSold must be either true or false")]
         public bool? IsSold { get; set; }
         public Guid? PromotionId { get; set; }
         public DateTime? CreatedAt { get; set; }
