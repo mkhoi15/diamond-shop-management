@@ -20,7 +20,7 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync(CancellationToken cancellationToken)
     {
-        Diamonds = (await _diamondServices.GetAllAsync(cancellationToken))
+        Diamonds = (await _diamondServices.GetAllByConditionAsync(d => d.IsDeleted != true, cancellationToken))
             .Take(8)
             .ToList();
     }

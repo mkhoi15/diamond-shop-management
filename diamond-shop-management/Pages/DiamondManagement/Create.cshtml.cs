@@ -123,6 +123,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
             var media = new Media
             {
                 Url = relativePath,
+                IsDeleted = false,
             };
 
             return _mapper.Map<MediaRequest>(media);

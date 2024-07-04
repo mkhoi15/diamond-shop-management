@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace diamond_shop_management.Pages.DiamondManagement
@@ -78,23 +79,46 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public async Task<IActionResult> OnPostAsync(Guid diamondId, CancellationToken cancellationToken)
         {
-            MediaResponse? media = await SaveMedia(ImageFile);
-
-            Diamond.Id = diamondId;
-
-
-            if (media != null)
+            try
             {
-                var jsonMedia = TempData["Media"] as string;
-                var updatedMedia = JsonSerializer.Deserialize<MediaResponse>(jsonMedia);
-                updatedMedia.Url = media.Url;
-                _mediaServices.Update(updatedMedia);
-            }
-            _diamondService.UpdateDiamond(Diamond);
-            await _unitOfWork.SaveChangeAsync(cancellationToken);
 
-            InitializeDiamondInfo();
-            return RedirectToPage("/DiamondManagement/Update", Diamond.Id);
+                MediaResponse? media = await SaveMedia(ImageFile);
+
+                Diamond.Id = diamondId;
+
+                var jsonMedia = TempData["Media"] as string;
+
+                var updatedMedia = JsonSerializer.Deserialize<MediaResponse>(jsonMedia);
+                if (media != null)
+                {
+                    if (updatedMedia != null)
+                    {
+                        updatedMedia.Url = media.Url;
+                        _mediaServices.Update(updatedMedia);
+                    }
+                    else
+                    {
+                        var addMedia = _mediaServices.Add(media);
+                        Diamond.MediaId = addMedia.Id;
+                    }
+                }
+                _diamondService.UpdateDiamond(Diamond);
+                await _unitOfWork.SaveChangeAsync(cancellationToken);
+
+                Message = "Diamond is updated successfully";
+                ModelState.AddModelError(string.Empty, Message);
+
+                InitializeDiamondInfo();
+                return RedirectToPage("/DiamondManagement/Update", Diamond.Id);
+            }
+            catch (Exception ex)
+            {
+                Message = "Update failed!\n" + ex.Message;
+                ModelState.AddModelError(string.Empty, ex.Message);
+
+                InitializeDiamondInfo();
+                return Page();
+            }
         }
 
         private async Task<MediaResponse?> SaveMedia(IFormFile imageFile)
@@ -123,6 +147,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
             var media = new Media
             {
                 Url = relativePath,
+                IsDeleted = false
             };
 
             return _mapper.Map<MediaResponse>(media);

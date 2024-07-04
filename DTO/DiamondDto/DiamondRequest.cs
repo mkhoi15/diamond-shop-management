@@ -29,6 +29,10 @@ namespace DTO.DiamondDto
 
         public DateTime? CreatedAt { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+
+        public bool IsSold { get; set; } = false;
+
         public ICollection<PaperworkRequest> PaperWorks { get; set; } = new List<PaperworkRequest>();
         public MediaRequest? Media { get; set; }
     }

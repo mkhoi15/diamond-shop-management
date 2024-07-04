@@ -28,10 +28,10 @@
                         <tr>
                             <th>Origin</th>
                             <th>Color</th>
-                            <th>Cut</th>
                             <th>Clarity</th>
                             <th>Weight</th>
                             <th>Price</th>
+                            <th>IsSold</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -42,11 +42,11 @@
                             <tr>
                                 <td>@diamond.Origin</td>
                                 <td>@diamond.Color</td>
-                                <td>@diamond.Cut</td>
                                 <td>@diamond.Clarity %</td>
                                 <td>@diamond.Weight carats</td>
                                 <td>@diamond.Price $</td>
-                                <td>@(diamond.IsSold.HasValue && diamond.IsSold.Value ? "Sold" : "Available")</td>
+                                <td>@diamond.IsSold</td>
+                                <td>@(diamond.IsDeleted.HasValue && diamond.IsDeleted.Value == true ? "Inactive" : "Active")</td>
                                 <td>
                                     <a asp-page="/DiamondManagement/DiamondDetail" asp-route-diamondId="@diamond.Id" class="btn btn-info btn-sm me-1">Detail</a>
                                     <a asp-page="/DiamondManagement/Update" asp-route-diamondId="@diamond.Id" class="btn btn-warning btn-sm me-1">Update</a>

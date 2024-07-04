@@ -1,16 +1,20 @@
-﻿using DTO;
+﻿using BusinessObject.Models;
+using DTO;
 using DTO.DiamondDto;
+using System.Linq.Expressions;
 
 namespace Services.Abstraction
 {
     public interface IDiamondServices
     {
-        DiamondResponse CreateDiamond(DiamondRequest diamondRequest);
+        void CreateDiamond(DiamondRequest diamondRequest);
 
-        DiamondResponse UpdateDiamond(DiamondResponse diamondResponse);
+        void UpdateDiamond(DiamondResponse diamondResponse);
 
-        Task<IEnumerable<DiamondResponse>> GetAllAsync(CancellationToken cancellationToken);
+        IEnumerable<DiamondResponse> GetAllAsync(CancellationToken cancellationToken);
         Task<PagedResult<DiamondResponse>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
+        Task<IEnumerable<DiamondResponse>> GetAllByConditionAsync(Expression<Func<Diamond, bool>> predicate, CancellationToken cancellationToken);
+        Task<PagedResult<DiamondResponse>> GetAllByConditionAsync(Expression<Func<Diamond, bool>> predicate, int pageNumber, int pageSize, CancellationToken cancellationToken);
 
         Task<DiamondResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     }
