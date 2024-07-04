@@ -102,28 +102,22 @@
         {
             <div class="row">
                 <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Type</th>
+                            <th class="text-center">Created Date</th>
+                            <th class="text-center">Expiration Date</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
                     @foreach (var paperwork in Model.Paperworks)
                     {
-                        <thead>
-                            <tr>
-                                <th class="text-center">Type</th>
-                                <th class="text-center">Created Date</th>
-                                @if (paperwork.Type.Trim().ToLower() != "certificate")
-                                {
-                                    <th class="text-center">Expiration Date</th>
-                                }
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </thead>
                         <tbody>
                             <tr>
                                 <td class="text-center">@paperwork.Type</td>
                                 <td class="text-center">@paperwork.CreatedDate</td>
-                                @if (paperwork.Type.Trim().ToLower() != "certificate")
-                                {
-                                    <td class="text-center">@paperwork.ExpirationDate</td>
-                                }
+                                <td class="text-center">@paperwork.ExpirationDate</td>
                                 <td class="text-center">@paperwork.Status</td>
                                 <td class="text-center">
                                     <a asp-page="/PaperworkManagement/Detail" asp-route-paperworkId="@paperwork.Id" class="btn btn-info">Detail</a>
