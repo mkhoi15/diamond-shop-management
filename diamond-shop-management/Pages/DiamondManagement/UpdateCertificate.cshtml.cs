@@ -59,6 +59,13 @@ namespace diamond_shop_management.Pages.DiamondManagement
         {
             try
             {
+                if (Paperwork.ExpirationDate != null && Paperwork.ExpirationDate <= Paperwork.CreatedDate)
+                {
+                    Message = "Expiration date must be greater than created date";
+                    ModelState.AddModelError(string.Empty, Message);
+                    return Page();
+                }
+
                 MediaResponse? media = await SaveMedia(ImageFile);
 
                 var jsonMedia = TempData["Media"] as string;
