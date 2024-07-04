@@ -5,6 +5,7 @@ using DTO;
 using DTO.DiamondDto;
 using Repositories.Abstraction;
 using Services.Abstraction;
+using System.Linq.Expressions;
 
 namespace Services
 {
@@ -25,7 +26,7 @@ namespace Services
             _mediaRepository = mediaRepository;
         }
 
-        public DiamondResponse CreateDiamond(DiamondRequest diamondRequest)
+        public void CreateDiamond(DiamondRequest diamondRequest)
         {
             var diamond = _mapper.Map<Diamond>(diamondRequest);
 
@@ -44,25 +45,17 @@ namespace Services
             }
             await _unitOfWork.SaveChangeAsync();
             */
-
-            return _mapper.Map<DiamondResponse>(diamond);
         }
-        public DiamondResponse UpdateDiamond(DiamondResponse diamondResponse)
+        public void UpdateDiamond(DiamondResponse diamondResponse)
         {
             var diamond = _mapper.Map<Diamond>(diamondResponse);
 
             _diamondRepository.Update(diamond);
-
-            return _mapper.Map<DiamondResponse>(diamond);
         }
 
-        public async Task<IEnumerable<DiamondResponse>> GetAllAsync(CancellationToken cancellationToken)
+        public IEnumerable<DiamondResponse> GetAllAsync(CancellationToken cancellationToken)
         {
-            var diamonds = await _diamondRepository.Find(
-                diamond => diamond.IsDeleted != true,
-                cancellationToken,
-                diamond => diamond.Media
-            );
+            var diamonds = _diamondRepository.FindAll();
 
             return _mapper.Map<IEnumerable<DiamondResponse>>(diamonds);
         }
@@ -74,7 +67,7 @@ namespace Services
             var diamonds = await _diamondRepository.FindPaged(
                 skip,
                 pageSize,
-                diamond => diamond.IsDeleted != true,
+                diamond => diamond.IsDeleted != null,
                 cancellationToken,
                 diamond => diamond.Promotion,
                 diamond => diamond.Media
@@ -87,7 +80,7 @@ namespace Services
                 Items = diamondResponses,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalItems = GetAllAsync(cancellationToken).Result.Count()
+                TotalItems = GetAllAsync(cancellationToken).Count()
             };
 
             return pagedResult;
@@ -104,5 +97,42 @@ namespace Services
             return _mapper.Map<DiamondResponse>(diamond);
         }
 
+        public async Task<IEnumerable<DiamondResponse>> GetAllByConditionAsync(Expression<Func<Diamond, bool>> predicate, CancellationToken cancellationToken)
+        {
+            var diamonds = await _diamondRepository.Find(
+                predicate,
+                cancellationToken,
+                diamond => diamond.Promotion,
+                diamond => diamond.Media
+            );
+
+            return _mapper.Map<IEnumerable<DiamondResponse>>(diamonds);
+        }
+
+        public async Task<PagedResult<DiamondResponse>> GetAllByConditionAsync(Expression<Func<Diamond, bool>> predicate, int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            int skip = (pageNumber - 1) * pageSize;
+
+            var diamonds = await _diamondRepository.FindPaged(
+                skip,
+                pageSize,
+                predicate,
+                cancellationToken,
+                diamond => diamond.Promotion,
+                diamond => diamond.Media
+            );
+
+            var diamondResponses = _mapper.Map<IEnumerable<DiamondResponse>>(diamonds);
+
+            var pagedResult = new PagedResult<DiamondResponse>
+            {
+                Items = diamondResponses,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = GetAllByConditionAsync(predicate, cancellationToken).Result.Count()
+            };
+
+            return pagedResult;
+        }
     }
 }
