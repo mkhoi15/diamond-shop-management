@@ -61,7 +61,7 @@
                 </div>
                 <div class="form-group">
                     <input type="hidden" asp-for="Paperwork.MediaId" />
-                    <a asp-page="/DiamondManagement/ViewDiamond" class="btn btn-secondary">Cancel</a>
+                    <a asp-page="/DiamondManagement/Update" asp-route-diamondId="@Model.Paperwork.DiamondId" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
