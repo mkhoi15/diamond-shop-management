@@ -32,7 +32,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
         {
             PageNumber = pageNumber ?? 1;
 
-            var pagedResult = await _diamondServices.GetAllAsync(PageNumber, PageSize, cancellationToken);
+            var pagedResult = await _diamondServices.GetAllByConditionAsync(d => d.IsDeleted != true, PageNumber, PageSize, cancellationToken);
 
             Diamonds = _mapper.Map<List<DiamondResponse>>(pagedResult.Items);
             TotalItems = pagedResult.TotalItems;

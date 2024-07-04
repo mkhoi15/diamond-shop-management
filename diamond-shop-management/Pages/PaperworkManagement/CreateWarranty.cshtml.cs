@@ -1,29 +1,25 @@
 using AutoMapper;
-using BusinessObject.Enum;
 using BusinessObject.Models;
 using DTO.Media;
 using DTO.PaperworkDto;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services;
 using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.PaperworkManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
-    public class CreateModel : PageModel
+    public class CreateWarrantyModel : PageModel
     {
         private readonly IPaperworkServices _paperworkServices;
         private readonly IWebHostEnvironment _environment;
         private readonly IDiamondServices _diamondService;
         private readonly IMapper _mapper;
 
-        public CreateModel(IPaperworkServices paperworkServices, IDiamondServices diamondService, IWebHostEnvironment environment, IMapper mapper)
+        public CreateWarrantyModel(IPaperworkServices paperworkServices, IWebHostEnvironment environment, IDiamondServices diamondService, IMapper mapper)
         {
             _paperworkServices = paperworkServices;
-            _diamondService = diamondService;
             _environment = environment;
+            _diamondService = diamondService;
             _mapper = mapper;
         }
 
@@ -59,23 +55,33 @@ namespace diamond_shop_management.Pages.PaperworkManagement
         {
             try
             {
-                MediaRequest? paperMedia = await SaveMedia(PaperFile);
-
-                if (paperMedia is not null)
+                if (PaperworkRequest.Type?.Trim().ToLower() != "warranty")
                 {
-                    PaperworkRequest.Media = paperMedia;
+                    Message = "Please enter a type Warranty";
+                    ModelState.AddModelError(string.Empty, Message);
+                    return Page();
                 }
+
+                if (PaperworkRequest.ExpirationDate < DateTime.Now)
+                {
+                    Message = "Expiration date must be greater than current date time";
+                    ModelState.AddModelError(string.Empty, Message);
+                    return Page();
+                }
+
                 PaperworkRequest.CreatedDate = DateTime.Now;
                 PaperworkRequest.Status = "Active";
-                PaperworkRequest.IsDeleted = false;
+                PaperworkRequest.Type = "warranty";
 
                 await _paperworkServices.AddAsync(PaperworkRequest);
 
-                return RedirectToPage("/DiamondManagement/Update", new { DiamondId = DiamondId });
+                Message = "Warranty created successfully";
+                ModelState.AddModelError(string.Empty, Message);
+                return Page();
             }
             catch (Exception ex)
             {
-                Message = "creation failed!\n" + ex.Message;
+                Message = "Warranty creation failed!\n" + ex.Message;
                 ModelState.AddModelError(string.Empty, Message);
                 return Page();
             }
