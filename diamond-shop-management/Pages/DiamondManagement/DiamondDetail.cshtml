@@ -76,11 +76,8 @@
                         <div>Clarity: @Model.Diamond.Clarity %</div>
                         <div>Weight: @Model.Diamond.Weight carats</div>
                         <div>Price: @Model.Diamond.Price $</div>
-                        <div>Status: @(Model.Diamond.IsSold.HasValue && Model.Diamond.IsSold.Value ? "Sold" : "Available")</div>
-                        @if (!string.IsNullOrEmpty(Model.Diamond.PromotionDescription))
-                        {
-                            <h6>Promotion: @Model.Diamond.PromotionDescription</h6>
-                        }
+                        <div>IsSold: @Model.Diamond.IsSold</div>
+                        <div>Status: @(Model.Diamond.IsDeleted.HasValue && Model.Diamond.IsDeleted.Value == true ? "Inactive" : "Active")</div>
                         @if (!string.IsNullOrEmpty(Model.Message))
                         {
                             <div style="color: red" id="error-message">@Model.Message</div>

@@ -49,9 +49,9 @@
                         <div class="box">
                             <a href="">
                                 <div class="img-box">
-                                    @if (!string.IsNullOrEmpty(diamond.MediaUrl))
+                                    @if (diamond.Media is not null)
                                     {
-                                        <img src="@diamond.MediaUrl" alt="Diamond Image">
+                                        <img src="~/@diamond.Media.Url" alt="Diamond Image">
                                     }
                                     else
                                     {
@@ -82,7 +82,7 @@
 
             </div>
             <div class="btn-box">
-                <a href="/DiamondManagement/ViewDiamond">
+                <a href="/DiamondShop/BrowseDiamond">
                     View All Products
                 </a>
             </div>
