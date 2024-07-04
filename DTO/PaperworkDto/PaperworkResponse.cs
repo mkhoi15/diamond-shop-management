@@ -17,6 +17,7 @@ namespace DTO.PaperworkDto
         public string? Status { get; set; }
         public string? MediaUrl { get; set; }
         public bool? IsDeleted { get; set; }
+        public Guid? MediaId { get; set; }
 
         public MediaResponse? Media { get; set; }
     }
