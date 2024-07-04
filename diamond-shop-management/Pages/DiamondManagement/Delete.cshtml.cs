@@ -62,15 +62,18 @@ namespace diamond_shop_management.Pages.DiamondManagement
             try
             {
 
+                var jsonMedia = TempData["Media"] as string;
+                var media = JsonSerializer.Deserialize<MediaResponse>(jsonMedia);
+
                 if (Diamond.IsDeleted == true)
                 {
                     Message = "Diamond is already deleted";
                     ModelState.AddModelError(string.Empty, Message);
+                    Diamond.Media = media;
+                    TempData["Media"] = jsonMedia;
                     return Page();
                 }
                 
-                var jsonMedia = TempData["Media"] as string;
-                var media = JsonSerializer.Deserialize<MediaResponse>(jsonMedia);
                 if (media != null)
                 {
                     media.IsDeleted = true;
@@ -96,10 +99,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 _diamondService.UpdateDiamond(Diamond);
                 await _unitOfWork.SaveChangeAsync(cancellationToken);
 
-                Message = "Diamond is deleted successfully";
-                ModelState.AddModelError(string.Empty, Message);
-
-                return Page();
+                return RedirectToPage("/DiamondManagement/ViewDiamond");
             }
             catch (Exception ex)
             {

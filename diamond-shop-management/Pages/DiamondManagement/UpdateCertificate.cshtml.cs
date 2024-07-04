@@ -1,8 +1,10 @@
 using AutoMapper;
+using BusinessObject.Enum;
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO.Media;
 using DTO.PaperworkDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services;
@@ -11,6 +13,7 @@ using System.Text.Json;
 
 namespace diamond_shop_management.Pages.DiamondManagement
 {
+    [Authorize(Roles = nameof(Roles.Admin))]
     public class UpdateCertificateModel : PageModel
     {
         private readonly IPaperworkServices _paperworkServices;
@@ -35,6 +38,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
         public IFormFile? ImageFile { get; set; }
 
         public string? Message { get; set; }
+
         public async Task<IActionResult> OnGetAsync(Guid? paperworkId, CancellationToken cancellationToken)
         {
             Paperwork = await _paperworkServices.GetByIdAsync(paperworkId, default);
