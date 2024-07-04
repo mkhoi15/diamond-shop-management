@@ -75,5 +75,12 @@ namespace Services
 
             return _mapper.Map<PaperworkResponse>(paperwork);
         }
+
+        public void Update(PaperworkResponse paperworkResponse)
+        {
+            var paperwork = _mapper.Map<PaperWork>(paperworkResponse);
+
+            _paperworkRepository.Update(paperwork);
+        }
     }
 }
