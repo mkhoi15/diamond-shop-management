@@ -63,7 +63,8 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 {
                     Type = "certificate",
                     CreatedDate = DateTime.Now,
-                    Status = "Active"
+                    Status = "Active",
+                    IsDeleted = false
                 };
                 if (paperMedia is not null)
                 {

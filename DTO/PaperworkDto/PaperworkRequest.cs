@@ -21,6 +21,8 @@ namespace DTO.PaperworkDto
 
         public string? Status { get; set; }
 
+        public bool? IsDeleted { get; set; }
+
         public MediaRequest? Media { get; set; }
 
         public DiamondRequest? Diamond { get; set; }
