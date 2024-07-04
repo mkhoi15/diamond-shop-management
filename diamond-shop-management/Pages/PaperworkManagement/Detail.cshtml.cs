@@ -1,10 +1,13 @@
+using BusinessObject.Enum;
 using DTO.PaperworkDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.PaperworkManagement
 {
+    [Authorize(Roles = nameof(Roles.Admin))]
     public class DetailModel : PageModel
     {
         private readonly IPaperworkServices _paperworkService;

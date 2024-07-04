@@ -7,6 +7,7 @@ using DTO.OrderDto;
 using DTO.PaperworkDto;
 using DTO.UserDto;
 using DTO.Media;
+using DTO.PromotionDto;
 
 namespace Services.Mapper;
 
@@ -41,6 +42,8 @@ public class MapperProfile : Profile
         CreateMap<Media, MediaResponse>()
             .ReverseMap();
         CreateMap<DiamondAccessoryRequest, DiamondAccessory>()
+            .ReverseMap();
+        CreateMap<Promotion, PromotionResponse>()
             .ReverseMap();
     }
 }
