@@ -1,0 +1,90 @@
+﻿@page
+@model diamond_shop_management.Pages.PromotionManagement.ViewModel
+
+@{
+    ViewData["Title"] = "Promotion List";
+}
+
+<div class="text-center">
+    <section class="shop_section layout_padding">
+        <div class="container">
+            <div class="heading_container heading_center">
+                <h2>
+                    Promotion Management
+                </h2>
+            </div>
+            <div class="text-right mb-3">
+                <a asp-page="/PromotionManagement/Create" class="btn btn-primary">Create New Promotion</a>
+            </div>
+            @if (Model.Promotions == null || !Model.Promotions.Any())
+            {
+                <div class="alert alert-info" role="alert">
+                    There are no Promotions.
+                </div>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Discount</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Is Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var promotion in Model.Promotions)
+                        {
+                            <tr>
+                                <td>@promotion.Name</td>
+                                <td>@promotion.Discount</td>
+                                <td>@promotion.StartDate</td>
+                                <td>@promotion.EndDate</td>
+                                <td>@promotion.IsActive</td>
+                                <td>
+                                    <a asp-page="/PromotionManagement/Detail" asp-route-id="@promotion.Id" class="btn btn-info">Detail</a>
+                                    <a asp-page="/PromotionManagement/Update" asp-route-id="@promotion.Id" class="btn btn-warning">Update</a>
+                                    <a asp-page="/PromotionManagement/Delete" asp-route-id="@promotion.Id" class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @* <div class="btn-box">
+            <a href="">
+            View All Products
+            </a>
+            </div> *@
+            <div class="container">
+
+                <nav aria-label="Page navigation" style="margin-top: 2%">
+                    <ul class="pagination justify-content-center">
+                        @if (Model.PageNumber > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-page="/PromotionManagement/View" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                            </li>
+                        }
+
+                        <li class="page-item active">
+                            <a class="page-link" asp-page="/PromotionManagement/View" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                        </li>
+
+                        @if (Model.PageNumber < Model.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-page="/PromotionManagement/View" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- end shop section -->
+</div>
