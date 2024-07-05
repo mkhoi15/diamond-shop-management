@@ -45,5 +45,7 @@ public class MapperProfile : Profile
             .ReverseMap();
         CreateMap<Promotion, PromotionResponse>()
             .ReverseMap();
+        CreateMap<PromotionRequest, Promotion>()
+            .ReverseMap();
     }
 }
