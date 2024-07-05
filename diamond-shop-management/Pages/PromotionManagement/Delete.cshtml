@@ -1,0 +1,81 @@
+﻿@page
+@model diamond_shop_management.Pages.PromotionManagement.DeleteModel
+@{
+    ViewData["Title"] = "Delete Promotion";
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <h1 class="text-center">Delete Promotion</h1>
+        <h3 class="text-center text-danger">Are you sure you want to delete this promotion?</h3>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <form method="post">
+                        <input type="hidden" asp-for="Promotion.Id" />
+                        @if (!string.IsNullOrEmpty(Model.Message))
+                        {
+                            <div class="alert alert-danger" id="message" role="alert">
+                                @Model.Message
+                            </div>
+                        }
+                        <div class="form-group">
+                            <label asp-for="Promotion.Name" class="control-label"></label>
+                            <input asp-for="Promotion.Name" class="form-control" readonly style="pointer-events:none" />
+                            <span asp-validation-for="Promotion.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Promotion.Discount" class="control-label"></label>
+                            <input asp-for="Promotion.Discount" class="form-control" readonly style="pointer-events:none" />
+                            <span asp-validation-for="Promotion.Discount" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Promotion.StartDate" class="control-label"></label>
+                            <input asp-for="Promotion.StartDate" class="form-control" type="date" readonly style="pointer-events:none" />
+                            <span asp-validation-for="Promotion.StartDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Promotion.EndDate" class="control-label"></label>
+                            <input asp-for="Promotion.EndDate" class="form-control" type="date" readonly style="pointer-events:none" />
+                            <span asp-validation-for="Promotion.EndDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Promotion.IsActive" class="control-label"></label>
+                            <input asp-for="Promotion.IsActive" class="form-control" readonly style="pointer-events:none" />
+                        </div>
+                        <div class="form-group">
+                            <a asp-page="/PromotionManagement/View" class="btn btn-secondary">Back</a>
+                            <input type="submit" value="Confirm" class="btn btn-danger" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const errorMessage = document.getElementById("message");
+            if (errorMessage) {
+                const message = errorMessage.textContent.trim();
+                if (message !== "") {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                        errorMessage.textContent = "";
+                    }, 2000);
+
+                } else {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                        errorMessage.textContent = "";
+                    }, 1000);
+                }
+            }
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -21,7 +21,7 @@ public class OrderRequest
     public DateTime Date { get; set; }
         
     [Required]
-    public ICollection<OrderDetailRequest> OrderDetails { get; set; } = new List<OrderDetailRequest>();
+    public List<OrderDetailRequest> OrderDetails { get; set; } = new List<OrderDetailRequest>();
 }
 
 public class OrderDetailRequest

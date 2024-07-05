@@ -1,0 +1,61 @@
+using BusinessObject.Enum;
+using DTO.PromotionDto;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Services.Abstraction;
+
+namespace diamond_shop_management.Pages.PromotionManagement
+{
+    [Authorize(Roles = nameof(Roles.Admin))]
+    public class DeleteModel : PageModel
+    {
+        private readonly IPromotionServices _promotionServices;
+
+        public DeleteModel(IPromotionServices promotionServices)
+        {
+            _promotionServices = promotionServices;
+        }
+
+        [BindProperty]
+        public PromotionResponse Promotion { get; set; }
+
+        public string? Message { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(Guid? id, CancellationToken cancellationToken)
+        {
+            if (id == null)
+            {
+                Message = "Promotion id is not found";
+                ModelState.AddModelError(string.Empty, Message);
+                return Page();
+            }
+
+            Promotion = await _promotionServices.GetByIdAsync(id.Value, cancellationToken);
+
+            if (Promotion == null)
+            {
+                Message = "Promotion is not found";
+                ModelState.AddModelError(string.Empty, Message);
+                return Page();
+            }
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (Promotion.Id == Guid.Empty)
+            {
+                Message = "Promotion id is not found";
+                ModelState.AddModelError(string.Empty, Message);
+                return Page();
+            }
+
+            Promotion.IsActive = false;
+            await _promotionServices.Update(Promotion);
+
+            return RedirectToPage("/PromotionManagement/View");
+        }
+    }
+}
