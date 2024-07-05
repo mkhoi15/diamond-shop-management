@@ -160,18 +160,18 @@
                     @if (Model.PageNumber > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-page="./View" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                            <a class="page-link" asp-page="/DiamondManagement/Update" asp-route-diamondId="@Model.Diamond.Id" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
                         </li>
                     }
 
                     <li class="page-item active">
-                        <a class="page-link" asp-page="./View" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                        <a class="page-link" asp-page="/DiamondManagement/Update" asp-route-diamondId="@Model.Diamond.Id" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
                     </li>
 
                     @if (Model.PageNumber < Model.TotalPages)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-page="./View" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                            <a class="page-link" asp-page="/DiamondManagement/Update" asp-route-diamondId="@Model.Diamond.Id" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
                         </li>
                     }
                 </ul>
