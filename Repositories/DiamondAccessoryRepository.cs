@@ -31,7 +31,7 @@ namespace Repositories
 
 		public IQueryable<DiamondAccessory> FindAll()
 		{
-			throw new NotImplementedException();
+			return _diamondAccessoryDAO.FindAll();
 		}
 
 		public Task<DiamondAccessory?> FindById(Guid id, CancellationToken cancellationToken = default, params Expression<Func<DiamondAccessory, object?>>[] includeProperties)

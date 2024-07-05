@@ -25,16 +25,19 @@ public class BrowseDiamond : PageModel
     public int PageSize { get; set; }
     public int TotalItems { get; set; }
     public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
-    
+    public DTO.Card CartItems { get; set; }
     
     public async Task OnGetAsync(int? pageNumber, CancellationToken cancellationToken)
     {
         PageNumber = pageNumber ?? 1;
 
-        var pagedResult = await _diamondServices.GetAllByConditionAsync(d => d.IsDeleted != true , PageNumber, PageSize, cancellationToken);
+        var pagedResult = await _diamondServices.GetAllByConditionAsync(d => d.IsSold != true , PageNumber, PageSize, cancellationToken);
 
         Diamonds = _mapper.Map<List<DiamondResponse>>(pagedResult.Items);
         TotalItems = pagedResult.TotalItems;
+        
+        // Get the cart items from the session
+        CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
     }
 
     public async Task<IActionResult> OnPostAddToCart(Guid diamondId, CancellationToken cancellationToken)
@@ -46,12 +49,15 @@ public class BrowseDiamond : PageModel
             var diamond = await _diamondServices.GetByIdAsync(diamondId, cancellationToken);
             var diamondResponse = _mapper.Map<DiamondResponse>(diamond);
             
-            
+            // if (!CartItems.Diamond.Exists(d => d.Id == diamondResponse.Id))
+            // {
+            //     cart.Diamond.Add(diamondResponse);
+            // }
             cart.Diamond.Add(diamondResponse);
         }
 
         HttpContext.Session.SetObjectAsJson("Cart", cart);
-        var cart2 = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
+        //var cart2 = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
 
         // Redirect to the cart page
         return RedirectToPage();
