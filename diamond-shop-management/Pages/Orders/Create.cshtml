@@ -27,24 +27,32 @@
                                 @* <th scope="col">Product</th> *@
                                 <th scope="col">Description (Origin, Color, Cut, Clarity) </th>
                                 <th scope="col">Price</th>
+                                <th scope="col">Hee</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Total</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.CartItems.Diamond)
+                            @foreach (var item in Model.OrderRequest.OrderDetails)
                             {
+                                var i = Model.OrderRequest.OrderDetails.IndexOf(item);
                                 <tr>
                                     <td>
                                         <div class="media">
                                             @* <img src="@item.Diamond?.MediaUrl ?? '/images/Diamond.png'" class="mr-3" alt="Diamond Image" style="max-width: 100px;"> *@
                                             <div class="media-body">
                                                 @* <h5 class="mt-0">@item.Diamond?.Name</h5> *@
-                                                <p>@item.Origin, @item.Color, @item.Cut, @item.Clarity</p>
+                                                @* <p>@item.Origin, @item.Color, @item.Cut, @item.Clarity</p> *@
                                             </div>
                                         </div>
                                     </td>
                                     <td>$@item.Price</td>
+                                     <td>
+                                                                $@item.Price
+                                                                <input type="hidden" name="OrderRequest.OrderDetails[@i].ProductId" value="@item.ProductId" />
+                                                                <input type="hidden" name="OrderRequest.OrderDetails[@i].Price" value="@item.Price" />
+                                                                <input type="hidden" name="OrderRequest.OrderDetails[@i].Quantity" value="1" />
+                                                                </td>
                                     <td>1</td>
                                     <td>$@(item.Price * 1)</td> 
                                 </tr>
@@ -58,6 +66,8 @@
         
         <!-- Hidden field for TotalPrice -->
         <input type="hidden" asp-for="OrderRequest.TotalPrice" />
+        
+          
 
         <button type="submit" class="btn btn-primary">Place Order</button>
     </form>
