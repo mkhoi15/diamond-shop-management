@@ -47,26 +47,18 @@ namespace Services
 
             return diamondAccessory;
         }
-        public async Task<DiamondAccessoryResponse> CreateDiamondAccessory(DiamondAccessoryRequest request)
+        public void CreateDiamondAccessory(DiamondAccessoryRequest request)
         {
             var diamondAccessory = _mapper.Map<DiamondAccessory>(request);
+
             _diamondAccessoryRepository.Add(diamondAccessory);
-            await _unitOfWork.SaveChangeAsync();
-            return _mapper.Map<DiamondAccessoryResponse>(diamondAccessory);
         }
 
-        public async Task<DiamondAccessoryResponse> UpdateDiamondAccessory(Guid id, DiamondAccessoryRequest request)
+        public void UpdateDiamondAccessory( DiamondAccessoryResponse response)
         {
-            var diamondAccessory = await _diamondAccessoryRepository.FindById(id);
-            if (diamondAccessory == null)
-            {
-                throw new KeyNotFoundException("DiamondAccessory not found");
-            }
+            var entity = _mapper.Map<DiamondAccessory>(response);
 
-            _mapper.Map(request, diamondAccessory);
-            _diamondAccessoryRepository.Update(diamondAccessory);
-            await _unitOfWork.SaveChangeAsync();
-            return _mapper.Map<DiamondAccessoryResponse>(diamondAccessory);
+            _diamondAccessoryRepository.Update(entity);
         }
 
         public async Task<bool> DeleteDiamondAccessory(Guid id)
@@ -80,17 +72,6 @@ namespace Services
             _diamondAccessoryRepository.Remove(diamondAccessory);
             await _unitOfWork.SaveChangeAsync();
             return true;
-        }
-
-        public async Task<DiamondAccessoryResponse> GetDiamondAccessoryById(Guid id)
-        {
-            var diamondAccessory = await _diamondAccessoryRepository.FindById(id);
-            if (diamondAccessory == null)
-            {
-                throw new KeyNotFoundException("DiamondAccessory not found");
-            }
-
-            return _mapper.Map<DiamondAccessoryResponse>(diamondAccessory);
         }
 
         public async Task<IEnumerable<DiamondAccessoryResponse>> GetAllDiamondAccessories()
