@@ -13,6 +13,13 @@
                     Browse Diamonds
                 </h2>
             </div>
+            
+            <div class="container">
+                <div class="d-flex justify-content-end">
+                    <a asp-page="/Card/Card" class="btn btn-success">Go To Cart</a>
+                </div>
+                </div>
+            
             @if (Model.Diamonds == null || !Model.Diamonds.Any())
             {
                 <div class="alert alert-info" role="alert">
@@ -47,7 +54,8 @@
                                 </div>
                                 <form method="post" asp-page-handler="AddToCart">
                                     <input type="hidden" name="diamondId" value="@diamond.Id" />
-                                    <button type="submit" class="btn btn-primary" @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "disabled" : "")>Add to Cart</button>
+                                    <button type="submit" class="btn btn-primary" @(Model.CartItems.Diamond.Exists(d => d.Id == diamond.Id) || (diamond.IsSold.HasValue && diamond.IsSold.Value) ? "disabled" : "")>Add to Cart</button>
+                                    @* <button type="submit" class="btn btn-primary" @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "disabled" : "")>Add to Cart</button> *@
                                 </form>
                             </div>
                         </div>

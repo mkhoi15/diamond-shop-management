@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using DTO.Enum;
 
 namespace DTO.OrderDto;
 
 public class OrderRequest
 {
+    
     [Required]
     public Guid CustomerId { get; set; }
         
@@ -15,13 +17,14 @@ public class OrderRequest
     public string? Address { get; set; }
         
     [StringLength(50)]
+    //[EnumDataType(typeof(OrderStatus), ErrorMessage = "Invalid order status.")]
     public string? Status { get; set; }
         
     [Required]
-    public DateTime Date { get; set; }
+    public DateTime Date { get; set; } = DateTime.Now;
         
     [Required]
-    public ICollection<OrderDetailRequest> OrderDetails { get; set; } = new List<OrderDetailRequest>();
+    public List<OrderDetailRequest> OrderDetails { get; set; } = new List<OrderDetailRequest>();
 }
 
 public class OrderDetailRequest
