@@ -1,0 +1,52 @@
+﻿@page "{accessoryId}"
+@model diamond_shop_management.Pages.AccessoryManagement.DeleteAccessoryModel
+@{
+    ViewData["Title"] = "Delete Accessory";
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <h1 class="text-center">Delete Accessory</h1>
+        <h3 class="text-center text-danger">Are you sure you want to delete this accessory?</h3>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="form-group text-center">
+                            @if (@Model.Accessory != null && Model.Accessory.Media != null)
+                            {
+                                <img src="~/@Model.Accessory.Media.Url" alt="Accessory Image" width="auto">
+                            }
+                            else
+                            {
+                                <img src="" alt="No image">
+                            }
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Message))
+                        {
+                            <div class="alert alert-danger" id="message" role="alert">
+                                @Model.Message
+                            </div>
+                        }
+                        <div class="form-group">
+                            <label asp-for="Accessory.Name"></label>
+                            <input asp-for="Accessory.Name" class="form-control" readonly style="pointer-events: none" />
+                            <span asp-validation-for="Accessory.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Accessory.Price">Price</label>
+                            <input asp-for="Accessory.Price" class="form-control" readonly style="pointer-events: none" />
+                            <span asp-validation-for="Accessory.Price" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" asp-for="Accessory.MediaId" />
+                            <input type="hidden" asp-for="Accessory.Id" />
+                            <a asp-page="/AccessoryManagement/ViewAccessory" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-danger">Confirm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

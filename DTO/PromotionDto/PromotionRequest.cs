@@ -1,11 +1,9 @@
-﻿using DTO.DiamondDto;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DTO.PromotionDto
 {
-    public class PromotionResponse
+    public class PromotionRequest
     {
-        public Guid Id { get; set; }
         [Required(ErrorMessage = "Name is required")]
         public string? Name { get; set; }
         [Required(ErrorMessage = "Discount is required")]
@@ -16,6 +14,5 @@ namespace DTO.PromotionDto
         [Required(ErrorMessage = "End date is required")]
         public DateTime? EndDate { get; set; }
         public bool? IsActive { get; set; }
-
     }
 }

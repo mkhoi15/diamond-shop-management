@@ -1,44 +1,39 @@
 ﻿@page
-@using BusinessObject.Enum
 @model diamond_shop_management.Pages.AccessoryManagement.ViewAccessoryModel
 @{
-    ViewData["Title"] = "ViewAccessory";
+    ViewData["Title"] = "View Accessory";
 }
 
-@if (User.IsInRole(Roles.Manager.ToString()))
-{
-    <div class="text-right mb-3">
-        <a asp-page="/AccessoryManagement/CreateAccessory" class="btn btn-primary">Create New Accessory</a>
-    </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th> Name</th>
-                <th>Price</th>
-                <th>PromotionName</th>
-                <th>MediaUrl</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var accessory in Model.Accessories)
-            {
-                <tr>
-                    <td>@accessory.Id</td>
-                    <td>@accessory.Name</td>
-                    <td>@accessory.Price</td>
-                    <td>@accessory.PromotionName</td>
-                    <td>@accessory.MediaUrl</td>
-                    <td>
-                        <a asp-page="./EditAccessory" asp-route-id="@accessory.Id">Edit</a> |
-                        <form method="post" asp-page-handler="Delete" asp-route-id="@accessory.Id">
-                            <button type="submit" class="btn-link">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            }
+<div class="text-center">
+    <section class="shop_section layout_padding">
+        <div class="container">
+            <div class="text-right mb-3">
+                <a asp-page="/AccessoryManagement/CreateAccessory" class="btn btn-primary">Create New Accessory</a>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var accessory in Model.Accessories)
+                    {
+                        <tr>
+                            <td>@accessory.Name</td>
+                            <td>@accessory.Price</td>
+                            <td>
+                                <a asp-page="/AccessoryManagement/AccessoryDetail" asp-route-accessoryId="@accessory.Id" class="btn btn-info btn-sm me-1">Detail</a>
+                                <a asp-page="/AccessoryManagement/UpdateAccessory" asp-route-accessoryId="@accessory.Id" class="btn btn-warning btn-sm me-1">Update</a>
+                                <a asp-page="/AccessoryManagement/DeleteAccessory" asp-route-accessoryId="@accessory.Id" class="btn btn-danger btn-sm me-1">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
             <div class="container">
-
                 <nav aria-label="Page navigation" style="margin-top: 2%">
                     <ul class="pagination justify-content-center">
                         @if (Model.PageNumber > 1)
@@ -47,11 +42,9 @@
                                 <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
                             </li>
                         }
-
                         <li class="page-item active">
                             <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
                         </li>
-
                         @if (Model.PageNumber < Model.TotalPages)
                         {
                             <li class="page-item">
@@ -61,83 +54,11 @@
                     </ul>
                 </nav>
             </div>
-        </tbody>
-    </table>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
-else
-{
-    <div class="text-center">
-        <section class="shop_section layout_padding">
-            <div class="container">
-                <div class="heading_container heading_center">
-                    <h2>
-                        Accessory
-                    </h2>
-                </div>
-                @if (Model.Accessories == null || !Model.Accessories.Any())
-                {
-                    <div class="alert alert-info" role="alert">
-                        There are no accessories.
-                    </div>
-                }
-                else
-                {
-                    <div class="row">
-                        @foreach (var accessory in Model.Accessories)
-                        {
-                            <div class="col-sm-6 col-md-4 col-lg-3">
-                                <div class="box">
-                                    <a asp-page="/AccessoryManagement/AccessoryDetail" asp-route-accessoryId="@accessory.Id">
-                                        <div class="img-box">
-                                            @if (!string.IsNullOrEmpty(accessory.MediaUrl))
-                                            {
-                                                <img src="@accessory.MediaUrl" alt="Accessory Image">
-                                            }
-                                            else
-                                            {
-                                                <img src="" alt="Accessory Image">
-                                            }
-                                        </div>
-                                        <div>
-                                            <div>Name: @accessory.Name</div>
-                                            <div>Price: @accessory.Price</div>
-                                            @if (!string.IsNullOrEmpty(accessory.PromotionName))
-                                            {
-                                                <h6>Promotion: @accessory.PromotionName</h6>
-                                            }
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                }
-                <div class="container">
-
-                    <nav aria-label="Page navigation" style="margin-top: 2%">
-                        <ul class="pagination justify-content-center">
-                            @if (Model.PageNumber > 1)
-                            {
-                                <li class="page-item">
-                                    <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
-                                </li>
-                            }
-
-                            <li class="page-item active">
-                                <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
-                            </li>
-
-                            @if (Model.PageNumber < Model.TotalPages)
-                            {
-                                <li class="page-item">
-                                    <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
-                                </li>
-                            }
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </section>
-    </div>
-}
-
+    

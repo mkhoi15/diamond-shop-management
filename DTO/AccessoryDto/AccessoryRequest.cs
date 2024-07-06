@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DTO.Media;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DTO.AccessoryDto
 {
-	public class AccessoryRequest
+    public class AccessoryRequest
 	{
 		[Required(ErrorMessage = "Name is required")]
         public required string Name { get; set; }
 
         [Required(ErrorMessage = "Price is required")]
-        [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive value.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero")]
         public decimal Price { get; set; }
-        public Guid? MediaId { get; set; }
-        public Guid? PromotionId { get; set; }
+        public MediaRequest? Media { get; set; }
     }
 }

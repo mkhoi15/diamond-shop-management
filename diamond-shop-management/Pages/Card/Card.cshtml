@@ -42,13 +42,6 @@
                             </td>
                             <td>$@item.Price</td>
                             <td>$@(item.Price * 1)</td> 
-                            <td>
-                                <form method="post" class="form-inline">
-                                    <input type="hidden" name="itemId" value="@item.Id" />
-                                    @* <input type="number" class="form-control mr-1" name="quantity" value="@item.Quantity" style="width: 60px;"> *@
-                                    <button type="submit" class="btn btn-sm btn-outline-primary">Update</button>
-                                </form>
-                            </td>
                             
                             <td>
                                 <form method="post" asp-page-handler="RemoveFromCart">

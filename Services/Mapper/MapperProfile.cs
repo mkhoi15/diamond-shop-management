@@ -18,22 +18,31 @@ public class MapperProfile : Profile
         CreateMap<User, UserResponse>()
             .ReverseMap();
         CreateMap<OrderRequest, Order>()
+            .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails))
             .ReverseMap();
         CreateMap<Order, OrderResponse>()
+            .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails))
             .ReverseMap();
+
+        // Mapping for OrderDetailRequest to OrderDetail
+        CreateMap<OrderDetailRequest, OrderDetail>()
+            .ReverseMap();
+        
+        // Add this mapping
+        CreateMap<OrderDetail, OrderDetailResponse>()
+            .ReverseMap();
+        
         CreateMap<DiamondRequest,Diamond>()
             .ReverseMap();
         CreateMap<Diamond, DiamondResponse>()
             .ReverseMap();
         CreateMap<PaperworkRequest, PaperWork>()
             .ReverseMap();
-        CreateMap<PaperWork,PaperworkResponse>()
+        CreateMap<PaperWork, PaperworkResponse>()
             .ReverseMap();
         CreateMap<AccessoryRequest, Accessory>()
             .ReverseMap();
         CreateMap<Accessory, AccessoryResponse>()
-            .ForMember(dest => dest.PromotionName, opt => opt.MapFrom(src => src.Promotion.Name))
-            .ForMember(dest => dest.MediaUrl, opt => opt.MapFrom(src => src.Media.Url))
             .ReverseMap();
         CreateMap<DiamondAccessory, DiamondAccessoryResponse>()
             .ReverseMap();
@@ -44,6 +53,8 @@ public class MapperProfile : Profile
         CreateMap<DiamondAccessoryRequest, DiamondAccessory>()
             .ReverseMap();
         CreateMap<Promotion, PromotionResponse>()
+            .ReverseMap();
+        CreateMap<PromotionRequest, Promotion>()
             .ReverseMap();
     }
 }

@@ -11,4 +11,7 @@ public class Order : Entity
     public User? Customer { get; set; }
     public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     public ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
+    
+    
+    
 }

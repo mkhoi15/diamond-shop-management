@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DTO.DiamondAccessoryDto
+﻿namespace DTO.DiamondAccessoryDto
 {
-	public class DiamondAccessoryResponse
+    public class DiamondAccessoryResponse
 	{
-
-	}
+        public Guid Id { get; set; }
+        public Guid? DiamondId { get; set; }
+        public Guid? AccessoryId { get; set; }
+    }
 }

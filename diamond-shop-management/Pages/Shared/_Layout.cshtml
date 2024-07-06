@@ -49,6 +49,7 @@
                                 @if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Admin"))
                                 {
                                     <a asp-page="/DiamondManagement/ViewDiamond">Diamond Management</a>
+                                    <a asp-page="/PromotionManagement/View">Promotion Management</a>
                                     <a asp-page="/Admin/Index">Account Management</a>
                                 }
                                 <a asp-page="/About">About</a>

@@ -1,18 +1,18 @@
 using AutoMapper;
-using BusinessObject.Models;
 using DTO.AccessoryDto;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.AccessoryManagement
 {
+    /*    [Authorize(Roles = nameof(Roles.Manager))]
+    */
     public class ViewAccessoryModel : PageModel
     {
         private readonly IAccessoryServices _accessoryServices;
         private readonly IMapper _mapper;
 
-        public List<AccessoryResponse> Accessories { get; set; }
+        public List<AccessoryResponse> Accessories { get; set; } = [];
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalItems { get; set; }
