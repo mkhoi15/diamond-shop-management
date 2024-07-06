@@ -54,7 +54,7 @@ namespace Services
             _diamondAccessoryRepository.Add(diamondAccessory);
         }
 
-        public void UpdateDiamondAccessory( DiamondAccessoryResponse response)
+        public void UpdateDiamondAccessory(DiamondAccessoryResponse response)
         {
             var entity = _mapper.Map<DiamondAccessory>(response);
 
@@ -74,9 +74,10 @@ namespace Services
             return true;
         }
 
-        public async Task<IEnumerable<DiamondAccessoryResponse>> GetAllDiamondAccessories()
+        public IEnumerable<DiamondAccessoryResponse> GetAllDiamondAccessories(CancellationToken cancellationToken)
         {
-            var diamondAccessories = await _diamondAccessoryRepository.FindAll().ToListAsync();
+            var diamondAccessories = _diamondAccessoryRepository.FindAll();
+
             return _mapper.Map<IEnumerable<DiamondAccessoryResponse>>(diamondAccessories);
         }
     }
