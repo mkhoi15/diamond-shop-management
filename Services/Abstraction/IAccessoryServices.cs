@@ -5,10 +5,12 @@ namespace Services.Abstraction
 {
     public interface IAccessoryServices
 	{
-		Task<AccessoryResponse> CreateAccessoryAsync(AccessoryRequest request);
-		Task<IEnumerable<AccessoryResponse>> GetAllAccessoriesAsync(CancellationToken cancellationToken);
+        void CreateAccessory(AccessoryRequest request);
+		IEnumerable<AccessoryResponse> GetAllAccessoriesAsync(CancellationToken cancellationToken);
 		Task<PagedResult<AccessoryResponse>> GetAccessoriesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
 		Task<AccessoryResponse> GetAccessoryByIdAsync(Guid accessoryId, CancellationToken cancellationToken);
+        void UpdateAccessory(AccessoryResponse accessory);
+        Task<bool> DeleteAccessory(Guid id);
         Task AddDiamondToAccessoryAsync(Guid accessoryId, Guid diamondId);
     }
 }

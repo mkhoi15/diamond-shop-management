@@ -1,56 +1,84 @@
-﻿using Services.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO.DiamondAccessoryDto;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
+using Services.Abstraction;
 
 namespace Services
 {
-	public class DiamondAccessoryServices : IDiamondAccessoryServices
-	{
-		private readonly IDiamondAccessoryRepository _diamondAccessoryRepository;
-		private readonly IMapper _mapper;
-		private readonly IUnitOfWork _unitOfWork;
+    public class DiamondAccessoryServices : IDiamondAccessoryServices
+    {
+        private readonly IDiamondAccessoryRepository _diamondAccessoryRepository;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-		public DiamondAccessoryServices(IDiamondAccessoryRepository diamondAccessoryRepository, IMapper mapper, IUnitOfWork unitOfWork)
-		{
-			_diamondAccessoryRepository = diamondAccessoryRepository;
-			_mapper = mapper;
-			_unitOfWork = unitOfWork;
-		}
+        public DiamondAccessoryServices(IDiamondAccessoryRepository diamondAccessoryRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        {
+            _diamondAccessoryRepository = diamondAccessoryRepository;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+        }
 
-		public async Task AddProducts(List<DiamondAccessoryRequest> productsRequest)
-		{
-			List<DiamondAccessory> products = new List<DiamondAccessory>();
+        public async Task AddProducts(List<DiamondAccessoryRequest> productsRequest)
+        {
+            List<DiamondAccessory> products = new List<DiamondAccessory>();
 
-			foreach (var productRequest in productsRequest)
-			{
-				var product = _mapper.Map<DiamondAccessory>(productRequest);
-				products.Add(product);
-			}
+            foreach (var productRequest in productsRequest)
+            {
+                var product = _mapper.Map<DiamondAccessory>(productRequest);
+                products.Add(product);
+            }
 
-			_diamondAccessoryRepository.AddRange(products);
-			await _unitOfWork.SaveChangeAsync();
-		}
+            _diamondAccessoryRepository.AddRange(products);
+            await _unitOfWork.SaveChangeAsync();
+        }
 
-		public async Task<DiamondAccessory> GetProductByDiamondId(Guid diamondId)
-		{
-			var diamondAccessory = await _diamondAccessoryRepository.FindAll()
-				.FirstOrDefaultAsync(x => x.DiamondId == diamondId);
+        public async Task<DiamondAccessory> GetProductByDiamondId(Guid diamondId)
+        {
+            var diamondAccessory = await _diamondAccessoryRepository.FindAll()
+                .FirstOrDefaultAsync(x => x.DiamondId == diamondId);
 
-			if (diamondAccessory == null)
-			{
-				throw new Exception("Diamond Accessory not found");
-			}
-            
-			return diamondAccessory;
-		}
-	}
+            if (diamondAccessory == null)
+            {
+                throw new Exception("Diamond Accessory not found");
+            }
+
+            return diamondAccessory;
+        }
+        public void CreateDiamondAccessory(DiamondAccessoryRequest request)
+        {
+            var diamondAccessory = _mapper.Map<DiamondAccessory>(request);
+
+            _diamondAccessoryRepository.Add(diamondAccessory);
+        }
+
+        public void UpdateDiamondAccessory(DiamondAccessoryResponse response)
+        {
+            var entity = _mapper.Map<DiamondAccessory>(response);
+
+            _diamondAccessoryRepository.Update(entity);
+        }
+
+        public async Task<bool> DeleteDiamondAccessory(Guid id)
+        {
+            var diamondAccessory = await _diamondAccessoryRepository.FindById(id);
+            if (diamondAccessory == null)
+            {
+                return false;
+            }
+
+            _diamondAccessoryRepository.Remove(diamondAccessory);
+            await _unitOfWork.SaveChangeAsync();
+            return true;
+        }
+
+        public IEnumerable<DiamondAccessoryResponse> GetAllDiamondAccessories(CancellationToken cancellationToken)
+        {
+            var diamondAccessories = _diamondAccessoryRepository.FindAll();
+
+            return _mapper.Map<IEnumerable<DiamondAccessoryResponse>>(diamondAccessories);
+        }
+    }
 }

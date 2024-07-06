@@ -1,7 +1,7 @@
 ﻿@page
 @model diamond_shop_management.Pages.AccessoryManagement.CreateAccessoryModel
 @{
-    ViewData["Title"] = "CreateAccessory";
+    ViewData["Title"] = "Create Accessory";
 }
 
 <section class="shop_section layout_padding">
@@ -12,7 +12,13 @@
             </h2>
         </div>
         <div class="row">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div class="alert alert-danger" id="message" role="alert">
+                        @Model.Message
+                    </div>
+                }
                 <div class="form-group">
                     <label asp-for=" AccessoryRequest.Name "></label>
                     <input asp-for="AccessoryRequest.Name" class="form-control" />
@@ -24,22 +30,10 @@
                     <span asp-validation-for="AccessoryRequest.Price" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="AccessoryRequest.PromotionId"></label>
-                    <input asp-for="AccessoryRequest.PromotionId" class="form-control" />
-                    <span asp-validation-for="AccessoryRequest.PromotionId" class="text-danger"></span>
+                    <label asp-for="ImageFile">Image</label>
+                    <input type="file" id="ImageFile" name="ImageFile" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="AccessoryRequest.MediaId"></label>
-                    <input asp-for="AccessoryRequest.MediaId" class="form-control" />
-                    <span asp-validation-for="AccessoryRequest.MediaId" class="text-danger"></span>
-                </div>
-                @if (!string.IsNullOrEmpty(Model.Message))
-                {
-                    <div class="alert alert-danger" id="message" role="alert">
-                        @Model.Message
-                    </div>
-                }
-
                 <div class="flex-start">
                     <a asp-page="/AccessoryManagement/ViewAccessory" class="btn btn-secondary">Back to List</a>
                     <button type="submit" class="btn btn-primary">Create</button>
@@ -52,3 +46,4 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
