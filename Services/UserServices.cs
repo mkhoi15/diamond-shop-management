@@ -96,6 +96,11 @@ public class UserServices : IUserServices
         {
             throw new AuthenticationException("User is exist!!");
         }
+        var emailExist = await _userManager.FindByEmailAsync(email);
+        if (emailExist is not null)
+        {
+            throw new AuthenticationException("Email is exist!!");
+        }
 
         if (!await _roleManager.RoleExistsAsync(roles.ToString()))
         {
