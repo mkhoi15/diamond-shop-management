@@ -3,16 +3,8 @@ using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO;
 using DTO.AccessoryDto;
-using DTO.DiamondDto;
-using Microsoft.EntityFrameworkCore;
-using Repositories;
 using Repositories.Abstraction;
 using Services.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services
 {
@@ -43,15 +35,25 @@ namespace Services
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<AccessoryResponse> CreateAccessoryAsync(AccessoryRequest request)
+        public void CreateAccessory(AccessoryRequest request)
         {
             var accessory = _mapper.Map<Accessory>(request);
 
             _AccessoryRepository.Add(accessory);
+        }
 
+        public async Task<bool> DeleteAccessory(Guid id)
+        {
+            var accessory = await _AccessoryRepository.FindById(id);
+
+            if (accessory == null)
+            {
+                return false;
+            }
+
+            _AccessoryRepository.Remove(accessory);
             await _unitOfWork.SaveChangeAsync();
-
-            return _mapper.Map<AccessoryResponse>(accessory);
+            return true;
         }
 
         public async Task<PagedResult<AccessoryResponse>> GetAccessoriesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
@@ -67,8 +69,8 @@ namespace Services
                 Items = accessoryResponses,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalItems = GetAllAccessoriesAsync(cancellationToken).Result.Count(),
-                
+                TotalItems = GetAllAccessoriesAsync(cancellationToken).Count(),
+
             };
 
             return pagedResult;
@@ -79,18 +81,25 @@ namespace Services
             var accessory = await _AccessoryRepository.FindById(
                 accessoryId,
                 cancellationToken,
-                a => a.Promotion
+                a => a.Promotion,
+                a => a.Media
                 );
+
             return _mapper.Map<AccessoryResponse>(accessory);
         }
 
-        public async Task<IEnumerable<AccessoryResponse>> GetAllAccessoriesAsync(CancellationToken cancellationToken)
+        public IEnumerable<AccessoryResponse> GetAllAccessoriesAsync(CancellationToken cancellationToken)
         {
-            var accessories = await _AccessoryRepository.Find(
-                accessory => accessory.IsDeleted != true,
-                cancellationToken,
-                accessory => accessory.Promotion);
+            var accessories = _AccessoryRepository.FindAll();
+
             return _mapper.Map<IEnumerable<AccessoryResponse>>(accessories);
+        }
+
+        public void UpdateAccessory(AccessoryResponse response)
+        {
+            var entity = _mapper.Map<Accessory>(response);
+
+            _AccessoryRepository.Update(entity);
         }
     }
 }

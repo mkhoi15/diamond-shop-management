@@ -1,16 +1,11 @@
 ﻿using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using Repositories.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories
 {
-	public class AccessoryRepository : IAccessoryRepository
+    public class AccessoryRepository : IAccessoryRepository
 	{
 		private readonly IAccessoryDAO _accessoryDAO;
 		public AccessoryRepository(IAccessoryDAO accessoryDAO)

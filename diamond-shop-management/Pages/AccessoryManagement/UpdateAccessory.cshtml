@@ -1,0 +1,63 @@
+﻿@page "{accessoryId}"
+@model diamond_shop_management.Pages.AccessoryManagement.UpdateAccessoryModel
+@{
+    ViewData["Title"] = "Update Accessory";
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Accessory Update
+            </h2>
+        </div>
+        <div class="row">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group text-center">
+                    @if (Model.Accessory != null && Model.Accessory.Media != null)
+                    {
+                        <img src="~/@Model.Accessory.Media.Url" alt="Accessory Image" width="auto">
+                    }
+                    else
+                    {
+                        <img src="" alt="No image">
+                    }
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div class="alert alert-danger" id="message" role="alert">
+                        @Model.Message
+                    </div>
+                }
+                <div class="form-group">
+                    <label asp-for="ImageFile">Image</label>
+                    <input type="file" id="ImageFile" name="ImageFile" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Accessory.Name">Name</label>
+                    <input asp-for="Accessory.Name" class="form-control" />
+                    <span asp-validation-for="Accessory.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Accessory.Price">Price</label>
+                    <input asp-for="Accessory.Price" class="form-control" />
+                    <span asp-validation-for="Accessory.Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Accessory.MediaId" />
+                    <a asp-page="/AccessoryManagement/ViewAccessory" class="btn btn-secondary">Back to List</a>
+                    <button type="submit" asp-route-accessoryId="@Model.Accessory.Id" class="btn btn-primary">Update</button>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div style="color: red" id="error-message">@Model.Message</div>
+                }
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

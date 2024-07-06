@@ -3,7 +3,6 @@ using DataAccessLayer.Abstraction;
 using Repositories.Abstraction;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLayer;
 
 namespace Repositories
 {

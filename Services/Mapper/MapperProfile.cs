@@ -21,19 +21,17 @@ public class MapperProfile : Profile
             .ReverseMap();
         CreateMap<Order, OrderResponse>()
             .ReverseMap();
-        CreateMap<DiamondRequest,Diamond>()
+        CreateMap<DiamondRequest, Diamond>()
             .ReverseMap();
         CreateMap<Diamond, DiamondResponse>()
             .ReverseMap();
         CreateMap<PaperworkRequest, PaperWork>()
             .ReverseMap();
-        CreateMap<PaperWork,PaperworkResponse>()
+        CreateMap<PaperWork, PaperworkResponse>()
             .ReverseMap();
         CreateMap<AccessoryRequest, Accessory>()
             .ReverseMap();
         CreateMap<Accessory, AccessoryResponse>()
-            .ForMember(dest => dest.PromotionName, opt => opt.MapFrom(src => src.Promotion.Name))
-            .ForMember(dest => dest.MediaUrl, opt => opt.MapFrom(src => src.Media.Url))
             .ReverseMap();
         CreateMap<DiamondAccessory, DiamondAccessoryResponse>()
             .ReverseMap();
