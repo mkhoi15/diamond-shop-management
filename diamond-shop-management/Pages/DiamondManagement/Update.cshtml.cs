@@ -28,7 +28,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
         {
             _diamondService = diamondService;
             _paperworkService = paperworkService;
-            PageSize = 8;
+            PageSize = 4;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _environment = environment;
@@ -70,9 +70,10 @@ namespace diamond_shop_management.Pages.DiamondManagement
             PageNumber = pageNumber ?? 1;
 
             var pagedResult = await _paperworkService.GetAllAsync(
-                paper => paper.DiamondId == diamondId, PageNumber, PageSize, cancellationToken);
+                paper => paper.DiamondId == diamondId && paper.IsDeleted != true, PageNumber, PageSize, cancellationToken);
 
             Paperworks = _mapper.Map<List<PaperworkResponse>>(pagedResult.Items);
+            TotalItems = pagedResult.TotalItems;
 
             return Page();
         }

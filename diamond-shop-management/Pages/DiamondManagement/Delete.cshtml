@@ -95,3 +95,29 @@
         </div>
     </div>
 </section>
+
+<!-- end shop section -->
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const errorMessage = document.getElementById("message");
+            if (errorMessage) {
+                const message = errorMessage.textContent.trim();
+                if (message !== "") {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                        errorMessage.textContent = "";
+                    }, 2000);
+
+                } else {
+                    setTimeout(function () {
+                        errorMessage.style.display = "none";
+                        errorMessage.textContent = "";
+                    }, 1000);
+                }
+            }
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -101,6 +101,9 @@ public class DiamondShopDbContext : IdentityDbContext<User, Role, Guid>
             .WithOne(d => d.Order)
             .HasForeignKey(o => o.OrderId)
             .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<Order>()
+            .Property(u => u.IsDeleted)
+            .HasDefaultValue(false);
 
         builder.Entity<User>().ToTable(nameof(Users));
         builder.Entity<User>()
@@ -128,6 +131,9 @@ public class DiamondShopDbContext : IdentityDbContext<User, Role, Guid>
             .WithOne(d => d.OrderDetail)
             .HasForeignKey<OrderDetail>(od => od.ProductId)
             .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<OrderDetail>()
+            .Property(u => u.IsDeleted)
+            .HasDefaultValue(false);
         
         builder.Entity<Delivery>().ToTable(nameof(Deliveries));
         

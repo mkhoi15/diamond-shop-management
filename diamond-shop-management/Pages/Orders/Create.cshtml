@@ -2,7 +2,7 @@
 @model diamond_shop_management.Pages.Orders.Create
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Create Order";
 }
 
 <div class="container mt-5">
@@ -11,55 +11,65 @@
     <form method="post">
         <div class="form-group">
             <label asp-for="OrderRequest.Address" class="control-label"></label>
-            <input asp-for="OrderRequest.Address" class="form-control" />
+            <input asp-for="OrderRequest.Address" class="form-control" placeholder="Enter address" />
             <span asp-validation-for="OrderRequest.Address" class="text-danger"></span>
         </div>
 
-        <div class="form-group">
-            <label asp-for="OrderRequest.Date" class="control-label"></label>
-            <input asp-for="OrderRequest.Date" class="form-control" type="datetime-local" />
-            <span asp-validation-for="OrderRequest.Date" class="text-danger"></span>
-        </div>
+        @* <div class="form-group" hidden="hidden"> *@
+        @*     <label asp-for="OrderRequest.Date" class="control-label"></label> *@
+        @*     <input asp-for="OrderRequest.Date" class="form-control" type="datetime-local" /> *@
+        @*     <span asp-validation-for="OrderRequest.Date" class="text-danger"></span> *@
+        @* </div> *@
+        
+        <!-- Hidden field for Date -->
+        <input type="hidden" asp-for="OrderRequest.Date" value="@Model.OrderRequest.Date.ToString("yyyy-MM-ddTHH:mm:ss")" />
 
-        <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                @* <th scope="col">Product</th> *@
-                                <th scope="col">Description (Origin, Color, Cut, Clarity) </th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.CartItems.Diamond)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="media">
-                                            @* <img src="@item.Diamond?.MediaUrl ?? '/images/Diamond.png'" class="mr-3" alt="Diamond Image" style="max-width: 100px;"> *@
-                                            <div class="media-body">
-                                                @* <h5 class="mt-0">@item.Diamond?.Name</h5> *@
-                                                <p>@item.Origin, @item.Color, @item.Cut, @item.Clarity</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>$@item.Price</td>
-                                    <td>1</td>
-                                    <td>$@(item.Price * 1)</td> 
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+        <table class="table table-hover mt-4">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Description (Origin, Color, Cut, Clarity)</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.CartItems.Diamond.Count; i++)
+                {
+                    var item = Model.CartItems.Diamond[i];
+                    var orderDetail = Model.OrderRequest.OrderDetails[i];
+                    <tr>
+                        <td>
+                            <div class="media">
+                                @* <img src="@item.MediaUrl ?? '/images/Diamond.png'" class="mr-3 img-thumbnail" alt="Diamond Image" style="max-width: 100px;"> *@
+                                <div class="media-body">
+                                    @* <h5 class="mt-0">@item.Name</h5> *@
+                                    <p class="mb-1">@item.Origin, @item.Color, @item.Cut, @item.Clarity</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">$@item.Price</td>
+                        <td class="align-middle">
+                            <input type="hidden" name="OrderRequest.OrderDetails[@i].ProductId" value="@orderDetail.ProductId"/>
+                            <input type="hidden" name="OrderRequest.OrderDetails[@i].Price" value="@orderDetail.Price"/>
+                            <input type="hidden" name="OrderRequest.OrderDetails[@i].Quantity" value="1"/>
+                            1
+                        </td>
+                        <td class="align-middle">$@(item.Price * 1)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-        <div class="form-group">
-            <label>Total Price: $@Model.Total</label>
+        <div class="form-group mt-4">
+            <label class="font-weight-bold">Total Price: $@Model.Total</label>
         </div>
         
         <!-- Hidden field for TotalPrice -->
         <input type="hidden" asp-for="OrderRequest.TotalPrice" />
-
-        <button type="submit" class="btn btn-primary">Place Order</button>
+        
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">Place Order</button>
+        </div>
     </form>
 </div>
-

@@ -31,7 +31,7 @@ namespace Repositories
 
 		public IQueryable<DiamondAccessory> FindAll()
 		{
-			 return _diamondAccessoryDAO.FindAll();
+			return _diamondAccessoryDAO.FindAll();
 		}
 
 		public async Task<DiamondAccessory?> FindById(Guid id, CancellationToken cancellationToken = default, params Expression<Func<DiamondAccessory, object?>>[] includeProperties)
