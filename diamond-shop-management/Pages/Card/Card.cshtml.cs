@@ -39,6 +39,18 @@ public class Card : PageModel
     //     }
     //     return RedirectToPage();
     // }
+    
+    public IActionResult OnPostRemoveFromCart(Guid itemId)
+    {
+        var cart = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
+        var item = cart.Diamond.FirstOrDefault(x => x.Id == itemId);
+        if (item != null)
+        {
+            cart.Diamond.Remove(item);
+            HttpContext.Session.SetObjectAsJson("Cart", cart);
+        }
+        return RedirectToPage();
+    }
 
 
     public void TotalPrice()

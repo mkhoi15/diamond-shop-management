@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BusinessObject.Models;
+using DTO.DiamondAccessoryDto;
 
 namespace Services.Abstraction
 {
-	public interface IDiamondAccessoryServices
-	{
-	}
+    public interface IDiamondAccessoryServices
+    {
+        Task AddProducts(List<DiamondAccessoryRequest> productsRequest);
+        Task<DiamondAccessory> GetProductByDiamondId(Guid diamondId);
+        void CreateDiamondAccessory(DiamondAccessoryRequest request);
+        void UpdateDiamondAccessory(DiamondAccessoryResponse response);
+        Task<bool> DeleteDiamondAccessory(Guid id);
+        IEnumerable<DiamondAccessoryResponse> GetAllDiamondAccessories(CancellationToken cancellationToken);
+    }
 }

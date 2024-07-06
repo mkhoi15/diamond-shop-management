@@ -23,7 +23,7 @@ public class MapperProfile : Profile
         CreateMap<Order, OrderResponse>()
             .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails))
             .ReverseMap();
-        
+
         // Mapping for OrderDetailRequest to OrderDetail
         CreateMap<OrderDetailRequest, OrderDetail>()
             .ReverseMap();
@@ -38,13 +38,11 @@ public class MapperProfile : Profile
             .ReverseMap();
         CreateMap<PaperworkRequest, PaperWork>()
             .ReverseMap();
-        CreateMap<PaperWork,PaperworkResponse>()
+        CreateMap<PaperWork, PaperworkResponse>()
             .ReverseMap();
         CreateMap<AccessoryRequest, Accessory>()
             .ReverseMap();
         CreateMap<Accessory, AccessoryResponse>()
-            .ForMember(dest => dest.PromotionName, opt => opt.MapFrom(src => src.Promotion.Name))
-            .ForMember(dest => dest.MediaUrl, opt => opt.MapFrom(src => src.Media.Url))
             .ReverseMap();
         CreateMap<DiamondAccessory, DiamondAccessoryResponse>()
             .ReverseMap();

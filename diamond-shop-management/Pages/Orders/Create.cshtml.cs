@@ -3,6 +3,7 @@ using AutoMapper;
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO.DiamondAccessoryDto;
+using DTO.Enum;
 using DTO.OrderDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -15,16 +16,16 @@ namespace diamond_shop_management.Pages.Orders;
 public class Create : PageModel
 {
     private readonly IOrderServices _orderServices;
-    private readonly IDiamondAccessoryRepository _diamondAccessoryRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IDiamondAccessoryServices _diamondAccessoryServices;
 
-    public Create(IOrderServices orderServices, IDiamondAccessoryRepository diamondAccessoryRepository, IUnitOfWork unitOfWork, IMapper mapper)
+    public Create(IOrderServices orderServices, IUnitOfWork unitOfWork, IMapper mapper, IDiamondAccessoryServices diamondAccessoryServices)
     {
         _orderServices = orderServices;
-        _diamondAccessoryRepository = diamondAccessoryRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _diamondAccessoryServices = diamondAccessoryServices;
     }
 
 
@@ -50,21 +51,24 @@ public class Create : PageModel
             });
         }
         
-        List<DiamondAccessory> products = new List<DiamondAccessory>();
-        foreach (var productRequest in productsRequest)
-        {
-            products.Add(_mapper.Map<DiamondAccessory>(productRequest));
-        }
-        
-        _diamondAccessoryRepository.AddRange(products);
-        await _unitOfWork.SaveChangeAsync();
+        // List<DiamondAccessory> products = new List<DiamondAccessory>();
+        // foreach (var productRequest in productsRequest)
+        // {
+        //     products.Add(_mapper.Map<DiamondAccessory>(productRequest));
+        // }
+        //
+        // _diamondAccessoryRepository.AddRange(products);
+        // await _unitOfWork.SaveChangeAsync();
+
+        await _diamondAccessoryServices.AddProducts(productsRequest);
         
         OrderRequest = new OrderRequest
         {
             TotalPrice = Total,
             OrderDetails = CartItems.Diamond.Select(d => new OrderDetailRequest
             {
-                ProductId = _diamondAccessoryRepository.GetProductByDiamondId(d.Id).Result.Id,
+                //ProductId = _diamondAccessoryRepository.GetProductByDiamondId(d.Id).Result.Id,
+                ProductId = _diamondAccessoryServices.GetProductByDiamondId(d.Id).Result.Id,
                 Price = d.Price ?? 0,
                 Quantity = 1
             }).ToList()
@@ -76,6 +80,8 @@ public class Create : PageModel
         var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         
         OrderRequest.CustomerId = Guid.Parse((customerId ?? throw new InvalidOperationException()));
+
+        OrderRequest.Status = "Pending";
         
         if (!ModelState.IsValid)
         {
