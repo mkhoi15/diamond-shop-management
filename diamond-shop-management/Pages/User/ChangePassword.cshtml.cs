@@ -29,6 +29,11 @@ public class ChangePassword : PageModel
     {
         _userServices = userServices;
     }
+    
+    public void OnGet(string? username)
+    {
+        Username = username;
+    }
 
     public async Task<IActionResult> OnPostAsync()
     {

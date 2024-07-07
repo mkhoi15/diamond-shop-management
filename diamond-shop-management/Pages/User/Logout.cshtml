@@ -2,16 +2,20 @@
 @model Logout
 @{
     ViewData["Title"] = "Log out";
+    Layout = "_Layout";
 }
 
 <header>
-    <h1>@ViewData["Title"]</h1>
+    <h1 class="text-center mt-5" style="margin-top: 70px">@ViewData["Title"]</h1>
     @{
         if (User.Identity?.IsAuthenticated ?? false)
         {
-            <form class="form-inline" asp-route-returnUrl="@Url.Page("/Index")" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
-            </form>
+            <div class="row align-items-center w-auto h-100 p-5 m-5">
+                <p>Are you sure you want to log out?</p>
+                <form class="form-inline" asp-route-returnUrl="@Url.Page("/Index")" method="post">
+                    <button type="submit" class="nav-link btn btn-link btn-secondary text-dark">Click here to Logout</button>
+                </form>
+            </div>
         }
         else
         {

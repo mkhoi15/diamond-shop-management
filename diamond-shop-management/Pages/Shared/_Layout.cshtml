@@ -1,4 +1,5 @@
-﻿@inject IHttpContextAccessor HttpContextAccessor
+﻿@using System.Security.Claims
+@inject IHttpContextAccessor HttpContextAccessor
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -52,10 +53,16 @@
                                     <a asp-page="/PromotionManagement/View">Promotion Management</a>
                                     <a asp-page="/Admin/Index">Account Management</a>
                                 }
-                                <a asp-page="/About">About</a>
-                                <a asp-page="/DiamondShop/BrowseDiamond">Shop</a>
-                                <a asp-page="/AccessoryManagement/ViewAccessory">Accessory</a>
-                                <a asp-page="/Blog">Blog</a>
+                                else if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Manager"))
+                                {
+                                    <a asp-page="/DiamondShop/BrowseDiamond">Shop</a>
+                                    <a asp-page="/AccessoryManagement/ViewAccessory">Accessory</a>
+                                }
+                                else
+                                {
+                                    <a asp-page="/DiamondShop/BrowseDiamond">Shop</a>
+                                    <a asp-page="/AccessoryManagement/ViewAccessory">Accessory</a>
+                                }
                                 @if (!User.Identity?.IsAuthenticated ?? true)
                                 {
                                     <a asp-page="/User/Login">Login</a>
@@ -63,6 +70,7 @@
                                 }
                                 else
                                 {
+                                    <a asp-page="/User/Profile" asp-route-id="@User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value">Profile</a>
                                     <a asp-page="/User/Logout">Logout</a>
                                 }
                             </div>
