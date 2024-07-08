@@ -66,6 +66,9 @@ public class OrderServices : IOrderServices
         updateOrder.Status = order.Status;
         //updateOrder.IsDeleted = order.IsDeleted;
         
+        _orderRepository.Update(updateOrder);
+        await _unitOfWork.SaveChangeAsync();
+        
         return _mapper.Map<OrderResponse>(updateOrder);
         
     }

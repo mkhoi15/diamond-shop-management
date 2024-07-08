@@ -5,5 +5,6 @@
         public Guid Id { get; set; }
         public Guid? DiamondId { get; set; }
         public Guid? AccessoryId { get; set; }
+        public Guid? CustomerId { get; set; }
     }
 }
