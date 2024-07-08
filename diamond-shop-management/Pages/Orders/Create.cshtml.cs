@@ -35,6 +35,8 @@ public class Create : PageModel
     public DTO.Card CartItems { get; private set; }
     
     public decimal Total { get; private set; }
+    
+    public List<Guid> ProductIds { get; set; } = new List<Guid>();
 
     public async Task OnGet()
     {
@@ -50,24 +52,16 @@ public class Create : PageModel
                 DiamondId = diamonds.Id,
             });
         }
-        
-        // List<DiamondAccessory> products = new List<DiamondAccessory>();
-        // foreach (var productRequest in productsRequest)
-        // {
-        //     products.Add(_mapper.Map<DiamondAccessory>(productRequest));
-        // }
-        //
-        // _diamondAccessoryRepository.AddRange(products);
-        // await _unitOfWork.SaveChangeAsync();
 
         await _diamondAccessoryServices.AddProducts(productsRequest);
+        
+        ProductIds = CartItems.Diamond.Select(d => _diamondAccessoryServices.GetProductByDiamondId(d.Id).Result.Id).ToList();
         
         OrderRequest = new OrderRequest
         {
             TotalPrice = Total,
             OrderDetails = CartItems.Diamond.Select(d => new OrderDetailRequest
             {
-                //ProductId = _diamondAccessoryRepository.GetProductByDiamondId(d.Id).Result.Id,
                 ProductId = _diamondAccessoryServices.GetProductByDiamondId(d.Id).Result.Id,
                 Price = d.Price ?? 0,
                 Quantity = 1
@@ -118,7 +112,20 @@ public class Create : PageModel
 
         this.Total = total;
 
-    } 
-    
+    }
+
+    public async Task<IActionResult> OnPostCancelBookingAsync()
+    {
+        if (ProductIds.Count > 0)
+        {
+            foreach (var productId in ProductIds)
+            {
+                await _diamondAccessoryServices.DeleteDiamondAccessory(productId);
+            }
+        }
+        
+        return RedirectToPage("/Card/Card");
+        
+    }
     
 }
