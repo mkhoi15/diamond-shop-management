@@ -1,0 +1,88 @@
+@page
+@model diamond_shop_management.Pages.Orders.OrdersList
+@{
+    ViewData["Title"] = "Orders List";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Customer Orders</h2>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <select id="orderStatusFilter" class="form-control" asp-for="SelectedStatus" asp-items="Model.StatusList">
+                <option value="">All</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary" onclick="filterOrders()">Filter</button>
+        </div>
+    </div>
+
+    @if (Model.Orders != null && Model.Orders.Any())
+    {
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Order Date</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.Orders)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>$@order.TotalPrice</td>
+                        <td><span class="badge @(GetBadgeClass(order.Status))">@order.Status</span></td>
+                        <td>@order.Date</td>
+                        <td>
+                            <a asp-page="/Orders/OrderDetails" asp-route-id="@order.Id" class="btn btn-info">View Details</a>
+                            @if (order.Status == "Pending")
+                            {
+                                <a asp-page="" asp-route-id="@order.Id" class="btn btn-primary">Create Delivery</a>
+                            }
+                        </td>
+                    </tr>
+                }
+
+                @functions {
+                    string GetBadgeClass(string status)
+                    {
+                        switch (status)
+                        {
+                            case "Pending":
+                                return "badge-warning";
+                            case "Processing":
+                                return "badge-info";
+                            case "Shipped":
+                                return "badge-primary";
+                            case "Delivered":
+                                return "badge-success";
+                            case "Cancelled":
+                                return "badge-danger";
+                            default:
+                                return "badge-secondary";
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-center">No orders found.</p>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function filterOrders() {
+            var selectedStatus = document.getElementById("orderStatusFilter").value;
+            var url = '@Url.Page("/Orders/OrdersList")' + '?SelectedStatus=' + selectedStatus;
+            window.location.href = url;
+        }
+    </script>
+}

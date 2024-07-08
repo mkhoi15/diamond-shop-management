@@ -2,6 +2,7 @@ using AutoMapper;
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO.OrderDto;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
 using Services.Abstraction;
 
@@ -31,5 +32,41 @@ public class OrderServices : IOrderServices
         _orderDetailRepository.AddRange(order.OrderDetails);
         await _unitOfWork.SaveChangeAsync();
         return _mapper.Map<OrderResponse>(order);
+    }
+
+    public async Task<List<OrderResponse>> GetAllOrdersAsync()
+    {
+        var orders = await _orderRepository.FindAll().ToListAsync();
+
+        return _mapper.Map<List<OrderResponse>>(orders);
+        
+    }
+
+    public async Task<OrderResponse> GetOrderByIdAsync(Guid orderId, CancellationToken cancellationToken)
+    {
+        var order = await _orderRepository.FindById(
+            orderId,
+            cancellationToken,
+            o => o.OrderDetails
+            );
+        
+        return _mapper.Map<OrderResponse>(order);
+    }
+
+    public async Task<OrderResponse> UpdateOrderAsync(Order order)
+    {
+        var updateOrder = await _orderRepository.FindById(order.Id);
+
+        if (updateOrder is null)
+        {
+            throw new ArgumentException("Not found order with this id");
+        }
+
+        updateOrder.Address = order.Address;
+        updateOrder.Status = order.Status;
+        //updateOrder.IsDeleted = order.IsDeleted;
+        
+        return _mapper.Map<OrderResponse>(updateOrder);
+        
     }
 }

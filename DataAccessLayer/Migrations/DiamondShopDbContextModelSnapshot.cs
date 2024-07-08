@@ -99,7 +99,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 6, 20, 6, 39, 339, DateTimeKind.Local).AddTicks(189));
+                        .HasDefaultValue(new DateTime(2024, 7, 6, 20, 55, 45, 48, DateTimeKind.Local).AddTicks(5229));
 
                     b.Property<string>("Cut")
                         .HasColumnType("nvarchar(max)");
@@ -151,7 +151,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 
@@ -254,7 +256,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 6, 20, 6, 39, 339, DateTimeKind.Local).AddTicks(5510));
+                        .HasDefaultValue(new DateTime(2024, 7, 6, 20, 55, 45, 48, DateTimeKind.Local).AddTicks(9328));
 
                     b.Property<Guid>("DiamondId")
                         .HasColumnType("uniqueidentifier");
@@ -360,7 +362,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 6, 20, 6, 39, 340, DateTimeKind.Local).AddTicks(5981));
+                        .HasDefaultValue(new DateTime(2024, 7, 6, 20, 55, 45, 49, DateTimeKind.Local).AddTicks(5960));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
