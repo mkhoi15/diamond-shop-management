@@ -5,9 +5,12 @@ using DataAccessLayer.Abstraction;
 using DTO.DiamondDto;
 using DTO.Media;
 using DTO.PaperworkDto;
+using DTO.PromotionDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Services;
 using Services.Abstraction;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
@@ -19,12 +22,13 @@ namespace diamond_shop_management.Pages.DiamondManagement
     {
         private readonly IDiamondServices _diamondService;
         private readonly IPaperworkServices _paperworkService;
+        private readonly IPromotionServices _promotionServices;
         private readonly IMediaServices _mediaServices;
         private readonly IWebHostEnvironment _environment;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UpdateModel(IDiamondServices diamondService, IPaperworkServices paperworkService, IMapper mapper, IUnitOfWork unitOfWork, IWebHostEnvironment environment, IMediaServices mediaServices)
+        public UpdateModel(IDiamondServices diamondService, IPaperworkServices paperworkService, IMapper mapper, IUnitOfWork unitOfWork, IWebHostEnvironment environment, IMediaServices mediaServices, IPromotionServices promotionServices)
         {
             _diamondService = diamondService;
             _paperworkService = paperworkService;
@@ -33,6 +37,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
             _unitOfWork = unitOfWork;
             _environment = environment;
             _mediaServices = mediaServices;
+            _promotionServices = promotionServices;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -54,7 +59,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public async Task<IActionResult> OnGetAsync(Guid diamondId, int? pageNumber, CancellationToken cancellationToken)
         {
-            InitializeDiamondInfo();
+            await InitializeDiamondInfoAsync();
             Diamond = await _diamondService.GetByIdAsync(diamondId, default);
 
 
@@ -109,7 +114,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 Message = "Diamond is updated successfully";
                 ModelState.AddModelError(string.Empty, Message);
 
-                InitializeDiamondInfo();
+                await InitializeDiamondInfoAsync();
                 return RedirectToPage("/DiamondManagement/Update", Diamond.Id);
             }
             catch (Exception ex)
@@ -117,7 +122,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 Message = "Update failed!\n" + ex.Message;
                 ModelState.AddModelError(string.Empty, ex.Message);
 
-                InitializeDiamondInfo();
+                await InitializeDiamondInfoAsync();
                 return Page();
             }
         }
@@ -154,7 +159,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
             return _mapper.Map<MediaResponse>(media);
         }
 
-        public void InitializeDiamondInfo()
+        public async Task InitializeDiamondInfoAsync()
         {
             Countries = new List<string>
             {
@@ -179,6 +184,8 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 "Trillion", "Baguette", "Rose", "Briolette", "Old European",
                 "Old Mine", "Tapered Baguette", "Half Moon", "Bullet", "French"
             };
+            IEnumerable<PromotionResponse> promotions = await _promotionServices.GetAllAsync(default);
+            ViewData["Promotions"] = new SelectList(promotions, "Id", "Name");
         }
     }
 }
