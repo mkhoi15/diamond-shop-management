@@ -38,7 +38,7 @@ namespace Services
         public async Task<DiamondAccessory> GetProductByDiamondId(Guid diamondId)
         {
             var diamondAccessory = await _diamondAccessoryRepository.FindAll()
-                .FirstOrDefaultAsync(x => x.DiamondId == diamondId);
+                .FirstOrDefaultAsync(x => x.DiamondId == diamondId && x.IsDeleted == false);
 
             if (diamondAccessory == null)
             {

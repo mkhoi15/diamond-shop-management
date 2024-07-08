@@ -62,6 +62,9 @@ public class DiamondShopDbContext : IdentityDbContext<User, Role, Guid>
             .OnDelete(DeleteBehavior.NoAction);
         
         builder.Entity<DiamondAccessory>().ToTable(nameof(DiamondAccessories));
+        builder.Entity<DiamondAccessory>()
+            .Property(u => u.IsDeleted)
+            .HasDefaultValue(false);
 
         builder.Entity<PaperWork>().ToTable(nameof(PaperWorks));
         builder.Entity<PaperWork>()

@@ -26,38 +26,38 @@
 
         <table class="table table-hover mt-4">
             <thead class="thead-light">
-                <tr>
-                    <th scope="col">Description (Origin, Color, Cut, Clarity)</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Total</th>
-                </tr>
+            <tr>
+                <th scope="col">Description (Origin, Color, Cut, Clarity)</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+            </tr>
             </thead>
             <tbody>
-                @for (var i = 0; i < Model.CartItems.Diamond.Count; i++)
-                {
-                    var item = Model.CartItems.Diamond[i];
-                    var orderDetail = Model.OrderRequest.OrderDetails[i];
-                    <tr>
-                        <td>
-                            <div class="media">
-                                @* <img src="@item.MediaUrl ?? '/images/Diamond.png'" class="mr-3 img-thumbnail" alt="Diamond Image" style="max-width: 100px;"> *@
-                                <div class="media-body">
-                                    @* <h5 class="mt-0">@item.Name</h5> *@
-                                    <p class="mb-1">@item.Origin, @item.Color, @item.Cut, @item.Clarity</p>
-                                </div>
+            @for (var i = 0; i < Model.CartItems.Diamond.Count; i++)
+            {
+                var item = Model.CartItems.Diamond[i];
+                var orderDetail = Model.OrderRequest.OrderDetails[i];
+                <tr>
+                    <td>
+                        <div class="media">
+                            @* <img src="@item.MediaUrl ?? '/images/Diamond.png'" class="mr-3 img-thumbnail" alt="Diamond Image" style="max-width: 100px;"> *@
+                            <div class="media-body">
+                                @* <h5 class="mt-0">@item.Name</h5> *@
+                                <p class="mb-1">@item.Origin, @item.Color, @item.Cut, @item.Clarity</p>
                             </div>
-                        </td>
-                        <td class="align-middle">$@item.Price</td>
-                        <td class="align-middle">
-                            <input type="hidden" name="OrderRequest.OrderDetails[@i].ProductId" value="@orderDetail.ProductId"/>
-                            <input type="hidden" name="OrderRequest.OrderDetails[@i].Price" value="@orderDetail.Price"/>
-                            <input type="hidden" name="OrderRequest.OrderDetails[@i].Quantity" value="1"/>
-                            1
-                        </td>
-                        <td class="align-middle">$@(item.Price * 1)</td>
-                    </tr>
-                }
+                        </div>
+                    </td>
+                    <td class="align-middle">$@item.Price</td>
+                    <td class="align-middle">
+                        <input type="hidden" name="OrderRequest.OrderDetails[@i].ProductId" value="@orderDetail.ProductId"/>
+                        <input type="hidden" name="OrderRequest.OrderDetails[@i].Price" value="@orderDetail.Price"/>
+                        <input type="hidden" name="OrderRequest.OrderDetails[@i].Quantity" value="1"/>
+                        1
+                    </td>
+                    <td class="align-middle">$@(item.Price * 1)</td>
+                </tr>
+            }
             </tbody>
         </table>
 
@@ -72,4 +72,11 @@
             <button type="submit" class="btn btn-primary btn-lg">Place Order</button>
         </div>
     </form>
+    
+    <form method="post" asp-page-handler="CancelBooking">
+            <div class="text-center mt-2">
+                <button type="submit" class="btn btn-danger btn-lg">Cancel</button>
+            </div>
+        </form>
+    
 </div>

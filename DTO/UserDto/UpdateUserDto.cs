@@ -18,5 +18,6 @@ public class UpdateUserDto
     public string Email { get; set; } = null!;
     
     [Phone(ErrorMessage = "Invalid phone number.")]
+    [Length(minimumLength: 10, maximumLength: 11, ErrorMessage = "Phone number must be between 10 and 11 digits.")]
     public string Phone { get; set; } = null!;
 }
