@@ -18,6 +18,11 @@ public class OrderResponse
     [StringLength(50)]
     public string? Status { get; set; }
         
+    public DateTime Date { get; set; }
+    
+    public string? CustomerName { get; set; }
+    
+    public string? PhoneNumber { get; set; }
     
     public ICollection<OrderDetailResponse> OrderDetails { get; set; } = new List<OrderDetailResponse>();
 }
