@@ -38,7 +38,10 @@ namespace diamond_shop_management.Pages.PromotionManagement
 
             Promotions = await _promotionService.GetAllAsync(cancellationToken);
             TotalItems = Promotions.Count();
-            Promotions = Promotions.Skip((PageNumber - 1) * PageSize).Take(PageSize);
+            Promotions = Promotions
+                .OrderByDescending(Promotion => Promotion.CreateAt)
+                .Skip((PageNumber - 1) * PageSize)
+                .Take(PageSize);
         }
     }
 }

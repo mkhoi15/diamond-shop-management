@@ -13,6 +13,7 @@ namespace DTO.PromotionDto
         public DateTime? StartDate { get; set; }
         [Required(ErrorMessage = "End date is required")]
         public DateTime? EndDate { get; set; }
+        public DateTime CreateAt { get; set; }
         public bool? IsActive { get; set; }
     }
 }

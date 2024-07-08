@@ -48,6 +48,7 @@ namespace diamond_shop_management.Pages.PromotionManagement
                 return Page();
             }
 
+            Promotion.CreateAt = DateTime.Now;
             await _promotionServices.Add(Promotion);
 
             Message = "Promotion is added successfully";
