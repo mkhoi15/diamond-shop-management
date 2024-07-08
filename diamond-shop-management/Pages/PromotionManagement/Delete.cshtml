@@ -40,6 +40,10 @@
                             <span asp-validation-for="Promotion.EndDate" class="text-danger"></span>
                         </div>
                         <div class="form-group">
+                            <label asp-for="Promotion.CreateAt" class="control-label"></label>
+                            <input asp-for="Promotion.CreateAt" class="form-control" readonly style="pointer-events:none" />
+                        </div>
+                        <div class="form-group">
                             <label asp-for="Promotion.IsActive" class="control-label"></label>
                             <input asp-for="Promotion.IsActive" class="form-control" readonly style="pointer-events:none" />
                         </div>
