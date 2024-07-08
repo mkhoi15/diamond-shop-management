@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace diamond_shop_management.Pages.PromotionManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
+    [Authorize(Roles = nameof(Roles.Manager))]
     public class ViewModel : PageModel
     {
         private readonly IPromotionServices _promotionService;
