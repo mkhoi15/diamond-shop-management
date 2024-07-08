@@ -11,7 +11,7 @@ using BusinessObject.Enum;
 
 namespace diamond_shop_management.Pages.PromotionManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
+    [Authorize(Roles = nameof(Roles.Manager))]
     public class UpdateModel : PageModel
     {
         private readonly IPromotionServices _promotionServices;

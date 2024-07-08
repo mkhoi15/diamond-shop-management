@@ -1,13 +1,16 @@
 using AutoMapper;
+using BusinessObject.Enum;
 using BusinessObject.Models;
 using DTO.Media;
 using DTO.PaperworkDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.PaperworkManagement
 {
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.Manager)}")]
     public class CreateWarrantyModel : PageModel
     {
         private readonly IPaperworkServices _paperworkServices;

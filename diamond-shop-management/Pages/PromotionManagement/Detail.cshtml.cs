@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace diamond_shop_management.Pages.PromotionManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
+    [Authorize(Roles = nameof(Roles.Manager))]
     public class DetailModel : PageModel
     {
         private readonly IPromotionServices _promotionServices;

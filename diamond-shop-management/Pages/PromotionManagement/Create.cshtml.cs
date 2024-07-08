@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace diamond_shop_management.Pages.PromotionManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
+    [Authorize(Roles = nameof(Roles.Manager))]
     public class CreateModel : PageModel
     {
         private readonly IPromotionServices _promotionServices;
@@ -48,6 +48,7 @@ namespace diamond_shop_management.Pages.PromotionManagement
                 return Page();
             }
 
+            Promotion.CreateAt = DateTime.Now;
             await _promotionServices.Add(Promotion);
 
             Message = "Promotion is added successfully";
