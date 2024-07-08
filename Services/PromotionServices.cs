@@ -4,6 +4,7 @@ using DataAccessLayer.Abstraction;
 using DTO.PromotionDto;
 using Repositories.Abstraction;
 using Services.Abstraction;
+using System.Linq.Expressions;
 
 namespace Services
 {
@@ -42,6 +43,13 @@ namespace Services
             var promotion = await _promotionRepository.FindById(id);
 
             return _mapper.Map<PromotionResponse>(promotion);
+        }
+
+        public async Task<IEnumerable<PromotionResponse>> GetPromotionsByCondition(Expression<Func<Promotion, bool>> expression, CancellationToken cancellationToken, params Expression<Func<Promotion, object?>>[] includeProperties)
+        {
+            var promotion = await _promotionRepository.Find(expression, cancellationToken, includeProperties);
+
+            return _mapper.Map<IEnumerable<PromotionResponse>>(promotion);
         }
 
         public async Task<PromotionResponse> Update(PromotionResponse promotion)

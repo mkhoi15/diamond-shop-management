@@ -46,6 +46,12 @@
                     <span asp-validation-for="DiamondRequest.Cut" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="DiamondRequest.PromotionId" class="control-label">Promotion</label>
+                    <select asp-for="DiamondRequest.PromotionId" class="form-control" asp-items="ViewBag.Promotions">
+                        <option value="">Select Promotion</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label asp-for="DiamondRequest.Clarity">Clarity (%)</label>
                     <input asp-for="DiamondRequest.Clarity" class="form-control" />
                     <span asp-validation-for="DiamondRequest.Clarity" class="text-danger"></span>
