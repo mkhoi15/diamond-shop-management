@@ -2,18 +2,19 @@
 @model diamond_shop_management.Pages.Orders.Success
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Order Success";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    Success
+
+<div class="container mt-5">
+    <div class="card text-center">
+        <div class="card-body">
+            <h1 class="card-title">Order Placed Successfully!</h1>
+            <p class="card-text">Thank you for your order. Your order has been placed successfully and is being processed.</p>
+            <a href="/" class="btn btn-primary mt-3">Return to Home Page</a>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+
