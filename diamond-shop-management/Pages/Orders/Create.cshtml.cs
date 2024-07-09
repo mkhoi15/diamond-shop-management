@@ -41,12 +41,12 @@ public class Create : PageModel
     public List<Guid> ProductIds { get; set; } = new List<Guid>();
     public List<Guid> DiamondIds { get; set; } = new List<Guid>();
 
-    public async Task OnGet()
+    public async Task<IActionResult> OnGet()
     {
         var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         if (customerId is null)
         {
-            RedirectToPage("/User/Login");
+           return RedirectToPage("/User/Login");
         }
         CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
         this.TotalPrice();
@@ -77,6 +77,8 @@ public class Create : PageModel
                 Quantity = 1
             }).ToList()
         };
+
+        return Page();
     }
 
     public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)

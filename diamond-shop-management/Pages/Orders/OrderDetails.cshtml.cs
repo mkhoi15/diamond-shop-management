@@ -1,3 +1,4 @@
+using BusinessObject.Models;
 using DTO.OrderDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -42,4 +43,35 @@ public class OrderDetails : PageModel
 
         return Page();
     }
+    
+    public async Task<IActionResult> OnPostCancelOrderAsync(Guid orderId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            
+            
+            
+            var order = new Order()
+            {
+                Id = orderId,
+                Status = "Cancelled"
+            };
+            var success = await _orderServices.UpdateOrderAsync(order);
+            if (success == null)
+            {
+                ModelState.AddModelError("", "Failed to cancel the order.");
+                return Page();
+            }
+
+            return RedirectToPage("/Orders/OrdersList");
+        }
+        catch (Exception e)
+        {
+            ModelState.AddModelError("", "An error occurred while cancelling the order.");
+            return Page();
+        }
+    }
+    
+    
+    
 }

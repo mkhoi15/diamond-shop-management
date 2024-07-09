@@ -2,6 +2,7 @@
 using BusinessObject.Models;
 using DTO.DiamondDto;
 using DTO.AccessoryDto;
+using DTO.DeliveryDto;
 using DTO.DiamondAccessoryDto;
 using DTO.OrderDto;
 using DTO.PaperworkDto;
@@ -55,6 +56,10 @@ public class MapperProfile : Profile
         CreateMap<Promotion, PromotionResponse>()
             .ReverseMap();
         CreateMap<PromotionRequest, Promotion>()
+            .ReverseMap();
+        CreateMap<DeliveryRequest, Delivery>()
+            .ReverseMap();
+        CreateMap<Delivery, DeliveryResponse>()
             .ReverseMap();
     }
 }

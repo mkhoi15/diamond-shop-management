@@ -92,7 +92,8 @@ namespace Services
                 id,
                 cancellationToken,
                 diamond => diamond.Promotion,
-                diamond => diamond.Media
+                diamond => diamond.Media,
+                diamond => diamond.PaperWorks
                 );
             return _mapper.Map<DiamondResponse>(diamond);
         }

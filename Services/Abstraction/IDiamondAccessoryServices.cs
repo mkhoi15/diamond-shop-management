@@ -11,5 +11,6 @@ namespace Services.Abstraction
         void UpdateDiamondAccessory(DiamondAccessoryResponse response);
         Task<bool> DeleteDiamondAccessory(Guid id);
         IEnumerable<DiamondAccessoryResponse> GetAllDiamondAccessories(CancellationToken cancellationToken);
+        
     }
 }
