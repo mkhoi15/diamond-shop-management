@@ -13,7 +13,7 @@ using System.Drawing.Printing;
 
 namespace diamond_shop_management.Pages.DiamondManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.Manager)}")]
     public class DiamondDetailModel : PageModel
     {
         private readonly IDiamondServices _diamondService;

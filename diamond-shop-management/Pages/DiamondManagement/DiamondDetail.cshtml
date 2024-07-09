@@ -76,8 +76,11 @@
                         <div>Clarity: @Model.Diamond.Clarity %</div>
                         <div>Weight: @Model.Diamond.Weight carats</div>
                         <div>Price: @Model.Diamond.Price $</div>
+                        @if (@Model.Diamond != null && Model.Diamond.Promotion is not null)
+                        {
+                            <div>Promotion: @(Model.Diamond.Promotion.DiscountRate * 100) %</div>
+                        }
                         <div>IsSold: @Model.Diamond.IsSold</div>
-                        <div>Status: @(Model.Diamond.IsDeleted.HasValue && Model.Diamond.IsDeleted.Value == true ? "Inactive" : "Active")</div>
                         @if (!string.IsNullOrEmpty(Model.Message))
                         {
                             <div style="color: red" id="error-message">@Model.Message</div>
@@ -107,7 +110,6 @@
                             <th class="text-center">Type</th>
                             <th class="text-center">Created Date</th>
                             <th class="text-center">Expiration Date</th>
-                            <th class="text-center">Status</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -118,7 +120,6 @@
                                 <td class="text-center">@paperwork.Type</td>
                                 <td class="text-center">@paperwork.CreatedDate</td>
                                 <td class="text-center">@paperwork.ExpirationDate</td>
-                                <td class="text-center">@paperwork.Status</td>
                                 <td class="text-center">
                                     <a asp-page="/PaperworkManagement/Detail" asp-route-paperworkId="@paperwork.Id" class="btn btn-info">Detail</a>
                                 </td>

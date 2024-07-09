@@ -5,19 +5,22 @@ using DataAccessLayer.Abstraction;
 using DTO.DiamondDto;
 using DTO.Media;
 using DTO.PaperworkDto;
+using DTO.PromotionDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Abstraction;
 using System.ComponentModel.DataAnnotations;
 
 namespace diamond_shop_management.Pages.DiamondManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.Manager)}")]
     public class CreateModel : PageModel
     {
         private readonly IDiamondServices _diamondServices;
         private readonly IWebHostEnvironment _environment;
+        private readonly IPromotionServices _promotionServices;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
@@ -39,17 +42,18 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public string? Message { get; set; }
 
-        public CreateModel(IDiamondServices diamondServices, IPaperworkServices paperworkServices, IWebHostEnvironment environment, IMapper mapper, IUnitOfWork unitOfWork)
+        public CreateModel(IDiamondServices diamondServices, IPaperworkServices paperworkServices, IWebHostEnvironment environment, IMapper mapper, IUnitOfWork unitOfWork, IPromotionServices promotionServices)
         {
             _diamondServices = diamondServices;
             _environment = environment;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _promotionServices = promotionServices;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-            InitializeDiamondInfo();
+            await InitializeDiamondInfo();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -85,7 +89,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 Message = "Create successfully!";
                 ModelState.AddModelError(string.Empty, "Create successfully!");
 
-                InitializeDiamondInfo();
+                await InitializeDiamondInfo();
                 return Page();
             }
             catch (Exception ex)
@@ -93,7 +97,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 Message = "Create failed!\n" + ex.Message;
                 ModelState.AddModelError(string.Empty, ex.Message);
 
-                InitializeDiamondInfo();
+                await InitializeDiamondInfo();
                 return Page();
             }
         }
@@ -130,7 +134,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
             return _mapper.Map<MediaRequest>(media);
         }
 
-        public void InitializeDiamondInfo()
+        public async Task InitializeDiamondInfo()
         {
             Countries = new List<string>
             {
@@ -155,6 +159,8 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 "Trillion", "Baguette", "Rose", "Briolette", "Old European",
                 "Old Mine", "Tapered Baguette", "Half Moon", "Bullet", "French"
             };
+            IEnumerable<PromotionResponse> promotions = await _promotionServices.GetAllAsync(default);
+            ViewData["Promotions"] = new SelectList(promotions, "Id" , "Name");
         }
     }
 }

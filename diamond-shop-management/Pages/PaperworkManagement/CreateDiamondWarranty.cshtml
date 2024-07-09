@@ -1,0 +1,35 @@
+@page
+@model diamond_shop_management.Pages.PaperworkManagement.CreateDiamondWarranty
+
+@{
+    ViewData["Title"] = "Create Diamond Warranty";
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>Create Warranty</h2>
+        </div>
+        <div class="row">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="PaperworkRequest.Type" class="control-label"></label>
+                    <input asp-for="PaperworkRequest.Type" value="warranty" class="form-control" readonly style="pointer-events: none"/>
+                    <span asp-validation-for="PaperworkRequest.Type" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PaperworkRequest.ExpirationDate" class="control-label"></label>
+                    <input asp-for="PaperworkRequest.ExpirationDate" class="form-control" />
+                    <span asp-validation-for="PaperworkRequest.ExpirationDate" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="PaperworkRequest.DiamondId" value="@Model.DiamondId" />
+                <a asp-page="/Delivery/CreateDelivery" asp-route-id="@Model.OrderId" class="btn btn-secondary">Back to Delivery</a>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

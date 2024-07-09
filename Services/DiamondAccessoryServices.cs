@@ -20,15 +20,35 @@ namespace Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
+        
+        
+        public async Task<List<DiamondAccessory>> IsDiamondAccessoryExist(List<Guid?> diamondId, Guid? customerId)
+        {
+            return await _diamondAccessoryRepository.FindAll()
+                .Where(x => diamondId.Contains(x.DiamondId) && x.CustomerId == customerId)
+                .ToListAsync();
+        }
 
         public async Task AddProducts(List<DiamondAccessoryRequest> productsRequest)
         {
+            var listDiamondId = productsRequest.Select(p => p.DiamondId).ToList();
+            var customerId = productsRequest.FirstOrDefault()?.CustomerId;
+            
+            var listDiamondAccessoryExist = await IsDiamondAccessoryExist(listDiamondId, customerId);
+            
             List<DiamondAccessory> products = new List<DiamondAccessory>();
 
             foreach (var productRequest in productsRequest)
             {
                 var product = _mapper.Map<DiamondAccessory>(productRequest);
-                products.Add(product);
+                if (listDiamondAccessoryExist.Select(d => d.DiamondId).Contains(product.DiamondId))
+                {
+                    product.IsDeleted = false;
+                }
+                else
+                {
+                    products.Add(product);
+                }
             }
 
             _diamondAccessoryRepository.AddRange(products);
