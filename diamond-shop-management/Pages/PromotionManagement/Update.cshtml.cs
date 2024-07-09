@@ -63,6 +63,7 @@ namespace diamond_shop_management.Pages.PromotionManagement
                 return Page();
             }
 
+            Promotion.DiscountRate = Double.Parse(Promotion.Name.TrimEnd('%')) / 100.0;
             await _promotionServices.Update(Promotion);
 
             return RedirectToPage("/PromotionManagement/View");
