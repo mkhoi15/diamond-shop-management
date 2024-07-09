@@ -33,7 +33,7 @@ namespace Services
 
         public async Task<IEnumerable<PromotionResponse>> GetAllAsync(CancellationToken cancellationToken)
         {
-            var promotions = await _promotionRepository.Find(p => p.IsActive != false && p.IsDeleted != true, cancellationToken);
+            var promotions = await _promotionRepository.Find(p => p.IsDeleted != true, cancellationToken);
 
             return _mapper.Map<IEnumerable<PromotionResponse>>(promotions);
         }
