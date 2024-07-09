@@ -61,9 +61,9 @@
                         @if (@Model.Diamond != null && Model.Diamond.Promotion is not null)
                         {
                             <div class="form-group">
-                                <label asp-for="Diamond.PromotionId">Discount</label>
+                                <label asp-for="Diamond.PromotionId">Promotion</label>
                                 <input type="hidden" asp-for="Diamond.PromotionId" />
-                                <input value="@Model.Diamond.Promotion.Discount" class="form-control" readonly style="pointer-events: none" />
+                                <input value="@(Model.Diamond.Promotion.DiscountRate * 100) %" class="form-control" readonly style="pointer-events: none" />
                                 <span asp-validation-for="Diamond.Price" class="text-danger"></span>
                             </div>
                         }

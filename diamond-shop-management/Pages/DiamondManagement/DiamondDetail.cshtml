@@ -78,7 +78,7 @@
                         <div>Price: @Model.Diamond.Price $</div>
                         @if (@Model.Diamond != null && Model.Diamond.Promotion is not null)
                         {
-                            <div>Discount: @Model.Diamond.Promotion.Discount</div>
+                            <div>Promotion: @(Model.Diamond.Promotion.DiscountRate * 100) %</div>
                         }
                         <div>IsSold: @Model.Diamond.IsSold</div>
                         @if (!string.IsNullOrEmpty(Model.Message))

@@ -52,7 +52,7 @@ namespace diamond_shop_management.Pages.PromotionManagement
                 return Page();
             }
 
-            Promotion.IsActive = false;
+            Promotion.IsDeleted = true;
             await _promotionServices.Update(Promotion);
 
             return RedirectToPage("/PromotionManagement/View");
