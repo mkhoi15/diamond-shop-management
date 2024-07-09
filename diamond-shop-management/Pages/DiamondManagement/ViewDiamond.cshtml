@@ -32,7 +32,6 @@
                             <th>Weight</th>
                             <th>Price</th>
                             <th>IsSold</th>
-                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -46,7 +45,6 @@
                                 <td>@diamond.Weight carats</td>
                                 <td>@diamond.Price $</td>
                                 <td>@diamond.IsSold</td>
-                                <td>@(diamond.IsDeleted.HasValue && diamond.IsDeleted.Value == true ? "Inactive" : "Active")</td>
                                 <td>
                                     <a asp-page="/DiamondManagement/DiamondDetail" asp-route-diamondId="@diamond.Id" class="btn btn-info btn-sm me-1">Detail</a>
                                     <a asp-page="/DiamondManagement/Update" asp-route-diamondId="@diamond.Id" class="btn btn-warning btn-sm me-1">Update</a>

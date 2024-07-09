@@ -7,7 +7,7 @@ using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.PromotionManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
+    [Authorize(Roles = nameof(Roles.Manager))]
     public class DeleteModel : PageModel
     {
         private readonly IPromotionServices _promotionServices;
@@ -52,7 +52,7 @@ namespace diamond_shop_management.Pages.PromotionManagement
                 return Page();
             }
 
-            Promotion.IsActive = false;
+            Promotion.IsDeleted = true;
             await _promotionServices.Update(Promotion);
 
             return RedirectToPage("/PromotionManagement/View");

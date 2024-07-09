@@ -10,7 +10,7 @@ using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.PaperworkManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.Manager)}")]
     public class ViewModel : PageModel
     {
         private readonly IPaperworkServices _paperworkService;

@@ -17,6 +17,7 @@ public static class ServicesCollection
         collection.AddScoped<IAccessoryRepository, AccessoryRepository>();
         collection.AddScoped<IDiamondAccessoryRepository, DiamondAccessoryRepository>();
         collection.AddScoped<IMediaRepository, MediaRepository>();
+        collection.AddScoped<IDeliveryRepository, DeliveryRepository>();
         return collection;
     }
 }
