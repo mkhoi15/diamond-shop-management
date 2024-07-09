@@ -18,7 +18,7 @@
                     <div class="img-box">
                         @if (Model.Accessory != null && Model.Accessory.Media != null)
                         {
-                            <img src="~/@Model.Accessory.Media.Url" alt="Accessory Image" width="auto">
+                            <img src="~/@Model.Accessory.Media.Url" alt="Accessory Image" width="30%">
                         }
                         else
                         {
@@ -28,9 +28,8 @@
                     <div class="text-center">
                         @if (Model.Accessory != null)
                         {
-                            <td>@Model.Accessory.Id</td>
-                            <td>@Model.Accessory.Name</td>
-                            <td>@Model.Accessory.Price</td>
+                            @Model.Accessory.Name <br/>
+                            @Model.Accessory.Price
                         }
                         else
                         {
