@@ -21,6 +21,7 @@ public static class ServicesCollection
             .AddScoped<IAccessoryServices, AccessoryServices>()
             .AddScoped<IDiamondAccessoryServices, DiamondAccessoryServices>()
             .AddScoped<IMediaServices, MediaServices>()
+            .AddScoped<IDeliveryServices, DeliveryServices>()
             .AddConfigureAutoMapper();
         return collection;
     }

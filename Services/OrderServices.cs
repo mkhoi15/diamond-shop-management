@@ -1,6 +1,8 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
+using DTO.DiamondDto;
 using DTO.OrderDto;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
@@ -15,14 +17,16 @@ public class OrderServices : IOrderServices
     private readonly IOrderDetailRepository _orderDetailRepository;
     private readonly IMapper _mapper;
     private readonly IDiamondAccessoryRepository _diamondAccessoryRepository;
+    private readonly IDiamondServices _diamondServices;
 
-    public OrderServices(IUnitOfWork unitOfWork, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IDiamondAccessoryRepository diamondAccessoryRepository)
+    public OrderServices(IUnitOfWork unitOfWork, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IDiamondAccessoryRepository diamondAccessoryRepository, IDiamondServices diamondServices)
     {
         _unitOfWork = unitOfWork;
         _orderRepository = orderRepository;
         _orderDetailRepository = orderDetailRepository;
         _mapper = mapper;
         _diamondAccessoryRepository = diamondAccessoryRepository;
+        _diamondServices = diamondServices;
     }
 
     public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest)
@@ -47,7 +51,8 @@ public class OrderServices : IOrderServices
         var order = await _orderRepository.FindById(
             orderId,
             cancellationToken,
-            o => o.OrderDetails
+            o => o.OrderDetails,
+            o => o.Deliveries
             );
         
         return _mapper.Map<OrderResponse>(order);
@@ -66,7 +71,55 @@ public class OrderServices : IOrderServices
         updateOrder.Status = order.Status;
         //updateOrder.IsDeleted = order.IsDeleted;
         
+        _orderRepository.Update(updateOrder);
+        await _unitOfWork.SaveChangeAsync();
+        
         return _mapper.Map<OrderResponse>(updateOrder);
         
     }
+    
+    
+    public async Task<List<DiamondResponse>> GetDiamondsByOrderId(Guid orderId, CancellationToken cancellationToken)
+    {
+        var order = await _orderRepository.FindById(
+            orderId,
+            cancellationToken,
+            o => o.OrderDetails
+        );
+        
+        if (order is null)
+        {
+            throw new ArgumentException("Not found order with this id");
+        }
+
+        //var diamondIdList = order.OrderDetails.Select(o => o.Product?.DiamondId).ToList();
+        var orderDetails = order.OrderDetails;
+
+        List<Guid> diamondIdList = new List<Guid>();
+        foreach (var orderdetail in orderDetails)
+        {
+            var diamondAccessory = await _diamondAccessoryRepository.FindAll()
+                .FirstOrDefaultAsync(x => x.Id == orderdetail.ProductId && x.IsDeleted == false, cancellationToken);
+
+            if (diamondAccessory != null && diamondAccessory.DiamondId != null)
+            {
+                diamondIdList.Add(diamondAccessory.DiamondId.Value);
+            }
+            
+        }
+
+        List<DiamondResponse> diamonds = new List<DiamondResponse>();
+        foreach (var diamondId in diamondIdList)
+        {
+            var diamond = await _diamondServices.GetByIdAsync(diamondId, cancellationToken);
+            
+            var warranty = diamond.PaperWorks?.FirstOrDefault(p => p.Type == "warranty" && p.IsDeleted == false);
+            diamond.WarrantyId = warranty?.Id;
+            
+            diamonds.Add(diamond);
+        }
+        
+        return diamonds;
+    }
+    
 }

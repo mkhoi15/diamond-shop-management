@@ -38,6 +38,7 @@ namespace DTO.DiamondDto
         public Guid? PromotionId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public bool? IsDeleted { get; set; }
+        public Guid? WarrantyId { get; set; }
 
         public MediaResponse? Media { get; set; }
         public ICollection<DiamondAccessoryResponse> DiamondAccessories { get; set; } = new List<DiamondAccessoryResponse>();

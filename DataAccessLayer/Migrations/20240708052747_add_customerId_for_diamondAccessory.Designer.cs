@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(DiamondShopDbContext))]
-    partial class DiamondShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240708052747_add_customerId_for_diamondAccessory")]
+    partial class add_customerId_for_diamondAccessory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,9 +63,6 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("DeliveryManId")
                         .HasColumnType("uniqueidentifier");
 
@@ -102,7 +102,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 9, 15, 43, 13, 435, DateTimeKind.Local).AddTicks(2996));
+                        .HasDefaultValue(new DateTime(2024, 7, 8, 12, 27, 46, 532, DateTimeKind.Local).AddTicks(8441));
 
                     b.Property<string>("Cut")
                         .HasColumnType("nvarchar(max)");
@@ -262,7 +262,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 9, 15, 43, 13, 436, DateTimeKind.Local).AddTicks(1139));
+                        .HasDefaultValue(new DateTime(2024, 7, 8, 12, 27, 46, 533, DateTimeKind.Local).AddTicks(2744));
 
                     b.Property<Guid>("DiamondId")
                         .HasColumnType("uniqueidentifier");
@@ -301,11 +301,8 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("DiscountRate")
-                        .HasColumnType("float");
+                    b.Property<string>("Discount")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
@@ -371,7 +368,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 9, 15, 43, 13, 437, DateTimeKind.Local).AddTicks(3416));
+                        .HasDefaultValue(new DateTime(2024, 7, 8, 12, 27, 46, 533, DateTimeKind.Local).AddTicks(9315));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

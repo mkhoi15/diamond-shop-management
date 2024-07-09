@@ -19,28 +19,35 @@ public class Create : PageModel
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IDiamondAccessoryServices _diamondAccessoryServices;
+    private readonly IDiamondServices _diamondServices;
 
-    public Create(IOrderServices orderServices, IUnitOfWork unitOfWork, IMapper mapper, IDiamondAccessoryServices diamondAccessoryServices)
+    public Create(IOrderServices orderServices, IUnitOfWork unitOfWork, IMapper mapper, IDiamondAccessoryServices diamondAccessoryServices, IDiamondServices diamondServices)
     {
         _orderServices = orderServices;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _diamondAccessoryServices = diamondAccessoryServices;
+        _diamondServices = diamondServices;
     }
 
 
     [BindProperty]
     public OrderRequest OrderRequest { get; set; }
-
+    
     public DTO.Card CartItems { get; private set; }
     
     public decimal Total { get; private set; }
     
     public List<Guid> ProductIds { get; set; } = new List<Guid>();
+    public List<Guid> DiamondIds { get; set; } = new List<Guid>();
 
-    public async Task OnGet()
+    public async Task<IActionResult> OnGet()
     {
-        
+        var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (customerId is null)
+        {
+           return RedirectToPage("/User/Login");
+        }
         CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
         this.TotalPrice();
 
@@ -50,9 +57,12 @@ public class Create : PageModel
             productsRequest.Add(new DiamondAccessoryRequest
             {
                 DiamondId = diamonds.Id,
+                CustomerId = Guid.Parse(customerId!),
             });
         }
 
+        
+        
         await _diamondAccessoryServices.AddProducts(productsRequest);
         
         ProductIds = CartItems.Diamond.Select(d => _diamondAccessoryServices.GetProductByDiamondId(d.Id).Result.Id).ToList();
@@ -67,9 +77,11 @@ public class Create : PageModel
                 Quantity = 1
             }).ToList()
         };
+
+        return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
     {
         var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         
@@ -87,6 +99,12 @@ public class Create : PageModel
     
         if (result is not null)
         {
+            CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
+            DiamondIds = CartItems.Diamond.Select(d => d.Id).ToList();
+            foreach (var diamond in DiamondIds)
+            {
+                await _diamondServices.UpdateDiamondStatusAsync(diamond, true, cancellationToken);
+            }
             // Clear the cart after successful order creation
             HttpContext.Session.Remove("Cart");
             return RedirectToPage("/Orders/Success");

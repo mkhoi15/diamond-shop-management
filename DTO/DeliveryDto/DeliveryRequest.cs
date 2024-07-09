@@ -1,13 +1,10 @@
-namespace BusinessObject.Models;
+namespace DTO.DeliveryDto;
 
-public class Delivery : Entity
+public class DeliveryRequest
 {
     public Guid OrderId { get; set; }
     public Guid DeliveryManId { get; set; }
     public string? Location { get; set; }
     public string? Status { get; set; }
     public DateTime CreatedAt { get; set; }
-    
-    public User? DeliveryMan { get; set; }
-    public Order? Order { get; set; }
 }
