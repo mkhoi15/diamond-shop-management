@@ -72,23 +72,17 @@
                     <span asp-validation-for="Diamond.Price" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="Diamond.PromotionId">Promotion</label>
+                    <select asp-for="Diamond.PromotionId" class="form-control" asp-items="ViewBag.Promotions">
+                        <option value="">Select Promotion</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label asp-for="Diamond.IsSold">IsSold</label>
                     <input asp-for="Diamond.IsSold" class="form-control" />
                     <span asp-validation-for="Diamond.IsSold" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <input type="hidden" asp-for="Diamond.IsDeleted" class="form-control"></input>
-                    @if (@Model.Diamond != null && Model.Diamond.IsDeleted.HasValue && Model.Diamond.IsDeleted.Value == true)
-                    {
-                        <input value="Inactive" class="form-control" readonly style="pointer-events:none" />
-                    }
-                    else
-                    {
-                        <input value="Active" class="form-control" readonly style="pointer-events:none" />
-                    }
-                    <span asp-validation-for="Diamond.IsDeleted" class="text-danger"></span>
-                </div>
+                <input type="hidden" asp-for="Diamond.IsDeleted" class="form-control"></input>
                 <div class="form-group">
                     <label asp-for="Diamond.CreatedAt">Created At</label>
                     <input asp-for="Diamond.CreatedAt" class="form-control" readonly style="pointer-events:none" />
@@ -129,7 +123,6 @@
                             <th class="text-center">Type</th>
                             <th class="text-center">Created Date</th>
                             <th class="text-center">Expiration Date</th>
-                            <th class="text-center">Status</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
@@ -140,9 +133,7 @@
                                 <td class="text-center">@paperwork.Type</td>
                                 <td class="text-center">@paperwork.CreatedDate</td>
                                 <td class="text-center">@paperwork.ExpirationDate</td>
-                                <td class="text-center">@paperwork.Status</td>
                                 <td class="text-center">
-                                    <a asp-page="/PaperworkManagement/Detail" asp-route-paperworkId="@paperwork.Id" class="btn btn-info">Detail</a>
                                     <a asp-page="/DiamondManagement/UpdateCertificate" asp-route-paperworkId="@paperwork.Id" class="btn btn-warning">Update</a>
                                     <a asp-page="/PaperworkManagement/Delete" asp-route-paperworkId="@paperwork.Id" class="btn btn-danger">Delete</a>
                                 </td>

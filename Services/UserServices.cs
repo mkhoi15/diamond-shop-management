@@ -224,4 +224,33 @@ public class UserServices : IUserServices
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         await _emailServices.SendForgotPasswordMail(user.Email!, token);
     }
+
+    public async Task<List<UserResponse>> GetDeliveryMenAsync(CancellationToken cancellationToken)
+    {
+        var deliveryMenRole = Roles.Delivery.ToString();
+
+        // First, get all users
+        var users = await _userManager.Users
+            .Where(u => u.IsDeleted == false)
+            .ToListAsync(cancellationToken);
+
+        // Then, filter users based on their roles
+        var deliveryMen = new List<User>();
+        foreach (var user in users)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Contains(deliveryMenRole))
+            {
+                deliveryMen.Add(user);
+            }
+        }
+
+        var response = deliveryMen.Select(user => {
+            var userResponse = _mapper.Map<UserResponse>(user);
+            userResponse.Role = deliveryMenRole;
+            return userResponse;
+        }).ToList();
+
+        return response;
+    }
 }

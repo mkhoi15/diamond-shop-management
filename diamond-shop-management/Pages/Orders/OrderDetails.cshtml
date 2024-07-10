@@ -5,34 +5,81 @@
     ViewData["Title"] = "Order Details";
 }
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Order Details</h2>
+@if ((User.Identity?.IsAuthenticated ?? false))
+{
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Order Details</h2>
 
-    @if (Model.Order != null)
-    {
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Order ID: @Model.Order.Id</h5>
-                <p class="card-text" hidden="hidden" ><strong>Customer ID:</strong> @Model.Order.CustomerId</p>
-                <p class="card-text"><strong>Customer Name</strong> @Model.Order.CustomerName </p>
-                <p class="card-text"><strong>Phone Number</strong> @Model.Order.PhoneNumber </p>
-                <p class="card-text"><strong>Order Date:</strong> @Model.Order.Date</p>
-                <p class="card-text"><strong>Status:</strong> @Model.Order.Status</p>
-                <p class="card-text"><strong>Total Price:</strong> $@Model.Order.TotalPrice</p>
-                <h6>Order Details</h6>
-                <ul>
-                    @foreach (var detail in Model.Order.OrderDetails)
+        @if (Model.Order != null)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order ID: @Model.Order.Id</h5>
+                    <p class="card-text" hidden="hidden"><strong>Customer ID:</strong> @Model.Order.CustomerId</p>
+                    <p class="card-text"><strong>Customer Name</strong> @Model.Order.CustomerName </p>
+                    <p class="card-text"><strong>Phone Number</strong> @Model.Order.PhoneNumber </p>
+                    <p class="card-text"><strong>Order Date:</strong> @Model.Order.Date</p>
+                    <p class="card-text"><strong>Status:</strong> @Model.Order.Status</p>
+                    <p class="card-text"><strong>Total Price:</strong> $@Model.Order.TotalPrice</p>
+                    <h6>Order Details</h6>
+                    <ul>
+                        @foreach (var detail in Model.Order.OrderDetails)
+                        {
+                            <li>
+                                <strong>Product:</strong> @detail.ProductId - <strong>Quantity:</strong> @detail.Quantity - <strong>Price:</strong> $@detail.Price
+                            </li>
+                        }
+                    </ul>
+
+                    @if (User.IsInRole("Manager"))
                     {
-                        <li>
-                            <strong>Product:</strong> @detail.ProductId - <strong>Quantity:</strong> @detail.Quantity - <strong>Price:</strong> $@detail.Price
-                        </li>
+                        <div class="mt-4 d-flex flex-wrap">
+                            <a asp-page="/Orders/OrdersList" class="btn btn-info m-2">Return to Manage Orders</a>
+                            @if (Model.Order.Status == "Pending")
+                            {
+                                <a asp-page="/Delivery/CreateDelivery" asp-route-id="@Model.Order.Id" class="btn btn-primary m-2">Create Delivery</a>
+                            }
+                            @if (Model.Order.Status == "Shipped")
+                            {
+                                <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@Model.Order.Id" class="btn btn-primary m-2">Update Delivery</a>
+                            }
+                            @if (Model.Order.Status != "Cancelled" && Model.Order.Status != "Delivered")
+                            {
+                                <form method="post">
+                                    <input type="hidden" name="orderId" asp-for="Order.Id"/>
+                                    <button type="submit" class="btn btn-danger m-2" asp-page-handler="CancelOrder">Cancel Order</button>
+                                </form>
+                            }
+                            @if(Model.Order.Status != "Pending")
+                            {
+                                <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@Model.Order.Id" class="btn btn-light m-2">See Delivery Details</a>
+                            }
+                        </div>
                     }
-                </ul>
+                    
+                    @if (User.IsInRole("User"))
+                    {
+                        <a asp-page="/Orders/SelfOrder" class="btn btn-info m-2">Return to Orders</a>
+                        @if (Model.Order.Status == "Pending")
+                        {
+                            <form method="post" >
+                                <input type="hidden" name="orderId" asp-for="Order.Id"/>
+                                <button type="submit" class="btn btn-danger" asp-page-handler="CancelOrder">Cancel Order</button>
+                            </form>
+                        }
+                        @if (Model.Order.Status != "Pending")
+                        {
+                            <a asp-page="/Orders/OrderDeliveries" class="btn btn-light m-2" asp-route-orderId="@Model.Order.Id">See Delivery Details</a>
+                        }
+                    }
+                    
+
+                </div>
             </div>
-        </div>
-    }
-    else
-    {
-        <p class="text-center">Order details not found.</p>
-    }
-</div>
+        }
+        else
+        {
+            <p class="text-center">Order details not found.</p>
+        }
+    </div>
+}

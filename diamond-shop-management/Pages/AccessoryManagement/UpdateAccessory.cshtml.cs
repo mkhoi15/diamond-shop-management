@@ -1,8 +1,10 @@
 using AutoMapper;
+using BusinessObject.Enum;
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO.AccessoryDto;
 using DTO.Media;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
@@ -10,8 +12,8 @@ using System.Text.Json;
 
 namespace diamond_shop_management.Pages.AccessoryManagement
 {
-    /*    [Authorize(Roles = nameof(Roles.Manager))]
-    */
+    [Authorize(Roles = nameof(Roles.Manager))]
+
     public class UpdateAccessoryModel : PageModel
     {
         private readonly IAccessoryServices _accessoryService;

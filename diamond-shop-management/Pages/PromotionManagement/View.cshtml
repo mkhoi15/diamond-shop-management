@@ -28,10 +28,9 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Discount</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th>Is Active</th>
+                            <th>Create At</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -40,10 +39,9 @@
                         {
                             <tr>
                                 <td>@promotion.Name</td>
-                                <td>@promotion.Discount</td>
                                 <td>@promotion.StartDate</td>
                                 <td>@promotion.EndDate</td>
-                                <td>@promotion.IsActive</td>
+                                <td>@promotion.CreateAt</td>
                                 <td>
                                     <a asp-page="/PromotionManagement/Detail" asp-route-id="@promotion.Id" class="btn btn-info">Detail</a>
                                     <a asp-page="/PromotionManagement/Update" asp-route-id="@promotion.Id" class="btn btn-warning">Update</a>

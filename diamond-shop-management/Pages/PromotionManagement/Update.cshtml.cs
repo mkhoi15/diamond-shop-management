@@ -11,7 +11,7 @@ using BusinessObject.Enum;
 
 namespace diamond_shop_management.Pages.PromotionManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
+    [Authorize(Roles = nameof(Roles.Manager))]
     public class UpdateModel : PageModel
     {
         private readonly IPromotionServices _promotionServices;
@@ -63,6 +63,7 @@ namespace diamond_shop_management.Pages.PromotionManagement
                 return Page();
             }
 
+            Promotion.DiscountRate = Double.Parse(Promotion.Name.TrimEnd('%')) / 100.0;
             await _promotionServices.Update(Promotion);
 
             return RedirectToPage("/PromotionManagement/View");

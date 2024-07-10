@@ -17,5 +17,6 @@ namespace Services.Abstraction
         Task<PagedResult<DiamondResponse>> GetAllByConditionAsync(Expression<Func<Diamond, bool>> predicate, int pageNumber, int pageSize, CancellationToken cancellationToken);
 
         Task<DiamondResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<DiamondResponse> UpdateDiamondStatusAsync(Guid id, bool status, CancellationToken cancellationToken);
     }
 }

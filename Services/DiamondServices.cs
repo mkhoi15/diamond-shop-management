@@ -92,9 +92,28 @@ namespace Services
                 id,
                 cancellationToken,
                 diamond => diamond.Promotion,
-                diamond => diamond.Media
+                diamond => diamond.Media,
+                diamond => diamond.PaperWorks
                 );
             return _mapper.Map<DiamondResponse>(diamond);
+        }
+
+        public async Task<DiamondResponse> UpdateDiamondStatusAsync(Guid id, bool status, CancellationToken cancellationToken)
+        {
+            var diamond = await _diamondRepository.FindById(id, cancellationToken);
+
+            if (diamond is null)
+            {
+                throw new ArgumentException("Don't find diamond");
+            }
+            
+            diamond.IsSold = status;
+            
+            _diamondRepository.Update(diamond);
+            await _unitOfWork.SaveChangeAsync(cancellationToken);
+            
+            return _mapper.Map<DiamondResponse>(diamond);
+            
         }
 
         public async Task<IEnumerable<DiamondResponse>> GetAllByConditionAsync(Expression<Func<Diamond, bool>> predicate, CancellationToken cancellationToken)

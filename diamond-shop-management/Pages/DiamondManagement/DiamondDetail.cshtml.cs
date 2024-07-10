@@ -13,7 +13,7 @@ using System.Drawing.Printing;
 
 namespace diamond_shop_management.Pages.DiamondManagement
 {
-    [Authorize(Roles = nameof(Roles.Admin))]
+    [Authorize(Roles = $"{nameof(Roles.Admin)},{nameof(Roles.Manager)}")]
     public class DiamondDetailModel : PageModel
     {
         private readonly IDiamondServices _diamondService;
@@ -25,11 +25,18 @@ namespace diamond_shop_management.Pages.DiamondManagement
         {
             _diamondService = diamondService;
             _paperworkService = paperworkService;
+            PageSize = 4;
             _mapper = mapper;
             _mediaService = mediaService;
         }
 
         public DiamondResponse Diamond { get; set; }
+
+        public List<PaperworkResponse> Paperworks { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public int TotalItems { get; set; }
+        public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
 
         public string? Message { get; set; }
 
@@ -43,6 +50,14 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 ModelState.AddModelError(string.Empty, Message);
                 return Page();
             }
+
+            PageNumber = pageNumber ?? 1;
+
+            var pagedResult = await _paperworkService.GetAllAsync(
+                paper => paper.DiamondId == diamondId && paper.IsDeleted != true, PageNumber, PageSize, cancellationToken);
+
+            Paperworks = _mapper.Map<List<PaperworkResponse>>(pagedResult.Items);
+            TotalItems = pagedResult.TotalItems;
 
             return Page();
         }

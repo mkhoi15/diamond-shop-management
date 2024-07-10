@@ -27,6 +27,8 @@ namespace DTO.DiamondDto
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
         public decimal Price { get; set; }
 
+        public Guid? PromotionId { get; set; }
+
         public DateTime? CreatedAt { get; set; }
 
         public bool IsDeleted { get; set; } = false;

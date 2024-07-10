@@ -50,18 +50,26 @@
                                 @if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Admin"))
                                 {
                                     <a asp-page="/DiamondManagement/ViewDiamond">Diamond Management</a>
-                                    <a asp-page="/PromotionManagement/View">Promotion Management</a>
                                     <a asp-page="/Admin/Index">Account Management</a>
                                 }
                                 else if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Manager"))
                                 {
                                     <a asp-page="/DiamondShop/BrowseDiamond">Shop</a>
-                                    <a asp-page="/AccessoryManagement/ViewAccessory">Accessory</a>
+                                    <a asp-page="/PromotionManagement/View">Promotion Management</a>
+                                    <a asp-page="/DiamondManagement/ViewDiamond">Diamond Management</a>
+                                    <a asp-page="/AccessoryManagement/ViewAccessory">Accessory Management</a>
+                                    <a asp-page="/DiamondAccessoryManagement/ViewDiamondAccessory">DiamondAccessory Management</a>
+                                    <a asp-page="/Orders/OrdersList">Manage Orders</a>
+                                }
+                                else if ((User.Identity?.IsAuthenticated ?? false) && (User.IsInRole("User")))
+                                {
+                                    <a asp-page="/DiamondShop/BrowseDiamond">Shop</a>
+                                    <a asp-page="/Orders/SelfOrder">Orders</a>
                                 }
                                 else
                                 {
                                     <a asp-page="/DiamondShop/BrowseDiamond">Shop</a>
-                                    <a asp-page="/AccessoryManagement/ViewAccessory">Accessory</a>
+                                    <a asp-page="/AccessoryShop/BrowseAccessory">Accessory</a>
                                 }
                                 @if (!User.Identity?.IsAuthenticated ?? true)
                                 {
