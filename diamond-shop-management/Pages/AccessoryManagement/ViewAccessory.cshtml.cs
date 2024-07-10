@@ -1,12 +1,14 @@
 using AutoMapper;
+using BusinessObject.Enum;
 using DTO.AccessoryDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.AccessoryManagement
 {
-    /*    [Authorize(Roles = nameof(Roles.Manager))]
-    */
+    [Authorize(Roles = nameof(Roles.Manager))]
+
     public class ViewAccessoryModel : PageModel
     {
         private readonly IAccessoryServices _accessoryServices;

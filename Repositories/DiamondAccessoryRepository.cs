@@ -3,6 +3,7 @@ using DataAccessLayer.Abstraction;
 using Repositories.Abstraction;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using DataAccessLayer;
 
 namespace Repositories
 {
@@ -56,11 +57,13 @@ namespace Repositories
 
             return diamondAccessory;
         }
-
-
         public void Update(DiamondAccessory entity)
         {
             _diamondAccessoryDAO.Update(entity);
+        }
+        public async Task<IEnumerable<DiamondAccessory>> FindPaged(int skip, int pageSize, Expression<Func<DiamondAccessory, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<DiamondAccessory, object?>>[] includeProperties)
+        {
+            return await _diamondAccessoryDAO.FindPagedAsync(predicate, skip, pageSize, cancellationToken, includeProperties);
         }
     }
 }

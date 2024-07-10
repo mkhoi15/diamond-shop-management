@@ -1,0 +1,41 @@
+﻿@page "{id:guid}"
+@model diamond_shop_management.Pages.DiamondAccessoryManagement.DiamondAccessoryDetailModel
+@{
+    ViewData["Title"] = "DiamondAccessory Details";
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <h1 class="text-center">Diamond Accessory Details</h1>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label asp-for="DiamondAccessory.DiamondId"></label>
+                        <input asp-for="DiamondAccessory.DiamondId" class="form-control" readonly />
+                        <span asp-validation-for="DiamondAccessory.DiamondId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DiamondAccessory.AccessoryId"></label>
+                        <input asp-for="DiamondAccessory.AccessoryId" class="form-control" readonly />
+                        <span asp-validation-for="DiamondAccessory.AccessoryId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DiamondAccessory.CustomerId"></label>
+                        <input asp-for="DiamondAccessory.CustomerId" class="form-control" readonly />
+                        <span asp-validation-for="DiamondAccessory.CustomerId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DiamondAccessory.Id"></label>
+                        <input asp-for="DiamondAccessory.Id" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <a asp-page="/DiamondAccessoryManagement/UpdateDiamondAccessory" asp-route-id="@Model.DiamondAccessory.Id" class="btn btn-primary">Edit</a>
+                        <a asp-page="/DiamondAccessoryManagement/DeleteDiamondAccessory" asp-route-id="@Model.DiamondAccessory.Id" class="btn btn-danger">Delete</a>
+                        <a asp-page="/DiamondAccessoryManagement/ViewDiamondAccessory" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

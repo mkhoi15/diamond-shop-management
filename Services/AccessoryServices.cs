@@ -3,8 +3,12 @@ using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO;
 using DTO.AccessoryDto;
+using DTO.DiamondDto;
+using Microsoft.EntityFrameworkCore;
+using Repositories;
 using Repositories.Abstraction;
 using Services.Abstraction;
+using System.Linq.Expressions;
 
 namespace Services
 {
@@ -86,6 +90,41 @@ namespace Services
                 );
 
             return _mapper.Map<AccessoryResponse>(accessory);
+        }
+
+        public async Task<PagedResult<AccessoryResponse>> GetAccessoryShopAsync(Expression<Func<Accessory, bool>> predicate, int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            int skip = (pageNumber - 1) * pageSize;
+
+            var accessories = await _AccessoryRepository.FindPaged(
+                skip,
+                pageSize,
+                predicate,
+                cancellationToken,
+                a => a.Promotion,
+                a => a.Media
+            );
+
+            var accessoryResponse = _mapper.Map<IEnumerable<AccessoryResponse>>(accessories);
+
+            var pagedResult = new PagedResult<AccessoryResponse>
+            {
+                Items = accessoryResponse,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = GetAllAccessoriesAsync(cancellationToken).Count(),
+            };
+
+            return pagedResult;
+        }
+
+        public async Task<IEnumerable<AccessoryResponse>> GetActiveAccessoriesAsync(Expression<Func<Accessory, bool>> predicate, CancellationToken cancellationToken)
+        {
+            var accessories = await _AccessoryRepository.Find(
+                predicate,
+                cancellationToken);
+
+            return _mapper.Map<IEnumerable<AccessoryResponse>>(accessories);
         }
 
         public IEnumerable<AccessoryResponse> GetAllAccessoriesAsync(CancellationToken cancellationToken)

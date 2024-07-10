@@ -1,0 +1,76 @@
+using AutoMapper;
+using DTO;
+using DTO.AccessoryDto;
+using DTO.DiamondDto;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Services.Abstraction;
+using Services.Helpers;
+
+namespace diamond_shop_management.Pages.AccessoryShop
+{
+    public class BrowseAccessoryModel : PageModel
+    {
+        private readonly IAccessoryServices _accessoryServices;
+        private readonly IMapper _mapper;
+
+        public BrowseAccessoryModel(IAccessoryServices accessoryServices, IMapper mapper)
+        {
+            _accessoryServices = accessoryServices;
+            _mapper = mapper;
+            PageSize = 10;
+        }
+
+        public List<AccessoryResponse> Accessories { get; set; } = [];
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public int TotalItems { get; set; }
+        public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
+        public DTO.Card CartItems { get; set; }
+
+        public async Task OnGetAsync(int? pageNumber, CancellationToken cancellationToken)
+        {
+            PageNumber = pageNumber ?? 1;
+
+            var pagedResult = await _accessoryServices.GetAccessoryShopAsync(a => a.IsDeleted != true, PageNumber, PageSize, cancellationToken);
+
+            Accessories = _mapper.Map<List<AccessoryResponse>>(pagedResult.Items);
+            TotalItems = pagedResult.TotalItems;
+
+            // Get the cart items from the session
+            CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
+        }
+
+        public async Task<IActionResult> OnPostAddToCart(Guid accessoryId, CancellationToken cancellationToken)
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
+
+            if (accessoryId != Guid.Empty)
+            {
+                var accessory = await _accessoryServices.GetAccessoryByIdAsync(accessoryId, cancellationToken);
+                var accessoryResponse = _mapper.Map<AccessoryResponse>(accessory);
+
+                // Check if the accessory already exists in the cart
+                var existingAccessory = cart.Accessories.FirstOrDefault(a => a.Accessory.Id == accessoryId);
+
+                if (existingAccessory != null)
+                {
+                    // Increment the quantity if the accessory already exists in the cart
+                    existingAccessory.Quantity++;
+                }
+                else
+                {
+                    // Add the new accessory to the cart with a quantity of 1
+                    cart.Accessories.Add(new AccessoryCard
+                    {
+                        Accessory = accessoryResponse,
+                        Quantity = 1
+                    });
+                }
+            }
+
+            HttpContext.Session.SetObjectAsJson("Cart", cart);
+            return RedirectToPage();
+        }
+    }
+}
