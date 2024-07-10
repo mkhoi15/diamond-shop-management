@@ -21,54 +21,75 @@
     }
 </style>
 
-@if (@Model.OrderResponse.Status == "Delivered")
+@if ((User.Identity?.IsAuthenticated ?? false))
 {
-    <div class="delivery-header alert alert-success" role="alert">
-        Order has been delivered successfully.
-    </div>
-}
-
-
-<h1 class="delivery-header">Delivery Details</h1>
-<div class="container">
-
-<div>
-    <h2>Order Information</h2>
-    <p><strong>Order ID:</strong> @Model.OrderResponse.Id</p>
-    <p><strong>Customer Name:</strong> @Model.Customer.FullName</p>
-    <p><strong>Address:</strong> @Model.Customer.FullName</p>
-    <p><strong>Phone Number:</strong> @Model.Customer.PhoneNumber</p>
-    <p><strong>Date:</strong> @Model.OrderResponse.Date</p>
-    <p><strong>Total Price:</strong> @Model.OrderResponse.TotalPrice</p>
-</div>
-
-<div>
-    <h2>Deliveries</h2>
-    @foreach (var delivery in Model.Deliveries)
+    @if (@Model.OrderResponse.Status == "Delivered")
     {
-        <div>
-            @* <h3>Delivery ID: @delivery.Id</h3> *@
-            <p><strong>Location:</strong> @delivery.Location</p>
-            <p><strong>Status:</strong> @delivery.Status</p>
-            <p><strong>Delivery Man:</strong> @delivery.DeliveryManFullName</p>
-            <p><strong>Updated At:</strong> @delivery.CreatedAt </p>
-            <p>-------------------------------------------------------------</p>
+        <div class="delivery-header alert alert-success" role="alert">
+            Order has been delivered successfully.
         </div>
     }
-</div>
+    
+    @if (@Model.OrderResponse.Status == "Cancelled")
+    {
+        <div class="delivery-header alert alert-danger" role="alert">
+            Order has been cancelled.
+        </div>
+    }
 
-@if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Manager") && Model.OrderResponse.Status == "Shipped")
-{ 
-    <div class="mt-2 d-flex flex-wrap">
+
+    <h1 class="delivery-header">Delivery Details</h1>
+    <div class="container">
+
         <div>
-            <a asp-page="/Delivery/CreateDelivery" asp-route-id="@Model.OrderResponse.Id" class="btn btn-warning mr-2">Update Delivery</a>
+            <h2>Order Information</h2>
+            <p><strong>Order ID:</strong> @Model.OrderResponse.Id</p>
+            <p><strong>Customer Name:</strong> @Model.Customer.FullName</p>
+            <p><strong>Address:</strong> @Model.Customer.FullName</p>
+            <p><strong>Phone Number:</strong> @Model.Customer.PhoneNumber</p>
+            <p><strong>Date:</strong> @Model.OrderResponse.Date</p>
+            <p><strong>Total Price:</strong> @Model.OrderResponse.TotalPrice</p>
         </div>
+
         <div>
-            <form method="post" asp-page-handler="UpdateStatus">
-                <button type="submit" class="btn btn-info">Complete Order</button>
-            </form>
+            <h2>Deliveries</h2>
+            @foreach (var delivery in Model.Deliveries)
+            {
+                <div>
+                    @* <h3>Delivery ID: @delivery.Id</h3> *@
+                    <p><strong>Location:</strong> @delivery.Location</p>
+                    <p><strong>Status:</strong> @delivery.Status</p>
+                    <p><strong>Delivery Man:</strong> @delivery.DeliveryManFullName</p>
+                    <p><strong>Updated At:</strong> @delivery.CreatedAt </p>
+                    <p>-------------------------------------------------------------</p>
+                </div>
+            }
         </div>
+
+        
+        <div class="mt-2 d-flex flex-wrap">
+            @if (User.IsInRole("Manager"))
+            {
+                <a asp-page="/Orders/OrdersList" class="btn btn-info mr-2">Return to Orders Management</a>
+            }
+            @if (User.IsInRole("Manager") && Model.OrderResponse.Status != "Delivered" && Model.OrderResponse.Status != "Cancelled")
+            {
+                <div>
+                    <a asp-page="/Delivery/CreateDelivery" asp-route-id="@Model.OrderResponse.Id" class="btn btn-warning mr-2">Update Delivery</a>
+                </div>
+                <div>
+                    <form method="post" asp-page-handler="UpdateStatus">
+                        <button type="submit" class="btn btn-success mr-2">Complete Order</button>
+                    </form>
+                </div>
+            }
+            @if (User.IsInRole("User"))
+            {
+                <a asp-page="/Orders/SelfOrder" class="btn btn-info mr-2">Return to Orders</a>
+            }
+
+        </div>
+        
+
     </div>
-}
-
-</div>
+};

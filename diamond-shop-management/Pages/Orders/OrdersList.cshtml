@@ -48,20 +48,21 @@
                         <td><span class="badge @(GetBadgeClass(order.Status))">@order.Status</span></td>
                         <td>@order.Date</td>
                         <td>
-                            <a asp-page="/Orders/OrderDetails" asp-route-id="@order.Id" class="btn btn-info">View Details</a>
-                            @if (order.Status == "Pending")
-                            {
-                                <a asp-page="/Delivery/CreateDelivery" asp-route-id="@order.Id" class="btn btn-primary">Create Delivery</a>
-                            }
-                            @if (order.Status == "Shipped")
-                            {
-                                <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@order.Id" class="btn btn-warning">Update Delivery</a>
-                            }
-                            @if (order.Status != "Cancelled" && order.Status != "Delivered")
-                            {
-                                <a asp-page="/Orders/OrderDetails" asp-route-id="@order.Id" class="btn btn-danger">Cancel Order</a>
-                            }
-
+                            <div class="d-flex flex-wrap">
+                                <a asp-page="/Orders/OrderDetails" asp-route-id="@order.Id" class="btn btn-info m-1">View Details</a>
+                                @if (order.Status == "Pending")
+                                {
+                                    <a asp-page="/Delivery/CreateDelivery" asp-route-id="@order.Id" class="btn btn-primary m-1">Create Delivery</a>
+                                }
+                                @if (order.Status == "Shipped")
+                                {
+                                    <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@order.Id" class="btn btn-warning m-1">Update Delivery</a>
+                                }
+                                @if (order.Status != "Cancelled" && order.Status != "Delivered")
+                                {
+                                    <a asp-page="/Orders/OrderDetails" asp-route-id="@order.Id" class="btn btn-danger m-1">Cancel Order</a>
+                                }
+                            </div>
                         </td>
                     </tr>
                 }

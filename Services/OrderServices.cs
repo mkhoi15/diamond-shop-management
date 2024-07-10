@@ -126,7 +126,7 @@ public class OrderServices : IOrderServices
 
     public async Task<List<OrderResponse>> GetOrdersByCustomerId(Guid customerId, CancellationToken cancellationToken)
     {
-        var customer = _userServices.GetUserByIdAsync(customerId.ToString());
+        var customer = await _userServices.GetUserByIdAsync(customerId.ToString());
 
         if (customer is null)
         {

@@ -110,6 +110,26 @@ namespace Services
             return _mapper.Map<IEnumerable<DiamondAccessoryResponse>>(diamondAccessories);
         }
 
+        public async Task DeleteProduct(List<DiamondAccessoryRequest> productsRequest)
+        {
+            var listDiamondId = productsRequest.Select(p => p.DiamondId).ToList();
+            var customerId = productsRequest.FirstOrDefault()?.CustomerId;
+
+            var listDiamondAccessoryExist = await IsDiamondAccessoryExist(listDiamondId, customerId);
+
+            foreach (var productRequest in productsRequest)
+            {
+                var product = _mapper.Map<DiamondAccessory>(productRequest);
+                if (listDiamondAccessoryExist.Select(d => d.DiamondId).Contains(product.DiamondId))
+                {
+                    product.IsDeleted = true;
+                }
+                
+            }
+            
+            await _unitOfWork.SaveChangeAsync();
+        }
+
         public async Task<PagedResult<DiamondAccessoryResponse>> GetDiamondAccessoriesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             int skip = (pageNumber - 1) * pageSize;
