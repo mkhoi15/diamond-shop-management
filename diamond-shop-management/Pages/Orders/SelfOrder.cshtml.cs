@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using DTO.OrderDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,7 +17,6 @@ public class SelfOrder : PageModel
         StatusList = new List<SelectListItem>
         {
             new SelectListItem { Value = "Pending", Text = "Pending" },
-            new SelectListItem { Value = "Processing", Text = "Processing" },
             new SelectListItem { Value = "Shipped", Text = "Shipped" },
             new SelectListItem { Value = "Delivered", Text = "Delivered" },
             new SelectListItem { Value = "Cancelled", Text = "Cancelled" }
@@ -30,12 +30,16 @@ public class SelfOrder : PageModel
 
     public List<SelectListItem> StatusList { get; set; }
     
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
-        var allOrders = await _orderServices.GetAllOrdersAsync();
+        var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         
-        // Add logging to debug the value of SelectedStatus
-        Console.WriteLine($"SelectedStatus: {SelectedStatus}");
+        if (customerId is null)
+        {
+            return RedirectToPage("/User/Login");
+        }
+
+        var allOrders = await _orderServices.GetOrdersByCustomerId(Guid.Parse(customerId!), default);
 
         if (!string.IsNullOrEmpty(SelectedStatus))
         {
@@ -45,5 +49,7 @@ public class SelfOrder : PageModel
         {
             Orders = allOrders;
         }
+        
+        return Page();
     }
 }

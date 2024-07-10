@@ -11,5 +11,6 @@ public interface IOrderServices
     Task<OrderResponse> GetOrderByIdAsync(Guid orderId, CancellationToken cancellationToken);
     Task<OrderResponse> UpdateOrderAsync(Order order);
     Task<List<DiamondResponse>> GetDiamondsByOrderId(Guid orderId, CancellationToken cancellationToken);
+    Task<List<OrderResponse>> GetOrdersByCustomerId(Guid customerId, CancellationToken cancellationToken);
 
 }
