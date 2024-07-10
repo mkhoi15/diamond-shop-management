@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using DTO;
 using DTO.DiamondAccessoryDto;
 
 namespace Services.Abstraction
@@ -7,10 +8,12 @@ namespace Services.Abstraction
     {
         Task AddProducts(List<DiamondAccessoryRequest> productsRequest);
         Task<DiamondAccessory> GetProductByDiamondId(Guid diamondId);
-        void CreateDiamondAccessory(DiamondAccessoryRequest request);
-        void UpdateDiamondAccessory(DiamondAccessoryResponse response);
-        Task<bool> DeleteDiamondAccessory(Guid id);
+        Task CreateDiamondAccessoryAsync(DiamondAccessoryRequest request);
+        Task<PagedResult<DiamondAccessoryResponse>> GetDiamondAccessoriesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
+        Task<DiamondAccessoryResponse> GetDiamondAccessoryByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task UpdateDiamondAccessoryAsync(Guid id, DiamondAccessoryRequest request);
+        Task DeleteDiamondAccessoryAsync(Guid id);
         IEnumerable<DiamondAccessoryResponse> GetAllDiamondAccessories(CancellationToken cancellationToken);
-        
+
     }
 }

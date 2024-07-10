@@ -26,15 +26,8 @@
                         }
                     </div>
                     <div class="text-center">
-                        @if (Model.Accessory != null)
-                        {
-                            @Model.Accessory.Name <br/>
-                            @Model.Accessory.Price
-                        }
-                        else
-                        {
-                            <td colspan="3">Accessory not found</td>
-                        }
+                        <div>Name: @Model.Accessory.Name</div>
+                        <div>Price: @Model.Accessory.Price</div>
                         @if (!string.IsNullOrEmpty(Model.Message))
                         {
                             <div style="color: red" id="error-message">@Model.Message</div>

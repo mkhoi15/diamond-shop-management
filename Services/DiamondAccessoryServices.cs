@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
+using DTO;
 using DTO.DiamondAccessoryDto;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
@@ -20,8 +21,8 @@ namespace Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        
-        
+
+
         public async Task<List<DiamondAccessory>> IsDiamondAccessoryExist(List<Guid?> diamondId, Guid? customerId)
         {
             return await _diamondAccessoryRepository.FindAll()
@@ -33,9 +34,9 @@ namespace Services
         {
             var listDiamondId = productsRequest.Select(p => p.DiamondId).ToList();
             var customerId = productsRequest.FirstOrDefault()?.CustomerId;
-            
+
             var listDiamondAccessoryExist = await IsDiamondAccessoryExist(listDiamondId, customerId);
-            
+
             List<DiamondAccessory> products = new List<DiamondAccessory>();
 
             foreach (var productRequest in productsRequest)
@@ -67,31 +68,39 @@ namespace Services
 
             return diamondAccessory;
         }
-        public void CreateDiamondAccessory(DiamondAccessoryRequest request)
+        public async Task CreateDiamondAccessoryAsync(DiamondAccessoryRequest request)
         {
             var diamondAccessory = _mapper.Map<DiamondAccessory>(request);
-
             _diamondAccessoryRepository.Add(diamondAccessory);
+            await _unitOfWork.SaveChangeAsync();
         }
 
-        public void UpdateDiamondAccessory(DiamondAccessoryResponse response)
+        public async Task UpdateDiamondAccessoryAsync(Guid id, DiamondAccessoryRequest request)
         {
-            var entity = _mapper.Map<DiamondAccessory>(response);
+            var existingDiamondAccessory = await _diamondAccessoryRepository.FindById(id);
 
-            _diamondAccessoryRepository.Update(entity);
+            if (existingDiamondAccessory == null)
+            {
+                throw new Exception("Diamond Accessory not found.");
+            }
+
+            _mapper.Map(request, existingDiamondAccessory);
+
+            _diamondAccessoryRepository.Update(existingDiamondAccessory);
+            await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<bool> DeleteDiamondAccessory(Guid id)
+        public async Task DeleteDiamondAccessoryAsync(Guid id)
         {
             var diamondAccessory = await _diamondAccessoryRepository.FindById(id);
+
             if (diamondAccessory == null)
             {
-                return false;
+                throw new Exception("Diamond Accessory not found.");
             }
 
             _diamondAccessoryRepository.Remove(diamondAccessory);
             await _unitOfWork.SaveChangeAsync();
-            return true;
         }
 
         public IEnumerable<DiamondAccessoryResponse> GetAllDiamondAccessories(CancellationToken cancellationToken)
@@ -99,6 +108,38 @@ namespace Services
             var diamondAccessories = _diamondAccessoryRepository.FindAll();
 
             return _mapper.Map<IEnumerable<DiamondAccessoryResponse>>(diamondAccessories);
+        }
+
+        public async Task<PagedResult<DiamondAccessoryResponse>> GetDiamondAccessoriesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            int skip = (pageNumber - 1) * pageSize;
+
+            var diamondAccessories = await _diamondAccessoryRepository.FindPaged(skip, pageSize, da => true, cancellationToken, da => da.Diamond, da => da.Accessory);
+
+            var diamondAccessoryResponses = _mapper.Map<IEnumerable<DiamondAccessoryResponse>>(diamondAccessories);
+
+            var totalItems = await _diamondAccessoryRepository.FindAll().CountAsync(cancellationToken);
+
+            var pagedResult = new PagedResult<DiamondAccessoryResponse>
+            {
+                Items = diamondAccessoryResponses,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            return pagedResult;
+        }
+
+        public async Task<DiamondAccessoryResponse> GetDiamondAccessoryByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var diamondAccessory = await _diamondAccessoryRepository.FindById(id, cancellationToken);
+            if (diamondAccessory == null)
+            {
+                throw new Exception("Diamond Accessory not found.");
+            }
+
+            return _mapper.Map<DiamondAccessoryResponse>(diamondAccessory);
         }
     }
 }

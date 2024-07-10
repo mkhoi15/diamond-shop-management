@@ -138,7 +138,7 @@ public class Create : PageModel
         {
             foreach (var productId in ProductIds)
             {
-                await _diamondAccessoryServices.DeleteDiamondAccessory(productId);
+                await _diamondAccessoryServices.DeleteDiamondAccessoryAsync(productId);
             }
         }
         

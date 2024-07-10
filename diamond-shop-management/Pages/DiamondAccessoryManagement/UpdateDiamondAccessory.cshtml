@@ -1,0 +1,48 @@
+﻿@page "{id:guid}"
+@model diamond_shop_management.Pages.DiamondAccessoryManagement.UpdateDiamondAccessoryModel
+@{
+    ViewData["Title"] = "Update Diamond Accessory";
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                DiamondAccessory Update
+            </h2>
+        </div>
+        <div class="row">
+            <form method="post" enctype="multipart/form-data">
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div class="alert alert-danger" id="message" role="alert">
+                        @Model.Message
+                    </div>
+                }
+                <div class="form-group">
+                    <label asp-for="DiamondAccessory.DiamondId" class="control-label"></label>
+                    <select asp-for="DiamondAccessory.DiamondId" class="form-control" asp-items="Model.Diamonds"><</select>
+                    <span asp-validation-for="DiamondAccessory.DiamondId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiamondAccessory.AccessoryId" class="control-label"></label>
+                    <select asp-for="DiamondAccessory.AccessoryId" class="form-control" asp-items="Model.Accessories"></select>
+                    <span asp-validation-for="DiamondAccessory.AccessoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <a asp-page="/DiamondAccessoryManagement/ViewDiamondAccessory" class="btn btn-secondary">Back to List</a>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div style="color: red" id="error-message">@Model.Message</div>
+                }
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
