@@ -18,8 +18,9 @@ public class OrderServices : IOrderServices
     private readonly IMapper _mapper;
     private readonly IDiamondAccessoryRepository _diamondAccessoryRepository;
     private readonly IDiamondServices _diamondServices;
+    private readonly IUserServices _userServices;
 
-    public OrderServices(IUnitOfWork unitOfWork, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IDiamondAccessoryRepository diamondAccessoryRepository, IDiamondServices diamondServices)
+    public OrderServices(IUnitOfWork unitOfWork, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IDiamondAccessoryRepository diamondAccessoryRepository, IDiamondServices diamondServices, IUserServices userServices)
     {
         _unitOfWork = unitOfWork;
         _orderRepository = orderRepository;
@@ -27,6 +28,7 @@ public class OrderServices : IOrderServices
         _mapper = mapper;
         _diamondAccessoryRepository = diamondAccessoryRepository;
         _diamondServices = diamondServices;
+        _userServices = userServices;
     }
 
     public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest)
@@ -121,5 +123,21 @@ public class OrderServices : IOrderServices
         
         return diamonds;
     }
-    
+
+    public async Task<List<OrderResponse>> GetOrdersByCustomerId(Guid customerId, CancellationToken cancellationToken)
+    {
+        var customer = _userServices.GetUserByIdAsync(customerId.ToString());
+
+        if (customer is null)
+        {
+            throw new ArgumentException("Not found customer with this id");
+        }
+        
+        var orders = await _orderRepository.FindAll()
+            .Where(o => o.CustomerId == customerId)
+            .ToListAsync(cancellationToken);
+        
+        return _mapper.Map<List<OrderResponse>>(orders);
+        
+    }
 }
