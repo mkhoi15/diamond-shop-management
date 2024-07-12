@@ -22,6 +22,12 @@
                     <input asp-for="PaperworkRequest.ExpirationDate" class="form-control" />
                     <span asp-validation-for="PaperworkRequest.ExpirationDate" class="text-danger"></span>
                 </div>
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div class="alert alert-danger" id="message" role="alert">
+                        @Model.Message
+                    </div>
+                }
                 <input type="hidden" asp-for="PaperworkRequest.DiamondId" value="@Model.DiamondId" />
                 <a asp-page="/Delivery/CreateDelivery" asp-route-id="@Model.OrderId" class="btn btn-secondary">Back to Delivery</a>
                 <button type="submit" class="btn btn-primary">Create</button>
