@@ -41,10 +41,6 @@
                         <input asp-for="Paperwork.ExpirationDate" class="form-control" readonly style="pointer-events:none" />
                     </div>
                 }
-                <div class="form-group">
-                    <label asp-for="Paperwork.Status"></label>
-                    <input asp-for="Paperwork.Status" class="form-control" readonly style="pointer-events:none" />
-                </div>
             </form>
         </div>
         @if (!string.IsNullOrEmpty(Model.Message))
