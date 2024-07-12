@@ -1,0 +1,51 @@
+﻿@page "{paperworkId:Guid}"
+@model diamond_shop_management.Pages.PaperworkManagement.PaperworkDetailModel
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<section class="shop_section layout_padding">
+    <div class="container">
+        <div class="text-Left mb-3">
+            <a asp-page="/DiamondShop/Detail" asp-route-diamondId="@Model.Paperwork.DiamondId" class="btn btn-secondary">Back</a>
+        </div>
+        <div class="heading_container heading_center">
+            <h2>
+                Paperwork Detail
+            </h2>
+        </div>
+        <div class="row">
+            <form>
+                <div class="form-group text-center">
+                    @if (@Model.Paperwork.Media is not null)
+                    {
+                        <img src="~/@Model.Paperwork.Media.Url" alt="Diamond Image" width="50%%">
+                    }
+                    else
+                    {
+                        <img src="" alt="No image" width="50%">
+                    }
+                </div>
+                <div class="form-group">
+                    <label asp-for="Paperwork.Type"></label>
+                    <input asp-for="Paperwork.Type" class="form-control" readonly style="pointer-events:none" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Paperwork.CreatedDate"></label>
+                    <input asp-for="Paperwork.CreatedDate" class="form-control" readonly style="pointer-events:none" />
+                </div>
+                @if (Model.Paperwork.Type.Trim().ToLower() != "certificate")
+                {
+                    <div class="form-group">
+                        <label asp-for="Paperwork.ExpirationDate"></label>
+                        <input asp-for="Paperwork.ExpirationDate" class="form-control" readonly style="pointer-events:none" />
+                    </div>
+                }
+            </form>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div style="color: red" id="error-message">@Model.Message</div>
+        }
+    </div>
+</section>
