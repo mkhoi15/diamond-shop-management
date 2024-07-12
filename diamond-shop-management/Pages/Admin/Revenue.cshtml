@@ -6,7 +6,7 @@
     ViewBag.Title = "Revenue";
 }
 
-<div class="container">
+<div class="container mt-5 pt-5">
     <div class="row">
         <div class="col-md-12">
             <h1>Revenue</h1>
@@ -17,7 +17,20 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3>Revenue</h3>
+                    <div class="d-flex flex-row justify-content-between">
+                        <h3>Revenue: @Model.TotalRevenue $</h3>
+                        <form method="get" class="form-inline">
+                            <div class="form-group mx-sm-3 mb-2">
+                                <label asp-for="Year" class="sr-only">Year</label>
+                                <input type="number" 
+                                       class="form-control"
+                                       asp-for="Year" 
+                                       max="@DateTime.Now.Year"
+                                />
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-2">Filter</button>
+                        </form>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -26,7 +39,7 @@
                                 <thead>
                                 <tr>
                                     <th>Month</th>
-                                    <th>Revenue</th>
+                                    <th>Revenue ($)</th>
                                 </tr>
                                 </thead>
                                 <tbody>

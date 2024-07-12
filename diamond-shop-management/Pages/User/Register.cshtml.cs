@@ -27,16 +27,23 @@ public class Register : PageModel
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid) return Page();
-        
-        var user = await _userServices.RegisterAsync(RegisterDto.Username, 
-            RegisterDto.Password, 
-            RegisterDto.Username,
-            RegisterDto.Email,
-            RegisterDto.Phone,
-            Roles.User);
 
-        var userLogin = await _userServices.Login(user.UserName!, RegisterDto.Password);
-        
+        try
+        {
+            var user = await _userServices.RegisterAsync(RegisterDto.Username, 
+                RegisterDto.Password, 
+                RegisterDto.Username,
+                RegisterDto.Email,
+                RegisterDto.Phone,
+                Roles.User);
+
+            var userLogin = await _userServices.Login(user.UserName!, RegisterDto.Password);
+        }
+        catch (Exception e)
+        {
+            ModelState.AddModelError("Error", e.Message);
+            return Page();
+        }
         return Redirect("/Index");
     }
 }

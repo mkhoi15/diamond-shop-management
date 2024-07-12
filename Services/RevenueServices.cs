@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Common;
+using DTO.Enum;
 using DTO.Revenue;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
@@ -18,6 +19,7 @@ public class RevenueServices : IRevenueServices
     public async Task<List<RevenueResponse>> GetRevenueByYear(int? year = null)
     {
         var query = _orderServices.FindAll()
+            .Where(o => o.Status == OrderStatus.Delivered.ToString())
             .WhereIf(year != null, order => order.Date.Year == year);
         
         var list = await query.GroupBy(order => order.Date.Month)
