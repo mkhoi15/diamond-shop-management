@@ -1,0 +1,119 @@
+@page "{id:guid}"
+@model diamond_shop_management.Pages.Delivery.CreateDelivery
+@{
+    ViewData["Title"] = "Create Delivery";
+}
+
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        h1, h2 {
+            margin-bottom: 30px;
+        }
+        table {
+            margin-bottom: 50px;
+        }
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+
+    <div class="container">
+        <h2>Order Details</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Phone Number</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.OrderResponse.Id</td>
+                    <td>@Model.OrderResponse.CustomerName</td>
+                    <th>@Model.OrderResponse.PhoneNumber</th>
+                    <td>@Model.OrderResponse.TotalPrice</td>
+                    <td>@Model.OrderResponse.Status</td>
+                    <td>@Model.OrderResponse.Date</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Diamond Details</h2>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                @* <th>Id</th> *@
+                <th>No.</th>
+                <th>Color</th>
+                <th>Cut</th>
+                <th>Origin</th>
+                <th>Clarity</th>
+                <th>Weight</th>
+                <th>Price</th>
+                <th>Warranty ID</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var diamond in Model.DiamondResponses)
+            {
+                <tr>
+                    @* <td>@diamond.Id</td> *@
+                    <td>@(Model.DiamondResponses.IndexOf(diamond) + 1 )</td>
+                    <td>@diamond.Color</td>
+                    <td>@diamond.Cut</td>
+                    <td>@diamond.Origin</td>
+                    <td>@diamond.Clarity</td>
+                    <td>@diamond.Weight</td>
+                    <td>@diamond.Price</td>
+                    <td>
+                        @if (diamond.WarrantyId != null)
+                        {
+                            @diamond.WarrantyId
+                        }
+                        else
+                        {
+                            <a asp-page="/PaperworkManagement/CreateDiamondWarranty" asp-route-diamondId="@diamond.Id" asp-route-orderId="@Model.OrderResponse.Id" class="btn btn-primary">Create Warranty</a>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        
+        
+    <h2>Create New Delivery</h2>
+        <form method="post">
+            <div class="form-group">
+                <label for="DeliveryManId">Delivery Man</label>
+                <select class="form-control" id="DeliveryManId" name="DeliveryRequest.DeliveryManId" required>
+                    @foreach (var deliveryMan in Model.DeliveryMen)
+                    {
+                        <option value="@deliveryMan.Id">@deliveryMan.FullName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Location">Location</label>
+                <input type="text" class="form-control" id="Location" name="DeliveryRequest.Location" required />
+            </div>
+            <div class="form-group">
+                <label for="Status">Status</label>
+                <input type="text" class="form-control" id="Status" name="DeliveryRequest.Status" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create Delivery</button>
+        </form>    
+    </div>
+

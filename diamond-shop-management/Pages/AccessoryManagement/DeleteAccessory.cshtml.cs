@@ -1,7 +1,9 @@
 using AutoMapper;
+using BusinessObject.Enum;
 using DataAccessLayer.Abstraction;
 using DTO.AccessoryDto;
 using DTO.Media;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
@@ -9,21 +11,19 @@ using System.Text.Json;
 
 namespace diamond_shop_management.Pages.AccessoryManagement
 {
-    /*    [Authorize(Roles = nameof(Roles.Manager))]
-    */
+    [Authorize(Roles = nameof(Roles.Manager))]
+
     public class DeleteAccessoryModel : PageModel
     {
         private readonly IAccessoryServices _accessoryServices;
         private readonly IMediaServices _mediaServices;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public DeleteAccessoryModel(IAccessoryServices accessoryServices, IMediaServices mediaServices, IUnitOfWork unitOfWork, IMapper mapper)
+        public DeleteAccessoryModel(IAccessoryServices accessoryServices, IMediaServices mediaServices, IUnitOfWork unitOfWork)
         {
             _accessoryServices = accessoryServices;
             _mediaServices = mediaServices;
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -62,14 +62,12 @@ namespace diamond_shop_management.Pages.AccessoryManagement
                 }
 
                 var success = await _accessoryServices.DeleteAccessory(AccessoryId);
-                if (!success)
-                {
-                    return NotFound();
-                }
+                await _unitOfWork.SaveChangeAsync(cancellationToken);
+                
 
                 Message = "Accessory deleted successfully";
                 ModelState.AddModelError(string.Empty, Message);
-                await Task.Delay(3000);
+                await Task.Delay(3000, cancellationToken);
                 return RedirectToPage("/AccessoryManagement/ViewAccessory");
             }
             catch (Exception ex)

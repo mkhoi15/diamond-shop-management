@@ -1,0 +1,65 @@
+﻿@page
+@model diamond_shop_management.Pages.DiamondAccessoryManagement.ViewDiamondAccessoryModel
+@{
+    ViewData["Title"] = "View DiamondAccessory";
+}
+
+<div class="text-center">
+    <section class="shop_section layout_padding">
+        <div class="container">
+            <div class="text-right mb-3">
+                <a asp-page="/DiamondAccessoryManagement/CreateDiamondAccessory" class="btn btn-primary">Create New DiamondAccessory</a>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Diamond ID</th>
+                        <th>Accessory ID</th>
+                        <th>Customer ID</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.DiamondAccessories)
+                    {
+                        <tr>
+                            <td>@item.DiamondId</td>
+                            <td>@item.AccessoryId</td>
+                            <td>@item.CustomerId</td>
+                            <td>
+                                <a asp-page="/DiamondAccessoryManagement/AccessoryDetail" asp-route-accessoryId="@item.Id" class="btn btn-info btn-sm me-1">Detail</a>
+                                <a asp-page="/DiamondAccessoryManagement/UpdateAccessory" asp-route-accessoryId="@item.Id" class="btn btn-warning btn-sm me-1">Update</a>
+                                <a asp-page="/DiamondAccessoryManagement/DeleteAccessory" asp-route-accessoryId="@item.Id" class="btn btn-danger btn-sm me-1">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="container">
+                <nav aria-label="Page navigation" style="margin-top: 2%">
+                    <ul class="pagination justify-content-center">
+                        @if (Model.PageNumber > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                            </li>
+                        }
+                        <li class="page-item active">
+                            <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                        </li>
+                        @if (Model.PageNumber < Model.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

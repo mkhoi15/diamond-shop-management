@@ -4,5 +4,5 @@ public class DiamondAccessoryRequest
 {
     public Guid? DiamondId { get; set; }
     public Guid? AccessoryId { get; set; }
-    
+    public Guid? CustomerId { get; set; }
 }

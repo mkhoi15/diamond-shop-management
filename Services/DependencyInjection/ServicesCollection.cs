@@ -17,10 +17,12 @@ public static class ServicesCollection
             .AddScoped<IPromotionServices, PromotionServices>()
             .AddScoped<IDiamondServices, DiamondServices>()
             .AddScoped<IPaperworkServices, PaperworkServices>()
-            .AddRepositories()
+            .AddScoped<IRevenueServices, RevenueServices>()
             .AddScoped<IAccessoryServices, AccessoryServices>()
             .AddScoped<IDiamondAccessoryServices, DiamondAccessoryServices>()
             .AddScoped<IMediaServices, MediaServices>()
+            .AddScoped<IDeliveryServices, DeliveryServices>()
+            .AddRepositories()
             .AddConfigureAutoMapper();
         return collection;
     }

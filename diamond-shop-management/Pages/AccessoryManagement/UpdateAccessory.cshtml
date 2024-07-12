@@ -47,7 +47,7 @@
                 <div class="form-group">
                     <input type="hidden" asp-for="Accessory.MediaId" />
                     <a asp-page="/AccessoryManagement/ViewAccessory" class="btn btn-secondary">Back to List</a>
-                    <button type="submit" asp-route-accessoryId="@Model.Accessory.Id" class="btn btn-primary">Update</button>
+                    <button type="submit" asp-route-accessoryId="@Model.Accessory?.Id" class="btn btn-primary">Update</button>
                 </div>
                 @if (!string.IsNullOrEmpty(Model.Message))
                 {
