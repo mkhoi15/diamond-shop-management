@@ -61,6 +61,11 @@
                                     <a asp-page="/DiamondAccessoryManagement/ViewDiamondAccessory">DiamondAccessory Management</a>
                                     <a asp-page="/Orders/OrdersList">Manage Orders</a>
                                 }
+                                else if ((User.Identity?.IsAuthenticated ?? false) && (User.IsInRole("User")))
+                                {
+                                    <a asp-page="/DiamondShop/BrowseDiamond">Shop</a>
+                                    <a asp-page="/Orders/SelfOrder">Orders</a>
+                                }
                                 else
                                 {
                                     <a asp-page="/DiamondShop/BrowseDiamond">Shop</a>

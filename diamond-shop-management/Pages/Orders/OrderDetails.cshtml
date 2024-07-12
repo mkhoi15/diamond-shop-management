@@ -34,30 +34,43 @@
                     @if (User.IsInRole("Manager"))
                     {
                         <div class="mt-4 d-flex flex-wrap">
+                            <a asp-page="/Orders/OrdersList" class="btn btn-info m-2">Return to Manage Orders</a>
                             @if (Model.Order.Status == "Pending")
                             {
-                                <a asp-page="/Delivery/CreateDelivery" asp-route-id="@Model.Order.Id" class="btn btn-primary mr-2">Create Delivery</a>
+                                <a asp-page="/Delivery/CreateDelivery" asp-route-id="@Model.Order.Id" class="btn btn-primary m-2">Create Delivery</a>
                             }
                             @if (Model.Order.Status == "Shipped")
                             {
-                                <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@Model.Order.Id" class="btn btn-primary mr-2">Update Delivery</a>
+                                <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@Model.Order.Id" class="btn btn-primary m-2">Update Delivery</a>
                             }
                             @if (Model.Order.Status != "Cancelled" && Model.Order.Status != "Delivered")
                             {
-                                <form method="post" asp-page-handler="CancelOrder">
-                                    <input type="hidden" name="orderId" value="@Model.Order.Id"/>
-                                    <button type="submit" class="btn btn-danger">Cancel Order</button>
+                                <form method="post">
+                                    <input type="hidden" name="orderId" asp-for="Order.Id"/>
+                                    <button type="submit" class="btn btn-danger m-2" asp-page-handler="CancelOrder">Cancel Order</button>
                                 </form>
+                            }
+                            @if(Model.Order.Status != "Pending")
+                            {
+                                <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@Model.Order.Id" class="btn btn-light m-2">See Delivery Details</a>
                             }
                         </div>
                     }
                     
-                    @if (User.IsInRole("User") && Model.Order.Status == "Pending")
+                    @if (User.IsInRole("User"))
                     {
-                        <form method="post" asp-page-handler="CancelOrder">
-                            <input type="hidden" name="orderId" value="@Model.Order.Id"/>
-                            <button type="submit" class="btn btn-danger">Cancel Order</button>
-                        </form>
+                        <a asp-page="/Orders/SelfOrder" class="btn btn-info m-2">Return to Orders</a>
+                        @if (Model.Order.Status == "Pending")
+                        {
+                            <form method="post" >
+                                <input type="hidden" name="orderId" asp-for="Order.Id"/>
+                                <button type="submit" class="btn btn-danger" asp-page-handler="CancelOrder">Cancel Order</button>
+                            </form>
+                        }
+                        @if (Model.Order.Status != "Pending")
+                        {
+                            <a asp-page="/Orders/OrderDeliveries" class="btn btn-light m-2" asp-route-orderId="@Model.Order.Id">See Delivery Details</a>
+                        }
                     }
                     
 
