@@ -13,16 +13,56 @@
                     Browse Diamonds
                 </h2>
             </div>
-            
+
             <div class="container">
                 <div class="d-flex justify-content-end">
                     <a asp-page="/Card/Card" class="btn btn-success">Go To Cart</a>
                 </div>
+            </div>
+
+            <form method="get">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="Origin">Origin</label>
+                        <input type="text" id="Origin" name="Origin" value="@Model.Origin" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="Color">Color</label>
+                        <input type="text" id="Color" name="Color" value="@Model.Color" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="Cut">Cut</label>
+                        <input type="text" id="Cut" name="Cut" value="@Model.Cut" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="Weight">Weight</label>
+                        <input type="text" id="Weight" name="Weight" value="@Model.Weight" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="Clarity">Clarity (%)</label>
+                        <input type="text" id="Clarity" name="Clarity" value="@Model.Clarity" class="form-control" />
+                    </div>
                 </div>
-            
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="MinPrice">Min Price ($)</label>
+                        <input id="MinPrice" name="MinPrice" value="@Model.MinPrice" class="form-control" />
+                        <span asp-validation-for="@Model.MinPrice" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="MaxPrice">Max Price ($)</label>
+                        <input id="MaxPrice" name="MaxPrice" value="@Model.MaxPrice" class="form-control" />
+                        <span asp-validation-for="@Model.MaxPrice" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column justify-content-end">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+            </form>
+
             @if (Model.Diamonds == null || !Model.Diamonds.Any())
             {
-                <div class="alert alert-info" role="alert">
+                <div class="alert alert-info" role="alert" style="margin-top:2%">
                     No diamonds available.
                 </div>
             }
@@ -33,30 +73,32 @@
                     {
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <div class="box">
-                                <div class="img-box">
-                                    @if (@diamond.Media is not null)
-                                    {
-                                        <img src="~/@diamond.Media.Url" alt="Diamond Image">
-                                    }
-                                    else
-                                    {
-                                        <img src="/images/Diamond.png" alt="Diamond Image">
-                                    }
-                                </div>
-                                <div>
-                                    <div>Origin: @diamond.Origin</div>
-                                    <div>Color: @diamond.Color</div>
-                                    <div>Cut: @diamond.Cut</div>
-                                    <div>Clarity: @diamond.Clarity</div>
-                                    <div>Weight: @diamond.Weight</div>
-                                    <div>Price: $@diamond.Price</div>
-                                    <div>Status: @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "Sold" : "Available")</div>
-                                </div>
-                                <form method="post" asp-page-handler="AddToCart">
-                                    <input type="hidden" name="diamondId" value="@diamond.Id" />
-                                    <button type="submit" class="btn btn-primary" @(Model.CartItems.Diamond.Exists(d => d.Id == diamond.Id) || (diamond.IsSold.HasValue && diamond.IsSold.Value) ? "disabled" : "")>Add to Cart</button>
-                                    @* <button type="submit" class="btn btn-primary" @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "disabled" : "")>Add to Cart</button> *@
-                                </form>
+                                <a asp-page="/DiamondShop/Detail" asp-route-diamondId="@diamond.Id">
+                                    <div class="img-box">
+                                        @if (@diamond.Media is not null)
+                                        {
+                                            <img src="~/@diamond.Media.Url" alt="Diamond Image">
+                                        }
+                                        else
+                                        {
+                                            <img src="" alt="No Image">
+                                        }
+                                    </div>
+                                    <div>
+                                        <div>Origin: @diamond.Origin</div>
+                                        <div>Color: @diamond.Color</div>
+                                        <div>Cut: @diamond.Cut</div>
+                                        <div>Clarity: @diamond.Clarity</div>
+                                        <div>Weight: @diamond.Weight carats</div>
+                                        <div>Price: @diamond.Price $</div>
+                                        <div>Status: @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "Sold" : "Available")</div>
+                                    </div>
+                                    <form method="post" asp-page-handler="AddToCart">
+                                        <input type="hidden" name="diamondId" value="@diamond.Id" />
+                                        <button type="submit" class="btn btn-primary" @(Model.CartItems.Diamond.Exists(d => d.Id == diamond.Id) || (diamond.IsSold.HasValue && diamond.IsSold.Value) ? "disabled" : "")>Add to Cart</button>
+                                        @* <button type="submit" class="btn btn-primary" @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "disabled" : "")>Add to Cart</button> *@
+                                    </form>
+                                </a>
                             </div>
                         </div>
                     }
@@ -68,18 +110,18 @@
                         @if (Model.PageNumber > 1)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="./BrowseDiamonds" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                                <a class="page-link" asp-page="/DiamondShop/BrowseDiamond" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
                             </li>
                         }
 
                         <li class="page-item active">
-                            <a class="page-link" asp-page="./BrowseDiamonds" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                            <a class="page-link" asp-page="/DiamondShop/BrowseDiamond" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
                         </li>
 
                         @if (Model.PageNumber < Model.TotalPages)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="./BrowseDiamonds" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                                <a class="page-link" asp-page="/DiamondShop/BrowseDiamond" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
                             </li>
                         }
                     </ul>
