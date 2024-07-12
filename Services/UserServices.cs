@@ -1,4 +1,5 @@
-﻿using System.Security.Authentication;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Authentication;
 using System.Web;
 using AutoMapper;
 using BusinessObject.Enum;
@@ -65,7 +66,18 @@ public class UserServices : IUserServices
 
     public async Task<UserResponse> Login(string username, string password)
     {
-        var user = await _userManager.FindByNameAsync(username);
+        User? user;
+        var emailAttribute = new EmailAddressAttribute();
+        
+        if (emailAttribute.IsValid(username))
+        {
+            user = await _userManager.FindByEmailAsync(username);
+        }
+        else
+        {
+            user = await _userManager.FindByNameAsync(username);
+        }
+        
         if (user is null)
         {
             throw new AuthenticationException("User name or password wrong!!");
