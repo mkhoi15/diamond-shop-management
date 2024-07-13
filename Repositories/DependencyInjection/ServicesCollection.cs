@@ -1,4 +1,5 @@
 using DataAccessLayer.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories.Abstraction;
 
@@ -6,18 +7,19 @@ namespace Repositories.DependencyInjection;
 
 public static class ServicesCollection
 {
-    public static IServiceCollection AddRepositories(this IServiceCollection collection)
+    public static IServiceCollection AddRepositories(this IServiceCollection collection, IConfiguration configuration)
     {
         collection.AddScoped<IOrderRepository, OrderRepository>();
         collection.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
         collection.AddScoped<IDiamondRepository, DiamondRepository>();
         collection.AddScoped<IPromotionRepository, PromotionRepository>();
         collection.AddScoped<IPaperworkRepository, PaperworkRepository>();
-        collection.AddDataAccessLayer();
+        collection.AddDataAccessLayer(configuration);
         collection.AddScoped<IAccessoryRepository, AccessoryRepository>();
         collection.AddScoped<IDiamondAccessoryRepository, DiamondAccessoryRepository>();
         collection.AddScoped<IMediaRepository, MediaRepository>();
         collection.AddScoped<IDeliveryRepository, DeliveryRepository>();
+        
         return collection;
     }
 }

@@ -17,11 +17,13 @@ public class ResetPassword : PageModel
     
     [BindProperty]
     [Required]
+    [DataType(DataType.Password)]
     public string? Password { get; set; }
     
     [BindProperty]
     [Required]
     [Compare(nameof(Password), ErrorMessage = "Password and Confirm Password do not match")]
+    [DataType(DataType.Password)]
     public string? ConfirmPassword { get; set; }
     
     private readonly IUserServices _userServices;

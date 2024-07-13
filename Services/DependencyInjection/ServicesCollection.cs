@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories.DependencyInjection;
 using Services.Abstraction;
@@ -8,7 +9,7 @@ namespace Services.DependencyInjection;
 
 public static class ServicesCollection
 {
-    public static IServiceCollection AddServices(this IServiceCollection collection)
+    public static IServiceCollection AddServices(this IServiceCollection collection, IConfiguration configuration)
     {
         collection.AddScoped<IUserServices, UserServices>()
             .AddScoped<IOrderServices, OrderServices>()
@@ -22,7 +23,7 @@ public static class ServicesCollection
             .AddScoped<IDiamondAccessoryServices, DiamondAccessoryServices>()
             .AddScoped<IMediaServices, MediaServices>()
             .AddScoped<IDeliveryServices, DeliveryServices>()
-            .AddRepositories()
+            .AddRepositories(configuration)
             .AddConfigureAutoMapper();
         return collection;
     }
