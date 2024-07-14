@@ -8,7 +8,7 @@ namespace Services.Abstraction;
 
 public interface IUserServices
 {
-    Task<(List<UserResponse>, int totalPage)> GetAllUserAsync(int page = 1, int limit = 10);
+    Task<(List<UserResponse>, int totalPage)> GetAllUserAsync(string search, int page = 1, int limit = 10);
     Task<bool> IsSignedInAsync(UserResponse user);
     Task<UserResponse> Login(string username, string password);
     Task SignOutAsync();
