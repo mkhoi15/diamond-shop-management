@@ -26,9 +26,10 @@ public class RevenueServices : IRevenueServices
             .Select(group => new RevenueResponse
             {
                 TotalRevenue = group.Sum(order => order.TotalPrice),
+                TotalOrder = group.Count(),
                 Month = group.Key.ToString()
             }).ToListAsync();
 
         return list;
-    } 
+    }
 }
