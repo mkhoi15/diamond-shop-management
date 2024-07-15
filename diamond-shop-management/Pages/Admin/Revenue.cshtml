@@ -2,8 +2,23 @@
 @model diamond_shop_management.Pages.Admin.Revenue
 
 @{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
     Layout = "Shared/_Layout";
     ViewBag.Title = "Revenue";
+    var labels = string.Join(",", Model.RevenueResponses.Select(x => $"'{x.Month}'"));
+    var data = string.Join(",", Model.RevenueResponses.Select(x => x.TotalRevenue));
+    var maxDataValue = (decimal)0;
+    if (Model.RevenueResponses.Count == 0)
+    {
+        labels = "''";
+        data = "0";
+    }
+    else
+    {
+        maxDataValue = Model.RevenueResponses.Max(x => x.TotalRevenue);
+    }
 }
 
 <div class="container mt-5 pt-5">
@@ -13,49 +28,78 @@
             <hr/>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex flex-row justify-content-between">
-                        <h3>Revenue: @Model.TotalRevenue $</h3>
-                        <form method="get" class="form-inline">
-                            <div class="form-group mx-sm-3 mb-2">
-                                <label asp-for="Year" class="sr-only">Year</label>
-                                <input type="number" 
-                                       class="form-control"
-                                       asp-for="Year" 
-                                       max="@DateTime.Now.Year"
-                                />
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-2">Filter</button>
-                        </form>
+    <div class="row d-flex">
+        <div class="row mt-5">
+            <div class="d-flex flex-row justify-content-between">
+                <h3>Revenue: @Model.TotalRevenue $</h3>
+                <form method="get" class="form-inline">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label asp-for="Year" class="sr-only">Year</label>
+                        <input type="number"
+                               class="form-control"
+                               asp-for="Year"
+                               max="@DateTime.Now.Year"/>
                     </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>Month</th>
-                                    <th>Revenue ($)</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach (var item in Model.RevenueResponses)
-                                {
-                                    <tr>
-                                        <td>@item.Month</td>
-                                        <td>@item.TotalRevenue</td>
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                    <button type="submit" class="btn btn-primary mb-2">Filter</button>
+                </form>
+                <form method="post" class="form-inline">
+                    <input type="hidden" value="@ViewBag.Years"/>
+                    <button type="submit" class="btn btn-secondary">Export Excel</button>
+                </form>
+            </div>
+            <div class="col-md-12">
+                <canvas id="myChart" width="400" height="200"></canvas>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    const ctx = document.getElementById("myChart").getContext('2d');
+    const maxYValue = Math.ceil(@Html.Raw(maxDataValue) / 1000) * 1200;
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [@Html.Raw(labels)],
+            datasets: [
+                {
+                    label: 'Revenue',
+                    data: [@Html.Raw(data)],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    order: 2
+                },
+                {
+                    type: 'line',
+                    label: 'line dataset',
+                    fill: false,
+                    data: [@Html.Raw(data)],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    order: 1
+                }
+            ]
+        },
+        options: {
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return '$' + tooltipItem.yLabel.toLocaleString();
+                    }
+                }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value, index, values) {
+                            return '$' + value.toLocaleString();
+                        },
+                        max: maxYValue
+                    }
+                }]
+            }
+        }
+    });
+</script>
