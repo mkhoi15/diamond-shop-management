@@ -2,6 +2,7 @@
 
 public class RevenueResponse
 {
-    public decimal TotalRevenue { get; set; }
     public string? Month { get; set; }
+    public int TotalOrder { get; set; }
+    public decimal TotalRevenue { get; set; }
 }
