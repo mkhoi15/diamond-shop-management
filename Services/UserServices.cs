@@ -1,4 +1,5 @@
-﻿using System.Security.Authentication;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Authentication;
 using System.Web;
 using AutoMapper;
 using BusinessObject.Enum;
@@ -28,7 +29,7 @@ public class UserServices : IUserServices
         _roleManager = roleManager;
     }
 
-    public async Task<(List<UserResponse>, int totalPage)> GetAllUserAsync(int page = 1, int limit = 10)
+    public async Task<(List<UserResponse>, int totalPage)> GetAllUserAsync(string search, int page = 1, int limit = 10)
     {
         var response = new List<UserResponse>();
 
@@ -36,6 +37,11 @@ public class UserServices : IUserServices
             .AsNoTracking()
             .Where(u => u.IsDeleted == false && u.UserName != "admin");
 
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(u => u.Email!.Contains(search));
+        }
+        
         var users = await query
             .OrderByDescending(u => u.CreatedAt)
             .Skip((page - 1) * limit)
@@ -65,7 +71,18 @@ public class UserServices : IUserServices
 
     public async Task<UserResponse> Login(string username, string password)
     {
-        var user = await _userManager.FindByNameAsync(username);
+        User? user;
+        var emailAttribute = new EmailAddressAttribute();
+        
+        if (emailAttribute.IsValid(username))
+        {
+            user = await _userManager.FindByEmailAsync(username);
+        }
+        else
+        {
+            user = await _userManager.FindByNameAsync(username);
+        }
+        
         if (user is null)
         {
             throw new AuthenticationException("User name or password wrong!!");

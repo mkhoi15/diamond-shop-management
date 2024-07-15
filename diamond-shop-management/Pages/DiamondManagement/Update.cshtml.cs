@@ -7,6 +7,7 @@ using DTO.Media;
 using DTO.PaperworkDto;
 using DTO.PromotionDto;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -97,8 +98,9 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 var updatedMedia = JsonSerializer.Deserialize<MediaResponse>(jsonMedia);
                 if (media != null)
                 {
-                    if (updatedMedia != null)
+                    if (updatedMedia != null && updatedMedia.Url != null)
                     {
+                        DeleteFile(updatedMedia.Url);
                         updatedMedia.Url = media.Url;
                         _mediaServices.Update(updatedMedia);
                     }
@@ -186,6 +188,17 @@ namespace diamond_shop_management.Pages.DiamondManagement
             };
             IEnumerable<PromotionResponse> promotions = await _promotionServices.GetAllAsync(default);
             ViewData["Promotions"] = new SelectList(promotions, "Id", "Name");
+        }
+
+        public void DeleteFile(string mediaUrl)
+        {
+            string relativePath = mediaUrl;
+            string physicalPath = Path.Combine(_environment.WebRootPath, relativePath);
+
+            if (System.IO.File.Exists(physicalPath))
+            {
+                System.IO.File.Delete(physicalPath);
+            }
         }
     }
 }

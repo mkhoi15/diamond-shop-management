@@ -16,7 +16,6 @@ public class OrdersList : PageModel
         StatusList = new List<SelectListItem>
         {
             new SelectListItem { Value = "Pending", Text = "Pending" },
-            new SelectListItem { Value = "Processing", Text = "Processing" },
             new SelectListItem { Value = "Shipped", Text = "Shipped" },
             new SelectListItem { Value = "Delivered", Text = "Delivered" },
             new SelectListItem { Value = "Cancelled", Text = "Cancelled" }
@@ -33,9 +32,6 @@ public class OrdersList : PageModel
     public async Task OnGetAsync()
     {
         var allOrders = await _orderServices.GetAllOrdersAsync();
-        
-        // Add logging to debug the value of SelectedStatus
-        Console.WriteLine($"SelectedStatus: {SelectedStatus}");
 
         if (!string.IsNullOrEmpty(SelectedStatus))
         {

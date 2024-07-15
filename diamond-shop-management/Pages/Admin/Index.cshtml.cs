@@ -1,6 +1,7 @@
 ﻿using BusinessObject.Enum;
 using DTO.UserDto;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
 
@@ -12,6 +13,8 @@ public class Index : PageModel
     public IList<UserResponse> Users { get; set; } = new List<UserResponse>();
     public int TotalPage { get; set; }
     public int CurrentPage { get; set; } = 1;
+    [BindProperty]
+    public string Search { get; set; }
     
     public bool HasPrevious => CurrentPage > 1;
     public bool HasNext => CurrentPage < TotalPage;
@@ -23,9 +26,10 @@ public class Index : PageModel
         _userServices = userServices;
     }
 
-    public async Task OnGetAsync(int currentPage = 1)
+    public async Task OnGetAsync(int currentPage = 1, string search = "")
     {
+        Search = search;
         CurrentPage = currentPage;
-        (Users, TotalPage) = await _userServices.GetAllUserAsync(currentPage);
+        (Users, TotalPage) = await _userServices.GetAllUserAsync(search, currentPage);
     }
 }

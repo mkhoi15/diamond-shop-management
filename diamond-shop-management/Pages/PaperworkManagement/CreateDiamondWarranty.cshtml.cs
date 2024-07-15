@@ -52,6 +52,13 @@ public class CreateDiamondWarranty : PageModel
     {
         try
         {
+            if (PaperworkRequest.ExpirationDate <= DateTime.Now)
+            {
+                Message = "Expiration date must be greater than current date time";
+                ModelState.AddModelError(string.Empty, Message);
+                return Page();
+            }
+
             PaperworkRequest.CreatedDate = DateTime.Now;
             PaperworkRequest.Status = "Active";
             PaperworkRequest.IsDeleted = false;

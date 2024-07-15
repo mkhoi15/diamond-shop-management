@@ -19,7 +19,7 @@ namespace DTO.DiamondDto
         public string? Cut { get; set; }
 
         [Required(ErrorMessage = "Clarity is required")]
-        [RegularExpression(@"^(?!0+(\.0*)?$)(\d{1,2}(\.\d+)?|100(\.0+)?)$", ErrorMessage = "Clarity must be a decimal number greater than 0 and less than 100")]
+        [RegularExpression(@"^(?!0+(\.0*)?%?$)(\d{1,2}(\.\d+)?%$|100(\.0+)?%)$", ErrorMessage = "Clarity must be a decimal number greater than 0 and less than 100, followed by % symbol.")]
         public string? Clarity { get; set; }
 
         [Required(ErrorMessage = "Weight is required")]

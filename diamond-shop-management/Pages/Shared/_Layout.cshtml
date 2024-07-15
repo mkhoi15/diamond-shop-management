@@ -51,6 +51,7 @@
                                 {
                                     <a asp-page="/DiamondManagement/ViewDiamond">Diamond Management</a>
                                     <a asp-page="/Admin/Index">Account Management</a>
+                                    <a asp-page="/Admin/Revenue">Revenue</a>
                                 }
                                 else if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Manager"))
                                 {

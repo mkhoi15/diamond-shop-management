@@ -8,9 +8,12 @@ public class RegisterDto
 
     [Required]
     [EmailAddress]
+    [DataType(DataType.EmailAddress)]
     public string Email { get; set; } = null!;
 
-    [Required] public string Password { get; set; } = null!;
+    [Required]
+    [DataType(DataType.Password)]
+    public string Password { get; set; } = null!;
     
     [Required]
     [Phone]
@@ -18,5 +21,6 @@ public class RegisterDto
 
     [Required]
     [Compare(nameof(Password), ErrorMessage = "Password does not match")]
+    [DataType(DataType.Password)]
     public string ConfirmPassword { get; set; } = null!;
 }

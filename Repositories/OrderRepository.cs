@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
 
 namespace Repositories;
@@ -16,7 +17,23 @@ public class OrderRepository : IOrderRepository
 
     public IQueryable<Order> FindAll()
     {
-        return _orderDao.FindAll();
+        return _orderDao.FindAll()
+            .Select(o => new Order()
+            {
+                Id = o.Id,
+                OrderDetails = o.OrderDetails,
+                Deliveries = o.Deliveries,
+                Status = o.Status,
+                Date = o.Date,
+                Address = o.Address,
+                TotalPrice = o.TotalPrice,
+                Customer = new User()
+                {
+                    Id = o.CustomerId,
+                    Email = o.Customer.Email,
+                    PhoneNumber = o.Customer.PhoneNumber,
+                }
+            });
     }
 
     public async Task<Order?> FindById(Guid id, CancellationToken cancellationToken = default, params Expression<Func<Order, object?>>[] includeProperties)
