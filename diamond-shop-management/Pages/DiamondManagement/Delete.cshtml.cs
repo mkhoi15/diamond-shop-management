@@ -6,6 +6,7 @@ using DTO.DiamondDto;
 using DTO.Media;
 using DTO.PaperworkDto;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services;
@@ -21,16 +22,18 @@ namespace diamond_shop_management.Pages.DiamondManagement
         private readonly IDiamondServices _diamondService;
         private readonly IPaperworkServices _paperworkService;
         private readonly IMediaServices _mediaServices;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DeleteModel(IDiamondServices diamondService, IMapper mapper, IMediaServices mediaServices, IUnitOfWork unitOfWork, IPaperworkServices paperworkService)
+        public DeleteModel(IDiamondServices diamondService, IMapper mapper, IMediaServices mediaServices, IUnitOfWork unitOfWork, IPaperworkServices paperworkService, IWebHostEnvironment webHostEnvironment)
         {
             _diamondService = diamondService;
             _mapper = mapper;
             _mediaServices = mediaServices;
             _unitOfWork = unitOfWork;
             _paperworkService = paperworkService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -77,6 +80,8 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 if (media != null)
                 {
                     media.IsDeleted = true;
+                    if (media.Url is not null)
+                        DeleteFile(media.Url);
                     _mediaServices.Update(media);
                 }
 
@@ -91,6 +96,8 @@ namespace diamond_shop_management.Pages.DiamondManagement
                     if (paperwork.Media != null)
                     {
                         paperwork.Media.IsDeleted = true;
+                        if (paperwork.Media.Url is not null)
+                            DeleteFile(paperwork.Media.Url);
                         _mediaServices.Update(paperwork.Media);
                     }
                     _paperworkService.Update(paperwork);
@@ -107,6 +114,17 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 ModelState.AddModelError(string.Empty, ex.Message);
 
                 return Page();
+            }
+        }
+
+        public void DeleteFile(string mediaUrl)
+        {
+            string relativePath = mediaUrl;
+            string physicalPath = Path.Combine(_webHostEnvironment.WebRootPath, relativePath);
+
+            if (System.IO.File.Exists(physicalPath))
+            {
+                System.IO.File.Delete(physicalPath);
             }
         }
     }
