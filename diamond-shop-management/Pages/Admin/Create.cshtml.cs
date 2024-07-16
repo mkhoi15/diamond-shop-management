@@ -34,15 +34,21 @@ public class Create : PageModel
     {
         if (!ModelState.IsValid) return Page();
 
-        var user = await _userServices.RegisterAsync(RegisterDto.Username,
-            RegisterDto.Password,
-            RegisterDto.Username,
-            RegisterDto.Email,
-            RegisterDto.Phone,
-            Role);
-
-        //var userLogin = await _userServices.Login(user.UserName!, RegisterDto.Password);
-
+        try
+        {
+            var user = await _userServices.RegisterAsync(RegisterDto.Username,
+                RegisterDto.Password,
+                RegisterDto.Username,
+                RegisterDto.Email,
+                RegisterDto.Phone,
+                Role);
+        }
+        catch (Exception e)
+        {
+            ModelState.AddModelError(string.Empty, e.Message);
+            return Page();
+        }
+        
         return RedirectToPage("./Index");
     }
 }

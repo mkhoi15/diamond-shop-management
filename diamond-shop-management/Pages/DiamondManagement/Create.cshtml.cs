@@ -86,11 +86,11 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 _diamondServices.CreateDiamond(DiamondRequest);
                 await _unitOfWork.SaveChangeAsync();
 
-                Message = "Create successfully!";
-                ModelState.AddModelError(string.Empty, "Create successfully!");
+                /*Message = "Create successfully!";
+                ModelState.AddModelError(string.Empty, "Create successfully!");*/
 
                 await InitializeDiamondInfo();
-                return Page();
+                return RedirectToPage("/DiamondManagement/ViewDiamond");
             }
             catch (Exception ex)
             {
@@ -136,31 +136,42 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public async Task InitializeDiamondInfo()
         {
-            Countries = new List<string>
+            try
             {
-                "USA", "India", "South Africa", "Canada", "Russia",
-                "Australia", "Brazil", "China", "Botswana", "Angola",
-                "Namibia", "Lesotho", "Zimbabwe", "Sierra Leone", "Tanzania",
-                "Belgium", "United Kingdom", "Israel", "Thailand", "United Arab Emirates"
-            };
+                Countries = new List<string>
+                {
+                    "USA", "India", "South Africa", "Canada", "Russia",
+                    "Australia", "Brazil", "China", "Botswana", "Angola",
+                    "Namibia", "Lesotho", "Zimbabwe", "Sierra Leone", "Tanzania",
+                    "Belgium", "United Kingdom", "Israel", "Thailand", "United Arab Emirates"
+                };
 
-            Colors = new List<string>
-            {
-                "Yellow", "Green", "Blue", "Brown", "White",
-                "Black", "Purple", "Orange", "Pink", "Red",
-                "Champagne", "Gray", "Violet", "Cognac", "Fancy Green",
-                "Fancy Blue", "Fancy Yellow", "Fancy Brown", "Fancy Purple", "Fancy Orange"
-            };
+                Colors = new List<string>
+                {
+                    "Yellow", "Green", "Blue", "Brown", "White",
+                    "Black", "Purple", "Orange", "Pink", "Red",
+                    "Champagne", "Gray", "Violet", "Cognac", "Fancy Green",
+                    "Fancy Blue", "Fancy Yellow", "Fancy Brown", "Fancy Purple", "Fancy Orange"
+                };
 
-            Cuts = new List<string>
+                Cuts = new List<string>
+                {
+                    "Round", "Princess", "Emerald", "Asscher", "Marquise",
+                    "Oval", "Radiant", "Pear", "Heart", "Cushion",
+                    "Trillion", "Baguette", "Rose", "Briolette", "Old European",
+                    "Old Mine", "Tapered Baguette", "Half Moon", "Bullet", "French"
+                };
+                IEnumerable<PromotionResponse> promotions = await _promotionServices.GetPromotionsByCondition(
+                    p => p.IsDeleted != true
+                    && p.StartDate <= DateTime.Now
+                    && p.EndDate >= DateTime.Now,default);
+                ViewData["Promotions"] = new SelectList(promotions, "Id", "Name");
+            }
+            catch (Exception ex)
             {
-                "Round", "Princess", "Emerald", "Asscher", "Marquise",
-                "Oval", "Radiant", "Pear", "Heart", "Cushion",
-                "Trillion", "Baguette", "Rose", "Briolette", "Old European",
-                "Old Mine", "Tapered Baguette", "Half Moon", "Bullet", "French"
-            };
-            IEnumerable<PromotionResponse> promotions = await _promotionServices.GetAllAsync(default);
-            ViewData["Promotions"] = new SelectList(promotions, "Id" , "Name");
+                Message = "Initialization component failed!\n" + ex.Message;
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
         }
     }
 }

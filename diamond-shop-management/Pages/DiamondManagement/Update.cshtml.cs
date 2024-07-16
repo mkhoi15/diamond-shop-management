@@ -60,28 +60,37 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public async Task<IActionResult> OnGetAsync(Guid diamondId, int? pageNumber, CancellationToken cancellationToken)
         {
-            await InitializeDiamondInfoAsync();
-            Diamond = await _diamondService.GetByIdAsync(diamondId, default);
-
-
-            if (Diamond == null)
+            try
             {
-                Message = "Diamond is not found";
-                ModelState.AddModelError(string.Empty, Message);
+                await InitializeDiamondInfoAsync();
+                Diamond = await _diamondService.GetByIdAsync(diamondId, default);
+
+
+                if (Diamond == null)
+                {
+                    Message = "Diamond is not found";
+                    ModelState.AddModelError(string.Empty, Message);
+                    return Page();
+                }
+
+                TempData["Media"] = JsonSerializer.Serialize(Diamond.Media);
+
+                PageNumber = pageNumber ?? 1;
+
+                var pagedResult = await _paperworkService.GetAllAsync(
+                    paper => paper.DiamondId == diamondId && paper.IsDeleted != true, PageNumber, PageSize, cancellationToken);
+
+                Paperworks = _mapper.Map<List<PaperworkResponse>>(pagedResult.Items);
+                TotalItems = pagedResult.TotalItems;
+
                 return Page();
             }
-
-            TempData["Media"] = JsonSerializer.Serialize(Diamond.Media);
-
-            PageNumber = pageNumber ?? 1;
-
-            var pagedResult = await _paperworkService.GetAllAsync(
-                paper => paper.DiamondId == diamondId && paper.IsDeleted != true, PageNumber, PageSize, cancellationToken);
-
-            Paperworks = _mapper.Map<List<PaperworkResponse>>(pagedResult.Items);
-            TotalItems = pagedResult.TotalItems;
-
-            return Page();
+            catch (Exception ex)
+            {
+                Message = "Get Diamond info failed!\n" + ex.Message;
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return Page();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(Guid diamondId, CancellationToken cancellationToken)
@@ -113,11 +122,11 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 _diamondService.UpdateDiamond(Diamond);
                 await _unitOfWork.SaveChangeAsync(cancellationToken);
 
-                Message = "Diamond is updated successfully";
-                ModelState.AddModelError(string.Empty, Message);
+                /*Message = "Diamond is updated successfully";
+                ModelState.AddModelError(string.Empty, Message);*/
 
                 await InitializeDiamondInfoAsync();
-                return RedirectToPage("/DiamondManagement/Update", Diamond.Id);
+                return RedirectToPage("/DiamondManagement/ViewDiamond");
             }
             catch (Exception ex)
             {
@@ -186,7 +195,10 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 "Trillion", "Baguette", "Rose", "Briolette", "Old European",
                 "Old Mine", "Tapered Baguette", "Half Moon", "Bullet", "French"
             };
-            IEnumerable<PromotionResponse> promotions = await _promotionServices.GetAllAsync(default);
+            IEnumerable<PromotionResponse> promotions = await _promotionServices.GetPromotionsByCondition(
+                    p => p.IsDeleted != true
+                    && p.StartDate <= DateTime.Now
+                    && p.EndDate >= DateTime.Now, default);
             ViewData["Promotions"] = new SelectList(promotions, "Id", "Name");
         }
 
