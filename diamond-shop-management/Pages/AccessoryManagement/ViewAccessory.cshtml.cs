@@ -19,6 +19,7 @@ namespace diamond_shop_management.Pages.AccessoryManagement
         public int PageSize { get; set; }
         public int TotalItems { get; set; }
         public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
+        public string Message { get; set; }
         public ViewAccessoryModel(IAccessoryServices accessoryServices, IMapper mapper)
         {
             _accessoryServices = accessoryServices;
@@ -31,6 +32,12 @@ namespace diamond_shop_management.Pages.AccessoryManagement
             PageNumber = pageNumber ?? 1;
 
             var pageResult = await _accessoryServices.GetAccessoriesAsync(PageNumber, PageSize, cancellationToken);
+
+            if (pageResult == null)
+            {
+                Message = "Failed to retrieve accessories.";
+                return;
+            }
 
             Accessories = _mapper.Map<List<AccessoryResponse>>(pageResult.Items);
             TotalItems = pageResult.TotalItems;

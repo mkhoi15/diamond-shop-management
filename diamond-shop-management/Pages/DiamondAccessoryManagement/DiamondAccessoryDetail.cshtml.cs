@@ -1,4 +1,3 @@
-using AutoMapper;
 using BusinessObject.Enum;
 using DTO.DiamondAccessoryDto;
 using Microsoft.AspNetCore.Authorization;
@@ -9,24 +8,38 @@ using Services.Abstraction;
 namespace diamond_shop_management.Pages.DiamondAccessoryManagement
 {
     [Authorize(Roles = nameof(Roles.Manager))]
+
     public class DiamondAccessoryDetailModel : PageModel
     {
-        private readonly IDiamondAccessoryServices _diamondAccessoryService;
-        private readonly IMapper _mapper;
 
-        public DiamondAccessoryDetailModel(IDiamondAccessoryServices diamondAccessoryService, IMapper mapper)
+        private readonly IDiamondAccessoryServices _diamondAccessoryService;
+
+        public DiamondAccessoryDetailModel(IDiamondAccessoryServices diamondAccessoryService)
         {
             _diamondAccessoryService = diamondAccessoryService;
-            _mapper = mapper;
         }
 
         [BindProperty]
         public DiamondAccessoryResponse DiamondAccessory { get; set; }
+        public string ErrorMessage { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id, CancellationToken cancellationToken)
         {
-            var diamondAccessory = await _diamondAccessoryService.GetDiamondAccessoryByIdAsync(id, cancellationToken);
-            DiamondAccessory = _mapper.Map<DiamondAccessoryResponse>(diamondAccessory);
+            try
+            {
+                DiamondAccessory = await _diamondAccessoryService.GetDiamondAccessoryByIdAsync(id, cancellationToken);
+
+                if (DiamondAccessory == null)
+                {
+                    ErrorMessage = "Diamond Accessory not found.";
+                    return Page();
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"An error occurred while retrieving the details: {ex.Message}";
+            }
+
             return Page();
         }
     }

@@ -12,16 +12,14 @@
                     Browse Accessories
                 </h2>
             </div>
-
             <div class="container">
                 <div class="d-flex justify-content-end">
                     <a asp-page="/Card/Card" class="btn btn-success">Go To Cart</a>
                 </div>
             </div>
-
             @if (Model.Accessories == null || !Model.Accessories.Any())
             {
-                <div class="alert alert-info" role="alert">
+                <div class="alert alert-info" role="alert" style="margin-top:2%">
                     No accessories available.
                 </div>
             }
@@ -35,21 +33,23 @@
                                 <div class="img-box">
                                     @if (@accessory.Media is not null)
                                     {
-                                        <img src="@Url.Content(accessory.Media.Url)" alt="Accessory Image">
+                                        <img src="~/@accessory.Media.Url" alt="Accessory Image">
                                     }
                                     else
                                     {
-                                        <img src="~/images/default-placeholder.png" alt="Accessory Image">
+                                        <img src="" alt="No Image">
                                     }
                                 </div>
                                 <div>
                                     <div>Name: @accessory.Name</div>
                                     <div>Price: @accessory.Price</div>
                                 </div>
-                                <form method="post" asp-page-handler="AddToCart">
-                                    <input type="hidden" name="accessoryId" value="@accessory.Id" />
-                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
-                                </form>
+                                <div>
+                                    <form method="post" asp-page-handler="AddToCart">
+                                        <input type="hidden" name="accessoryId" value="@accessory.Id" />
+                                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     }
@@ -77,7 +77,7 @@
                         }
                     </ul>
                 </nav>
-            </div>
+            </div>  
         </div>
     </section>
 </div>
