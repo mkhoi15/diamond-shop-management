@@ -42,25 +42,35 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public async Task<IActionResult> OnGetAsync(Guid? paperworkId, CancellationToken cancellationToken)
         {
-            Paperwork = await _paperworkServices.GetByIdAsync(paperworkId, default);
-
-            if (Paperwork == null)
+            try
             {
-                Message = "Paperwork is not found";
-                ModelState.AddModelError(string.Empty, Message);
+                Paperwork = await _paperworkServices.GetByIdAsync(paperworkId, default);
+
+                if (Paperwork == null)
+                {
+                    Message = "Paperwork is not found";
+                    ModelState.AddModelError(string.Empty, Message);
+                    return Page();
+                }
+
+                TempData["Media"] = JsonSerializer.Serialize(Paperwork.Media);
+
                 return Page();
             }
+            catch (Exception ex)
+            {
+                Message = "Get paperwork failed!\n" + ex.Message;
+                ModelState.AddModelError(string.Empty, ex.Message);
 
-            TempData["Media"] = JsonSerializer.Serialize(Paperwork.Media);
-
-            return Page();
+                return Page();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
         {
             try
             {
-                if (Paperwork.ExpirationDate != null && Paperwork.ExpirationDate <= Paperwork.CreatedDate)
+                if (Paperwork.ExpirationDate != null && Paperwork.ExpirationDate.Value.Date <= Paperwork.CreatedDate.Date)
                 {
                     Message = "Expiration date must be greater than created date";
                     ModelState.AddModelError(string.Empty, Message);

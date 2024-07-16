@@ -46,18 +46,27 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public async Task<IActionResult> OnGetAsync(Guid diamondId, int? pageNumber, CancellationToken cancellationToken)
         {
-            Diamond = await _diamondService.GetByIdAsync(diamondId, default);
-
-            if (Diamond == null)
+            try
             {
-                Message = "Diamond is not found";
-                ModelState.AddModelError(string.Empty, Message);
+                Diamond = await _diamondService.GetByIdAsync(diamondId, default);
+
+                if (Diamond == null)
+                {
+                    Message = "Diamond is not found";
+                    ModelState.AddModelError(string.Empty, Message);
+                    return Page();
+                }
+
+                TempData["Media"] = JsonSerializer.Serialize(Diamond.Media);
+
                 return Page();
             }
-
-            TempData["Media"] = JsonSerializer.Serialize(Diamond.Media);
-
-            return Page();
+            catch (Exception ex)
+            {
+                Message = "Get diamond failed!\n" + ex.Message;
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return Page();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
@@ -76,7 +85,7 @@ namespace diamond_shop_management.Pages.DiamondManagement
                     TempData["Media"] = jsonMedia;
                     return Page();
                 }
-                
+
                 if (media != null)
                 {
                     media.IsDeleted = true;

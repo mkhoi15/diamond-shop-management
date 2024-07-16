@@ -40,19 +40,27 @@ namespace diamond_shop_management.Pages.PaperworkManagement
 
         public async Task OnGetAsync(Guid diamondId)
         {
-            var diamond = await _diamondService.GetByIdAsync(diamondId, default);
-
-            if (diamond == null)
+            try
             {
-                Message = "Diamond is not found to create its paperwork";
-                ModelState.AddModelError("DiamondId", Message);
-            }
-            else
-            {
-                DiamondId = diamondId;
-            }
+                var diamond = await _diamondService.GetByIdAsync(diamondId, default);
 
-            PaperworkRequest.Type = "warranty";
+                if (diamond == null)
+                {
+                    Message = "Diamond is not found to create its paperwork";
+                    ModelState.AddModelError("DiamondId", Message);
+                }
+                else
+                {
+                    DiamondId = diamondId;
+                }
+
+                PaperworkRequest.Type = "warranty";
+            }
+            catch (Exception ex)
+            {
+                Message = "Created failed!\n" + ex.Message;
+                ModelState.AddModelError(string.Empty, Message);
+            }
         }
 
         public async Task<IActionResult> OnPost()
