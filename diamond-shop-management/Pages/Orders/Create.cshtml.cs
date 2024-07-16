@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using AutoMapper;
+using Azure;
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO.DiamondAccessoryDto;
@@ -20,14 +21,16 @@ public class Create : PageModel
     private readonly IMapper _mapper;
     private readonly IDiamondAccessoryServices _diamondAccessoryServices;
     private readonly IDiamondServices _diamondServices;
+    private readonly IOrderDetailServices _orderDetailServices;
 
-    public Create(IOrderServices orderServices, IUnitOfWork unitOfWork, IMapper mapper, IDiamondAccessoryServices diamondAccessoryServices, IDiamondServices diamondServices)
+    public Create(IOrderServices orderServices, IUnitOfWork unitOfWork, IMapper mapper, IDiamondAccessoryServices diamondAccessoryServices, IDiamondServices diamondServices, IOrderDetailServices orderDetailServices)
     {
         _orderServices = orderServices;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _diamondAccessoryServices = diamondAccessoryServices;
         _diamondServices = diamondServices;
+        _orderDetailServices = orderDetailServices;
     }
 
 
@@ -83,35 +86,64 @@ public class Create : PageModel
 
     public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
     {
-        var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        
-        OrderRequest.CustomerId = Guid.Parse((customerId ?? throw new InvalidOperationException()));
-
-        OrderRequest.Status = "Pending";
-        
-        if (!ModelState.IsValid)
+        try
         {
+            CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
+            ProductIds = CartItems.Diamond.Select(d => _diamondAccessoryServices.GetProductByDiamondId(d.Id).Result.Id).ToList();
+            var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (customerId is null)
+            {
+                return RedirectToPage("/User/Login");
+            }
+        
+            foreach (var productId in ProductIds)
+            {
+                var isExistOrderdetail = await _orderDetailServices.GetOrderDetailByProductId(productId, cancellationToken);
+                if (isExistOrderdetail != null)
+                {
+                    ModelState.AddModelError("", "Product already exist in order.");
+                    return Page();
+                }
+            }
+        
+            //var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        
+            OrderRequest.CustomerId = Guid.Parse((customerId ?? throw new InvalidOperationException()));
+
+            OrderRequest.Status = "Pending";
+        
+        
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "There was an error creating the order. Please try again later.");
+                return Page();
+            }
+        
+        
+            var result = await _orderServices.CreateOrderAsync(OrderRequest);
+    
+            if (result is not null)
+            {
+                CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
+                DiamondIds = CartItems.Diamond.Select(d => d.Id).ToList();
+                foreach (var diamond in DiamondIds)
+                {
+                    await _diamondServices.UpdateDiamondStatusAsync(diamond, true, cancellationToken);
+                }
+                // Clear the cart after successful order creation
+                HttpContext.Session.Remove("Cart");
+                return RedirectToPage("/Orders/Success");
+            }
+
+            ModelState.AddModelError("", "There was an error creating the order. Please try again later.");
+            return Page();
+        }
+        catch (Exception e)
+        {
+            ModelState.AddModelError("", "There was an error creating the order. Please try again later.");
             return Page();
         }
         
-        
-        var result = await _orderServices.CreateOrderAsync(OrderRequest);
-    
-        if (result is not null)
-        {
-            CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
-            DiamondIds = CartItems.Diamond.Select(d => d.Id).ToList();
-            foreach (var diamond in DiamondIds)
-            {
-                await _diamondServices.UpdateDiamondStatusAsync(diamond, true, cancellationToken);
-            }
-            // Clear the cart after successful order creation
-            HttpContext.Session.Remove("Cart");
-            return RedirectToPage("/Orders/Success");
-        }
-    
-        ModelState.AddModelError("", "There was an error creating the order. Please try again.");
-        return Page();
     }
     
     public void TotalPrice()

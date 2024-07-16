@@ -52,7 +52,7 @@
                             <a asp-page="/Orders/OrderDetails" asp-route-id="@order.Id" class="btn btn-info">View Details</a>
                             @if(User.IsInRole("Manager") && order.Status == "Pending")
                             {
-                                <a asp-page="/Orders/OrderDetails" asp-route-id="@order.Id" class="btn btn-danger">Cancel Order</a>
+                                <a asp-page="/Orders/CancelOrder" asp-route-id="@order.Id" class="btn btn-danger">Cancel Order</a>
                             }
 
                         </td>

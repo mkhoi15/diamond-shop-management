@@ -9,8 +9,8 @@ public interface IRepositoryBase<TEntity>
     public Task<TEntity?> FindById(Guid id, CancellationToken cancellationToken = default,
         params Expression<Func<TEntity, object?>>[] includeProperties);
     
-    public Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate, 
-        CancellationToken cancellationToken = default,
+    public Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken = default, 
         params Expression<Func<TEntity, object?>>[] includeProperties);
 
     public void Add(TEntity entity);

@@ -28,6 +28,7 @@ public class OrderDetailRepository : IOrderDetailRepository
     {
         return await _orderDetailDao.Find(predicate, cancellationToken, includeProperties);
     }
+    
 
     public void Add(OrderDetail entity)
     {
@@ -47,5 +48,10 @@ public class OrderDetailRepository : IOrderDetailRepository
     public void Remove(OrderDetail entity)
     {
         _orderDetailDao.Remove(entity);
+    }
+
+    public void Delete(OrderDetail orderDetail)
+    {
+        _orderDetailDao.Delete(orderDetail);
     }
 }
