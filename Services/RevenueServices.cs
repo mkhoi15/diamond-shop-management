@@ -15,11 +15,13 @@ public class RevenueServices : IRevenueServices
 {
     private readonly IOrderRepository _orderServices;
     private readonly UserManager<User> _userManager;
+    private readonly IDiamondRepository _diamondRepository;
 
-    public RevenueServices(IOrderRepository orderServices, UserManager<User> userManager)
+    public RevenueServices(IOrderRepository orderServices, UserManager<User> userManager, IDiamondRepository diamondRepository)
     {
         _orderServices = orderServices;
         _userManager = userManager;
+        _diamondRepository = diamondRepository;
     }
 
     public async Task<List<RevenueResponse>> GetRevenueByYear(int? year = null)
@@ -82,5 +84,19 @@ public class RevenueServices : IRevenueServices
         
         return list;
     }
-    
+
+    public async Task<DiamondStatistic> GetDiamondStatistics()
+    {
+        var query = _diamondRepository.FindAll()
+            .AsNoTracking();
+        
+        var soldCount = await query.CountAsync(d => d.IsSold == true);
+        var inStockCount = await query.CountAsync(d => d.IsSold == false);
+
+        return new DiamondStatistic()
+        {
+            TotalDiamondSold = soldCount,
+            TotalDiamondInStock = inStockCount
+        };
+    }
 }
