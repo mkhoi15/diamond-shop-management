@@ -34,28 +34,49 @@ namespace diamond_shop_management.Pages.DiamondAccessoryManagement
 
         public async Task OnGetAsync(CancellationToken cancellationToken)
         {
-
-            var request = _mapper.Map<DiamondAccessoryRequest>(DiamondAccessory);
-            var accessories = await _accessoryServices.GetActiveAccessoriesAsync(a => a.IsDeleted != true, cancellationToken);
-            Accessories = accessories.Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.Name });
+            await PopulateSelectListsAsync(cancellationToken);
         }
-        public async Task<IActionResult> OnPostAsync()
+
+        public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
         {
+            if (!ModelState.IsValid)
+            {
+                // Re-populate dropdown lists if the model state is invalid
+                await PopulateSelectListsAsync(cancellationToken);
+                return Page();
+            }
+
             try
             {
                 await _diamondAccessoryService.CreateDiamondAccessoryAsync(DiamondAccessory);
 
-                Message = "DiamondAccessory Create successfully!";
-                return Page();
+                Message = "DiamondAccessory created successfully!";
+                return RedirectToPage("/DiamondAccessoryManagement/ViewDiamondAccessory");
             }
             catch (Exception e)
             {
-                Message = "Create failed\n" + e.Message;
-                ModelState.AddModelError(string.Empty, e + Message);
+                Message = "Create failed: " + e.Message;
+                ModelState.AddModelError(string.Empty, Message);
+                await PopulateSelectListsAsync(cancellationToken);
                 return Page();
             }
+        }
 
+        private async Task PopulateSelectListsAsync(CancellationToken cancellationToken)
+        {
+            var diamonds = _diamondServices.GetAllAsync(cancellationToken);
+            Diamonds = diamonds.Select(d => new SelectListItem
+            {
+                Value = d.Id.ToString(),
+                Text = $"{d.Origin} {d.Color} {d.Cut}"
+            }).ToList();
 
+            var accessories = await _accessoryServices.GetActiveAccessoriesAsync(a => a.IsDeleted != true, cancellationToken);
+            Accessories = accessories.Select(a => new SelectListItem
+            {
+                Value = a.Id.ToString(),
+                Text = a.Name
+            }).ToList();
         }
     }
 }

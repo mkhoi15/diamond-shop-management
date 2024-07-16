@@ -54,6 +54,11 @@
                         <input id="MaxPrice" name="MaxPrice" value="@Model.MaxPrice" class="form-control" />
                         <span asp-validation-for="@Model.MaxPrice" class="text-danger"></span>
                     </div>
+                    <div class="col-md-2">
+                        <label for="Promotion">Promotion (%)</label>
+                        <input id="Promotion" name="Promotion" value="@Model.Promotion" class="form-control" />
+                        <span asp-validation-for="@Model.Promotion" class="text-danger"></span>
+                    </div>
                     <div class="col-md-2 d-flex flex-column justify-content-end">
                         <button type="submit" class="btn btn-primary">Filter</button>
                     </div>
@@ -68,11 +73,11 @@
             }
             else
             {
-                <div class="row">
+                <div class="row" style="margin-bottom: 2%">
                     @foreach (var diamond in Model.Diamonds)
                     {
                         <div class="col-sm-6 col-md-4 col-lg-3">
-                            <div class="box">
+                            <div class="box d-flex flex-column justify-content-around" style="height: 95%">
                                 <a asp-page="/DiamondShop/Detail" asp-route-diamondId="@diamond.Id">
                                     <div class="img-box">
                                         @if (@diamond.Media is not null)
@@ -98,11 +103,13 @@
                                         }
                                         <div>Status: @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "Sold" : "Available")</div>
                                     </div>
-                                    <form method="post" asp-page-handler="AddToCart">
-                                        <input type="hidden" name="diamondId" value="@diamond.Id" />
-                                        <button type="submit" class="btn btn-primary" @(Model.CartItems.Diamond.Exists(d => d.Id == diamond.Id) || (diamond.IsSold.HasValue && diamond.IsSold.Value) ? "disabled" : "")>Add to Cart</button>
-                                        @* <button type="submit" class="btn btn-primary" @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "disabled" : "")>Add to Cart</button> *@
-                                    </form>
+                                    <div>
+                                        <form method="post" asp-page-handler="AddToCart">
+                                            <input type="hidden" name="diamondId" value="@diamond.Id" />
+                                            <button type="submit" class="btn btn-primary" @(Model.CartItems.Diamond.Exists(d => d.Id == diamond.Id) || (diamond.IsSold.HasValue && diamond.IsSold.Value) ? "disabled" : "")>Add to Cart</button>
+                                            @* <button type="submit" class="btn btn-primary" @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "disabled" : "")>Add to Cart</button> *@
+                                        </form>
+                                    </div>
                                 </a>
                             </div>
                         </div>
@@ -110,7 +117,7 @@
                 </div>
             }
             <div class="container">
-                <nav aria-label="Page navigation" style="margin-top: 2%">
+                <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
                         @if (Model.PageNumber > 1)
                         {

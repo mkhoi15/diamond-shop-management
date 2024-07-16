@@ -8,4 +8,5 @@ public interface IRevenueServices
     Task<List<RevenueResponse>> GetRevenueByYear(int? year = null);
     
     Task<List<UserStatistic>> GetUserStatisticsByYear(int? year = null);
+    Task<DiamondStatistic> GetDiamondStatistics();
 }

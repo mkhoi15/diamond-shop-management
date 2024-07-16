@@ -21,7 +21,7 @@ namespace diamond_shop_management.Pages.AccessoryShop
             PageSize = 10;
         }
 
-        public List<AccessoryResponse> Accessories { get; set; } = [];
+        public List<AccessoryResponse> Accessories { get; set; } = new();
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalItems { get; set; }
@@ -51,25 +51,21 @@ namespace diamond_shop_management.Pages.AccessoryShop
                 var accessoryResponse = _mapper.Map<AccessoryResponse>(accessory);
 
                 // Check if the accessory already exists in the cart
-                var existingAccessory = cart.Accessories.FirstOrDefault(a => a.Accessory.Id == accessoryId);
+                var existingAccessory = cart.Accessories.FirstOrDefault(a => a.Accessory.Id == accessoryResponse.Id);
 
                 if (existingAccessory != null)
                 {
-                    // Increment the quantity if the accessory already exists in the cart
                     existingAccessory.Quantity++;
                 }
                 else
                 {
-                    // Add the new accessory to the cart with a quantity of 1
-                    cart.Accessories.Add(new AccessoryCard
-                    {
-                        Accessory = accessoryResponse,
-                        Quantity = 1
-                    });
+                    cart.Accessories.Add(new AccessoryCard { Accessory = accessoryResponse, Quantity = 1 });
                 }
+
+                // Save the cart back to the session
+                HttpContext.Session.SetObjectAsJson("Cart", cart);
             }
 
-            HttpContext.Session.SetObjectAsJson("Cart", cart);
             return RedirectToPage();
         }
     }

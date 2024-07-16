@@ -33,11 +33,11 @@ public class BrowseDiamond : PageModel
     [BindProperty(SupportsGet = true)]
     public string? Weight { get; set; }
     [BindProperty(SupportsGet = true)]
-    [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
     public decimal? MinPrice { get; set; }
     [BindProperty(SupportsGet = true)]
-    [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
     public decimal? MaxPrice { get; set; }
+    [BindProperty(SupportsGet = true)]
+    public string? Promotion { get; set; }
 
     public List<DiamondResponse> Diamonds { get; set; }
     public int PageNumber { get; set; }
@@ -58,7 +58,8 @@ public class BrowseDiamond : PageModel
             && (string.IsNullOrEmpty(Clarity) == true? true : d.Clarity == Clarity)
             && (string.IsNullOrEmpty(Weight) == true? true : d.Weight == Weight)
             && (MinPrice.HasValue? d.Price >= MinPrice : true)
-            && (MaxPrice.HasValue ? d.Price <= MaxPrice : true
+            && (MaxPrice.HasValue ? d.Price <= MaxPrice : true)
+            && (string.IsNullOrEmpty(Promotion) == true ? true : d.Promotion!.Name == Promotion
             ), PageNumber, PageSize, cancellationToken);
 
         Diamonds = _mapper.Map<List<DiamondResponse>>(pagedResult.Items);
