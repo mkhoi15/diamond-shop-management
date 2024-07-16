@@ -1,5 +1,6 @@
 using AutoMapper;
 using BusinessObject.Enum;
+using DataAccessLayer.Abstraction;
 using DTO.DiamondAccessoryDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,14 @@ namespace diamond_shop_management.Pages.DiamondAccessoryManagement
     {
         private readonly IDiamondAccessoryServices _diamondAccessoryService;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteDiamondAccessoryModel(IDiamondAccessoryServices diamondAccessoryService, IMapper mapper)
+
+        public DeleteDiamondAccessoryModel(IDiamondAccessoryServices diamondAccessoryService, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _diamondAccessoryService = diamondAccessoryService;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         [BindProperty]
@@ -41,14 +45,15 @@ namespace diamond_shop_management.Pages.DiamondAccessoryManagement
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(Guid id)
+        public async Task<IActionResult> OnPostAsync(Guid id, CancellationToken cancellationToken)
         {
             try
             {
                 await _diamondAccessoryService.DeleteDiamondAccessoryAsync(id);
+                await _unitOfWork.SaveChangeAsync(cancellationToken);
                 Message = "Accessory deleted successfully";
                 ModelState.AddModelError(string.Empty, Message);
-                await Task.Delay(3000);
+                await Task.Delay(3000, cancellationToken);
                 return RedirectToPage("/DiamondAccessoryManagement/ViewDiamondAccessory");
             }
             catch (Exception ex)
