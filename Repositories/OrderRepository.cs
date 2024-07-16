@@ -28,6 +28,7 @@ public class OrderRepository : IOrderRepository
                 Address = o.Address,
                 TotalPrice = o.TotalPrice,
                 CustomerId = o.CustomerId,
+                IsDeleted = o.IsDeleted,
                 Customer = new User()
                 {
                     //Id = o.CustomerId,
