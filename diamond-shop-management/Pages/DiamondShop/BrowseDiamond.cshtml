@@ -122,18 +122,45 @@
                         @if (Model.PageNumber > 1)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="/DiamondShop/BrowseDiamond" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                                <a class="page-link" asp-page="/DiamondShop/BrowseDiamond"
+                                   asp-route-pageNumber="@(Model.PageNumber - 1)"
+                                   asp-route-Origin="@Model.Origin"
+                                   asp-route-Color="@Model.Color"
+                                   asp-route-Cut="@Model.Cut"
+                                   asp-route-Weight="@Model.Weight"
+                                   asp-route-Clarity="@Model.Clarity"
+                                   asp-route-MinPrice="@Model.MinPrice"
+                                   asp-route-MaxPrice="@Model.MaxPrice"
+                                   asp-route-Promotion="@Model.Promotion">Previous</a>
                             </li>
                         }
 
                         <li class="page-item active">
-                            <a class="page-link" asp-page="/DiamondShop/BrowseDiamond" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                            <a class="page-link" asp-page="/DiamondShop/BrowseDiamond"
+                               asp-route-pageNumber="@Model.PageNumber"
+                               asp-route-Origin="@Model.Origin"
+                               asp-route-Color="@Model.Color"
+                               asp-route-Cut="@Model.Cut"
+                               asp-route-Weight="@Model.Weight"
+                               asp-route-Clarity="@Model.Clarity"
+                               asp-route-MinPrice="@Model.MinPrice"
+                               asp-route-MaxPrice="@Model.MaxPrice"
+                               asp-route-Promotion="@Model.Promotion">@Model.PageNumber</a>
                         </li>
 
                         @if (Model.PageNumber < Model.TotalPages)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="/DiamondShop/BrowseDiamond" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                                <a class="page-link" asp-page="/DiamondShop/BrowseDiamond"
+                                   asp-route-pageNumber="@(Model.PageNumber + 1)"
+                                   asp-route-Origin="@Model.Origin"
+                                   asp-route-Color="@Model.Color"
+                                   asp-route-Cut="@Model.Cut"
+                                   asp-route-Weight="@Model.Weight"
+                                   asp-route-Clarity="@Model.Clarity"
+                                   asp-route-MinPrice="@Model.MinPrice"
+                                   asp-route-MaxPrice="@Model.MaxPrice"
+                                   asp-route-Promotion="@Model.Promotion">Next</a>
                             </li>
                         }
                     </ul>

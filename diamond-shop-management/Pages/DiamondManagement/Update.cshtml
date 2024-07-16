@@ -79,7 +79,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Diamond.IsSold">IsSold</label>
-                    <input asp-for="Diamond.IsSold" class="form-control" />
+                    <input asp-for="Diamond.IsSold" class="form-control" readonly style="pointer-events: none"/>
                     <span asp-validation-for="Diamond.IsSold" class="text-danger"></span>
                 </div>
                 <input type="hidden" asp-for="Diamond.IsDeleted" class="form-control"></input>
