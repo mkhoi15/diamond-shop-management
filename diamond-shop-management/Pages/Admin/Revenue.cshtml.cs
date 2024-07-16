@@ -14,6 +14,7 @@ public class Revenue : PageModel
     private readonly IRevenueServices _revenueServices;
     public List<RevenueResponse> RevenueResponses { get; set; } = new List<RevenueResponse>();
     public List<UserStatistic> UserStatistics { get; set; } = new List<UserStatistic>();
+    public DiamondStatistic DiamondStatistic { get; set; }
     public decimal TotalRevenue { get; set; }
     public int Year { get; set; } = DateTime.Now.Year;
     public static int CurrentYear { get; set; } = DateTime.Now.Year;
@@ -30,6 +31,7 @@ public class Revenue : PageModel
         RevenueResponses = await _revenueServices.GetRevenueByYear(year);
         TotalRevenue = RevenueResponses.Sum(revenue => revenue.TotalRevenue);
         UserStatistics = await _revenueServices.GetUserStatisticsByYear(year);
+        DiamondStatistic = await _revenueServices.GetDiamondStatistics();
     }
     
     public async Task<IActionResult> OnPost()
