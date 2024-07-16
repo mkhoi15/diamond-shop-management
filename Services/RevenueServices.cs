@@ -26,11 +26,13 @@ public class RevenueServices : IRevenueServices
 
     public async Task<List<RevenueResponse>> GetRevenueByYear(int? year = null)
     {
-        var query = _orderServices.FindAll()
+        var query = await _orderServices.FindAll()
             .Where(o => o.Status == OrderStatus.Delivered.ToString())
-            .WhereIf(year != null, order => order.Date.Year == year);
+            .Where(o => o.IsDeleted == false)
+            .WhereIf(year != null, order => order.Date.Year == year)
+            .ToListAsync();
         
-        var list = await query.GroupBy(order => order.Date.Month)
+        var list = query.GroupBy(order => order.Date.Month)
             .Select(group => new RevenueResponse
             {
                 TotalRevenue = group.Sum(order => order.TotalPrice),
@@ -44,7 +46,7 @@ public class RevenueServices : IRevenueServices
                     TotalPrice = order.TotalPrice,
                     Date = order.Date
                 }).ToList()
-            }).ToListAsync();
+            }).ToList();
         
         // Calculate revenue growth rate
         for (int i = 1; i < list.Count; i++)
@@ -57,6 +59,7 @@ public class RevenueServices : IRevenueServices
     public async Task<List<UserStatistic>> GetUserStatisticsByYear(int? year = null)
     {
         var query = _userManager.Users
+            .Where(u => u.IsDeleted == false)
             .AsNoTracking();
         if (year != null)
         {
@@ -88,6 +91,7 @@ public class RevenueServices : IRevenueServices
     public async Task<DiamondStatistic> GetDiamondStatistics()
     {
         var query = _diamondRepository.FindAll()
+            .Where(d => d.IsDeleted == false)
             .AsNoTracking();
         
         var soldCount = await query.CountAsync(d => d.IsSold == true);
