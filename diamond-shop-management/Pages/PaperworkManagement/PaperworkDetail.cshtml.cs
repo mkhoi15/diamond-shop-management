@@ -21,16 +21,25 @@ namespace diamond_shop_management.Pages.PaperworkManagement
 
         public async Task<IActionResult> OnGetAsync(Guid? paperworkId, CancellationToken cancellationToken)
         {
-            Paperwork = await _paperworkService.GetByIdAsync(paperworkId, default);
-
-            if (Paperwork == null)
+            try
             {
-                Message = "Paperwork is not found";
+                Paperwork = await _paperworkService.GetByIdAsync(paperworkId, default);
+
+                if (Paperwork == null)
+                {
+                    Message = "Paperwork is not found";
+                    ModelState.AddModelError(string.Empty, Message);
+                    return Page();
+                }
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                Message = "Paperwork is not found\n" + ex.Message;
                 ModelState.AddModelError(string.Empty, Message);
                 return Page();
             }
-
-            return Page();
         }
     }
 }

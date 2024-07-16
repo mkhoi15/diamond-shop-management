@@ -52,9 +52,9 @@ public class CreateDiamondWarranty : PageModel
     {
         try
         {
-            if (PaperworkRequest.ExpirationDate <= DateTime.Now)
+            if (PaperworkRequest.ExpirationDate != null && PaperworkRequest.ExpirationDate.Value.Date <= DateTime.Now.Date)
             {
-                Message = "Expiration date must be greater than current date time";
+                Message = "Expiration date must be greater than current date";
                 ModelState.AddModelError(string.Empty, Message);
                 return Page();
             }
