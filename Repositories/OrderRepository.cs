@@ -27,11 +27,13 @@ public class OrderRepository : IOrderRepository
                 Date = o.Date,
                 Address = o.Address,
                 TotalPrice = o.TotalPrice,
+                CustomerId = o.CustomerId,
                 Customer = new User()
                 {
-                    Id = o.CustomerId,
+                    //Id = o.CustomerId,
                     Email = o.Customer.Email,
                     PhoneNumber = o.Customer.PhoneNumber,
+                    FullName = o.Customer.FullName
                 }
             });
     }

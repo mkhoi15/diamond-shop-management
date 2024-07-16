@@ -80,6 +80,7 @@
                         {
                             <div>Promotion: @(Model.Diamond.Promotion.DiscountRate * 100) %</div>
                         }
+                        <div>Create at: @Model.Diamond.CreatedAt</div>
                         <div>IsSold: @Model.Diamond.IsSold</div>
                         @if (!string.IsNullOrEmpty(Model.Message))
                         {

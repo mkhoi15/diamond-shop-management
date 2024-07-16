@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(DiamondShopDbContext))]
-    partial class DiamondShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240715144741_add_description")]
+    partial class add_description
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,7 +105,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 16, 10, 48, 50, 157, DateTimeKind.Local).AddTicks(7758));
+                        .HasDefaultValue(new DateTime(2024, 7, 15, 21, 47, 41, 123, DateTimeKind.Local).AddTicks(7096));
 
                     b.Property<string>("Cut")
                         .HasColumnType("nvarchar(max)");
@@ -265,7 +268,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 16, 10, 48, 50, 158, DateTimeKind.Local).AddTicks(3180));
+                        .HasDefaultValue(new DateTime(2024, 7, 15, 21, 47, 41, 124, DateTimeKind.Local).AddTicks(1185));
 
                     b.Property<Guid>("DiamondId")
                         .HasColumnType("uniqueidentifier");
@@ -371,7 +374,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 7, 16, 10, 48, 50, 159, DateTimeKind.Local).AddTicks(2067));
+                        .HasDefaultValue(new DateTime(2024, 7, 15, 21, 47, 41, 124, DateTimeKind.Local).AddTicks(7651));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -416,9 +419,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

@@ -31,17 +31,33 @@ namespace diamond_shop_management.Pages.PromotionManagement
         public int PageSize { get; set; }
         public int TotalItems { get; set; }
         public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
+        [BindProperty(SupportsGet = true)]
+        public string? Search { get; set; }
+        public string? Message { get; set; }
 
         public async Task OnGetAsync(int? pageNumber, CancellationToken cancellationToken)
         {
-            PageNumber = pageNumber ?? 1;
+            try
+            {
+                PageNumber = pageNumber ?? 1;
 
-            Promotions = await _promotionService.GetAllAsync(cancellationToken);
-            TotalItems = Promotions.Count();
-            Promotions = Promotions
-                .OrderByDescending(Promotion => Promotion.CreateAt)
-                .Skip((PageNumber - 1) * PageSize)
-                .Take(PageSize);
+                Promotions = await _promotionService.GetPromotionsByCondition(
+                    p => p.IsDeleted != true
+                    && (string.IsNullOrEmpty(Search) == true ? true : 
+                    p.Name == Search),
+                    cancellationToken);
+                TotalItems = Promotions.Count();
+                Promotions = Promotions
+                    .OrderByDescending(Promotion => Promotion.CreateAt)
+                    .Skip((PageNumber - 1) * PageSize)
+                    .Take(PageSize);
+            }
+            catch (Exception e)
+            {
+                Message = e.Message;
+                ModelState.AddModelError(string.Empty, e.Message);
+                return;
+            }
         }
     }
 }

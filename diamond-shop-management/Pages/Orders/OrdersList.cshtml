@@ -23,9 +23,14 @@
                 </select>
             </div>
             <div class="col-md-4">
+                <input type="text" id="searchString" class="form-control" placeholder="Search by customer name or email" asp-for="SearchString" />
+                </div>
+            <div class="col-md-4">
                 <button type="button" class="btn btn-primary" onclick="filterOrders()">Filter</button>
             </div>
         </div>
+        
+        
 
         @if (Model.Orders != null && Model.Orders.Any())
         {
@@ -33,6 +38,7 @@
                 <thead class="thead-light">
                 <tr>
                     <th scope="col">Order ID</th>
+                    <th scope="col">Customer Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone Number</th>
                     <th scope="col">Total Price</th>
@@ -46,6 +52,7 @@
                 {
                     <tr>
                         <td>@order.Id</td>
+                        <td>@order.Customer?.FullName</td>
                         <td>@order.Customer?.Email</td>
                         <td>@order.Customer?.PhoneNumber</td>
                         <td>$@order.TotalPrice</td>
@@ -64,7 +71,7 @@
                                 }
                                 @if (order.Status != "Cancelled" && order.Status != "Delivered")
                                 {
-                                    <a asp-page="/Orders/OrderDetails" asp-route-id="@order.Id" class="btn btn-danger m-1">Cancel Order</a>
+                                    <a asp-page="/Orders/CancelOrder" asp-route-id="@order.Id" class="btn btn-danger m-1">Cancel Order</a>
                                 }
                             </div>
                         </td>
@@ -102,13 +109,14 @@
     </div>
 
     @section Scripts {
-        <script>
-        function filterOrders() {
-            var selectedStatus = document.getElementById("orderStatusFilter").value;
-            var url = '@Url.Page("/Orders/OrdersList")' + '?SelectedStatus=' + selectedStatus;
-            window.location.href = url;
-        }
-    </script>
+   <script>
+       function filterOrders() {
+           var selectedStatus = document.getElementById("orderStatusFilter").value;
+           var searchString = document.getElementById("searchString").value;
+           var url = '@Url.Page("/Orders/OrdersList")' + '?SelectedStatus=' + selectedStatus + '&SearchString=' + searchString;
+           window.location.href = url;       
+       }
+          </script>      
     }
 }
 else

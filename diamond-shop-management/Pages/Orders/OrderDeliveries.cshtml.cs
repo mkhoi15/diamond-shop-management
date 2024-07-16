@@ -36,23 +36,31 @@ public class OrderDeliveries : PageModel
     
     public async Task<IActionResult> OnPostUpdateStatusAsync(Guid orderId, CancellationToken cancellationToken)
     {
-        // Update the order status
-        var orderUpdateDto = new Order()
+        try
         {
-            Id = orderId,
-            Status = "Delivered"
-        };
+            var orderUpdateDto = new Order()
+            {
+                Id = orderId,
+                Status = "Delivered"
+            };
 
-        await _orderServices.UpdateOrderAsync(orderUpdateDto);
+            await _orderServices.UpdateOrderAsync(orderUpdateDto);
 
-        // Refresh the order and deliveries data
-        var orderResponse = await _orderServices.GetOrderByIdAsync(orderId, cancellationToken);
-        Customer = await _userServices.GetUserByIdAsync(orderResponse.CustomerId.ToString());
-        OrderResponse = orderResponse;
+            // Refresh the order and deliveries data
+            var orderResponse = await _orderServices.GetOrderByIdAsync(orderId, cancellationToken);
+            Customer = await _userServices.GetUserByIdAsync(orderResponse.CustomerId.ToString());
+            OrderResponse = orderResponse;
 
-        Deliveries = await _deliveryServices.GetDeliveriesByOrderId(orderId, cancellationToken);
+            Deliveries = await _deliveryServices.GetDeliveriesByOrderId(orderId, cancellationToken);
 
-        return Page();
+            return Page();
+        }
+        catch (Exception e)
+        {
+            ModelState.AddModelError("", "An error occurred while create the order delivery.");
+            return Page();
+        }
+        
     }
     
 }
