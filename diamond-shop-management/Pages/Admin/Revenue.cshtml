@@ -11,6 +11,7 @@
     var data = string.Join(",", Model.RevenueResponses.Select(x => x.TotalRevenue));
     var buyOrders = string.Join(",", Model.RevenueResponses.Select(x => x.TotalOrder));
     var revenueGrowth = string.Join(",", Model.RevenueResponses.Select(x => x.RevenueGrowth));
+    var userlabels = string.Join(",", Model.UserStatistics.Select(x => $"'{x.Month}'"));
     var newUsers = string.Join(",", Model.UserStatistics.Select(x => x.NewUsers));
     var maxDataValue = (decimal)0;
     var maxOrderValue = 0;
@@ -54,16 +55,16 @@
                     <button type="submit" class="btn btn-secondary">Export Excel</button>
                 </form>
             </div>
-            <div class="col-md-6 pt-5">
+            <div class="col-md-6 pt-5 chart-container">
                 <canvas id="revenueChart" width="400" height="200"></canvas>
             </div>
-            <div class="col-md-6 pt-5">
+            <div class="col-md-6 pt-5 chart-container">
                 <canvas id="growthChart" width="400" height="200"></canvas>
             </div>
-            <div class="col-md-6 pt-5 pb-5">
+            <div class="col-md-6 pt-5 pb-5 chart-container">
                 <canvas id="userChart" width="400" height="200"></canvas>
             </div>
-            <div class="col-md-6 pt-5 pb-5">
+            <div class="col-md-6 pt-5 pb-5 chart-container">
                 <canvas id="diamondDonutChart" width="400" height="200"></canvas>
             </div>
         </div>
@@ -71,6 +72,20 @@
 </div>
 
 <script>
+
+    $(document).ready(function() {
+        // Function to toggle chart size on click
+        $(".chart-container").on("click", function() {
+            if ($(this).hasClass("col-md-12")) {
+                // If the chart is expanded, collapse it back to col-6
+                $(".chart-container").removeClass("col-md-4").addClass("col-md-6");
+            } else {
+                // If the chart is not expanded, expand it and collapse others
+                $(".chart-container").removeClass("col-md-12").addClass("col-md-4");
+                $(this).removeClass("col-md-4").addClass("col-md-12");
+            }
+        });
+    });
     
     // Revenue and Total Orders Chart
     const revenueCtx = document.getElementById("revenueChart").getContext('2d');
@@ -113,6 +128,11 @@
             ]
         },
         options: {
+            elements: {
+                line: {
+                    tension: 0, // disables bezier curves
+                }
+            },
             title: {
                 display: true,
                 text: 'Revenue and Total Orders',
@@ -201,6 +221,11 @@
             ]
         },
         options: {
+            elements: {
+                line: {
+                    tension: 0, // disables bezier curves
+                }
+            },
             title: {
                 display: true,
                 text: 'Revenue Growth',
@@ -254,7 +279,7 @@
     const userChart = new Chart(userCtx, {
         type: 'bar',
         data: {
-            labels: [@Html.Raw(labels)],
+            labels: [@Html.Raw(userlabels)],
             datasets: [
                 {
                     label: 'New Users',
@@ -287,7 +312,8 @@
                         ticks: {
                             beginAtZero: true,
                             callback: function(value, index, values) {
-                                return value.toLocaleString();
+                                if (value % 1 === 0)
+                                    return value.toLocaleString();
                             }
                         },
                         scaleLabel: {
@@ -348,5 +374,6 @@
             }
         }
     });
+
 
 </script>

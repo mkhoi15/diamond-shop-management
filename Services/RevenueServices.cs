@@ -46,7 +46,9 @@ public class RevenueServices : IRevenueServices
                     TotalPrice = order.TotalPrice,
                     Date = order.Date
                 }).ToList()
-            }).ToList();
+            })
+            .OrderBy(e => e.Month)
+            .ToList();
         
         // Calculate revenue growth rate
         for (int i = 1; i < list.Count; i++)
