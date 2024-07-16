@@ -195,7 +195,10 @@ namespace diamond_shop_management.Pages.DiamondManagement
                 "Trillion", "Baguette", "Rose", "Briolette", "Old European",
                 "Old Mine", "Tapered Baguette", "Half Moon", "Bullet", "French"
             };
-            IEnumerable<PromotionResponse> promotions = await _promotionServices.GetAllAsync(default);
+            IEnumerable<PromotionResponse> promotions = await _promotionServices.GetPromotionsByCondition(
+                    p => p.IsDeleted != true
+                    && p.StartDate <= DateTime.Now
+                    && p.EndDate >= DateTime.Now, default);
             ViewData["Promotions"] = new SelectList(promotions, "Id", "Name");
         }
 
