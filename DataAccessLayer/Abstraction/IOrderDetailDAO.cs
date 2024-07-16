@@ -4,5 +4,5 @@ namespace DataAccessLayer.Abstraction;
 
 public interface IOrderDetailDAO : IDaoBase<OrderDetail>
 {
-    
+    public void Delete (OrderDetail orderDetail);
 }

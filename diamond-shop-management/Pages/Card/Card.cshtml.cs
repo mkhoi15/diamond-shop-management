@@ -28,28 +28,26 @@ public class Card : PageModel
         return RedirectToPage();
     }
     
-    // public IActionResult OnPostRemoveFromCart(Guid itemId)
-    // {
-    //     var cart = HttpContext.Session.GetObjectFromJson<Card>("Cart") ?? new Card();
-    //     Card item = cart.CartItems.FirstOrDefault(x => x.Id == itemId);
-    //     if (item != null)
-    //     {
-    //         cart.Remove(item);
-    //         HttpContext.Session.SetObjectAsJson("Cart", cart);
-    //     }
-    //     return RedirectToPage();
-    // }
-    
     public IActionResult OnPostRemoveFromCart(Guid itemId)
     {
-        var cart = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
-        var item = cart.Diamond.FirstOrDefault(x => x.Id == itemId);
-        if (item != null)
+        try
         {
-            cart.Diamond.Remove(item);
-            HttpContext.Session.SetObjectAsJson("Cart", cart);
+            var cart = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
+            var item = cart.Diamond.FirstOrDefault(x => x.Id == itemId);
+            if (item != null)
+            {
+                cart.Diamond.Remove(item);
+                HttpContext.Session.SetObjectAsJson("Cart", cart);
+            }
         }
+        catch (Exception e)
+        {
+            ModelState.AddModelError("", "Failed to remove item from cart.");
+            return Page();
+        }
+        
         return RedirectToPage();
+        
     }
 
 

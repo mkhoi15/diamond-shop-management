@@ -26,6 +26,7 @@ public class OrderDetails : PageModel
     }
     
     public OrderResponse Order { get; set; }
+    
 
     public async Task<IActionResult> OnGetAsync(Guid id, CancellationToken cancellationToken)
     {
@@ -34,7 +35,7 @@ public class OrderDetails : PageModel
             var orderResponse = await _orderServices.GetOrderByIdAsync(id, cancellationToken);
             if (orderResponse == null)
             {
-                return NotFound();
+                return NotFound("Order not found.");
             }
 
             var customer = await _userServices.GetUserByIdAsync(orderResponse.CustomerId.ToString());
@@ -46,59 +47,11 @@ public class OrderDetails : PageModel
         }
         catch (Exception e)
         {
-            return NotFound();
+            return NotFound("An error occurred while retrieving the order details.");
         }
 
         return Page();
     }
-    
-    public async Task<IActionResult> OnPostCancelOrderAsync(Guid orderId, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var orderResponse = await _orderServices.GetOrderByIdAsync(orderId, cancellationToken);
-            var diamonds = await _orderServices.GetDiamondsByOrderId(orderId, cancellationToken);
-
-            var diamondsId = diamonds.Select(p => p.Id).ToList();
-
-            List<DiamondAccessoryRequest> diamondsRequest = new List<DiamondAccessoryRequest>();
-            foreach (var d in diamonds)
-            {
-                diamondsRequest.Add(new DiamondAccessoryRequest
-                {
-                    DiamondId = d.Id,
-                    CustomerId = orderResponse.CustomerId
-                });
-            }
-
-            await _diamondAccessoryServices.DeleteProduct(diamondsRequest);
-
-            foreach (var diamond in diamondsId)
-            {
-                await _diamondServices.UpdateDiamondStatusAsync(diamond, false, cancellationToken);
-            }
-            
-            var order = new Order()
-            {
-                Id = orderId,
-                Status = "Cancelled"
-            };
-            var success = await _orderServices.UpdateOrderAsync(order);
-            if (success == null)
-            {
-                ModelState.AddModelError("", "Failed to cancel the order.");
-                return Page();
-            }
-
-            return RedirectToPage("/Orders/OrdersList");
-        }
-        catch (Exception e)
-        {
-            ModelState.AddModelError("", "An error occurred while cancelling the order.");
-            return Page();
-        }
-    }
-    
     
     
 }

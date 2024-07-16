@@ -69,8 +69,9 @@ public class OrderServices : IOrderServices
             throw new ArgumentException("Not found order with this id");
         }
 
-        updateOrder.Address = order.Address;
+        //updateOrder.Address = order.Address;
         updateOrder.Status = order.Status;
+        updateOrder.Description = order.Description;
         //updateOrder.IsDeleted = order.IsDeleted;
         
         _orderRepository.Update(updateOrder);

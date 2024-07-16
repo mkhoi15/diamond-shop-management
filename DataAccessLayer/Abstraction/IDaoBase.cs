@@ -20,4 +20,5 @@ public interface IDaoBase<TEntity>
     public void Update(TEntity entity);
 
     public void Remove(TEntity entity);
+    
 }
