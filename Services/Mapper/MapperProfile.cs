@@ -23,6 +23,7 @@ public class MapperProfile : Profile
             .ReverseMap();
         CreateMap<Order, OrderResponse>()
             .ForMember(dest => dest.OrderDetails, opt => opt.MapFrom(src => src.OrderDetails))
+            .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
             .ReverseMap();
 
         // Mapping for OrderDetailRequest to OrderDetail

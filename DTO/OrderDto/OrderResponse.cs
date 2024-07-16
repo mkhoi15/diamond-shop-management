@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DTO.UserDto;
 
 namespace DTO.OrderDto;
 
@@ -25,6 +26,8 @@ public class OrderResponse
     public string? PhoneNumber { get; set; }
     
     public ICollection<OrderDetailResponse> OrderDetails { get; set; } = new List<OrderDetailResponse>();
+    
+    public UserResponse? Customer { get; set; }
 }
 
 
