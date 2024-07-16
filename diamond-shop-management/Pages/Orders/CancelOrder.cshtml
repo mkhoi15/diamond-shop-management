@@ -1,0 +1,65 @@
+@page
+@model diamond_shop_management.Pages.Orders.CancelOrder
+
+@{
+    ViewData["Title"] = "CancelOrder";
+}
+
+@if ((User.Identity?.IsAuthenticated ?? false && (User.IsInRole("Manager") || User.IsInRole("User"))))
+{
+    
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Cancel Order</h2>
+
+        @if (Model.Order != null)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order ID: @Model.Order.Id</h5>
+                    <p class="card-text"><strong>Customer Name:</strong> @Model.Order.CustomerName</p>
+                    <p class="card-text"><strong>Phone Number:</strong> @Model.Order.PhoneNumber</p>
+                    <p class="card-text"><strong>Order Date:</strong> @Model.Order.Date</p>
+                    <p class="card-text"><strong>Status:</strong> @Model.Order.Status</p>
+                    <p class="card-text"><strong>Total Price:</strong> $@Model.Order.TotalPrice</p>
+                    <h6>Order Details</h6>
+                    <ul>
+                        @foreach (var detail in Model.Order.OrderDetails)
+                        {
+                            <li>
+                                <strong>Product:</strong> @detail.ProductId - <strong>Quantity:</strong> @detail.Quantity - <strong>Price:</strong> $@detail.Price
+                            </li>
+                        }
+                    </ul>
+
+                    
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="description">Cancellation Description</label>
+                            <textarea id="description" name="CancellationDescription" class="form-control" required></textarea>
+                            <span asp-validation-for="CancellationDescription" class="text-danger"></span>
+                        </div>
+                        <input type="hidden" name="orderId" value="@Model.Order.Id" />
+                        <button type="submit" class="btn btn-danger mt-3">Cancel Order</button>
+                    </form>
+                    
+                    <a asp-page="/Orders/OrderDetails" asp-route-id="@Model.Order.Id" class="btn btn-secondary mt-3">Return to Order Details</a>
+
+                    
+                    <div class="text-danger mt-2">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div>@error.ErrorMessage</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p class="text-center">Order details not found.</p>
+        }
+    </div>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -61,4 +61,5 @@ public class DaoBase<TEntity> : IDaoBase<TEntity>
     {
         entity.IsDeleted = true;
     }
+    
 }

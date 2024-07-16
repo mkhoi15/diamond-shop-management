@@ -19,38 +19,38 @@
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
-                    <tr>
-                        @* <th scope="col">Product</th> *@
-                        <th scope="col">Description (Origin, Color, Cut, Clarity) </th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Total</th>
-                        <th scope="col"></th>
-                    </tr>
+                <tr>
+                    @* <th scope="col">Product</th> *@
+                    <th scope="col">Description (Origin, Color, Cut, Clarity) </th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Total</th>
+                    <th scope="col"></th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.CartItems.Diamond)
-                    {
-                        <tr>
-                            <td>
-                                <div class="media">
-                                    @* <img src="@item.Diamond?.MediaUrl ?? '/images/Diamond.png'" class="mr-3" alt="Diamond Image" style="max-width: 100px;"> *@
-                                    <div class="media-body">
-                                        @* <h5 class="mt-0">@item.Diamond?.Name</h5> *@
-                                        <p>@item.Origin, @item.Color, @item.Cut, @item.Clarity</p>
-                                    </div>
+                @foreach (var item in Model.CartItems.Diamond)
+                {
+                    <tr>
+                        <td>
+                            <div class="media">
+                                @* <img src="@item.Diamond?.MediaUrl ?? '/images/Diamond.png'" class="mr-3" alt="Diamond Image" style="max-width: 100px;"> *@
+                                <div class="media-body">
+                                    @* <h5 class="mt-0">@item.Diamond?.Name</h5> *@
+                                    <p>@item.Origin, @item.Color, @item.Cut, @item.Clarity</p>
                                 </div>
-                            </td>
-                            <td>$@item.Price</td>
-                            <td>$@(item.Price * 1)</td> 
+                            </div>
+                        </td>
+                        <td>$@item.Price</td>
+                        <td>$@(item.Price * 1)</td> 
                             
-                            <td>
-                                <form method="post" asp-page-handler="RemoveFromCart">
-                                    <input type="hidden" name="itemId" value="@item.Id" />
-                                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
-                                </form>
-                            </td>
-                        </tr>
-                    }
+                        <td>
+                            <form method="post" asp-page-handler="RemoveFromCart">
+                                <input type="hidden" name="itemId" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
         </div>
@@ -72,6 +72,13 @@
                             </form>
                             <a asp-page="/Orders/Create" class="btn btn-success">Proceed to Checkout</a>
                         </div>
+                    </div>
+                    
+                    <div class="text-danger mt-2">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors)) 
+                        { 
+                            <div>@error.ErrorMessage</div>
+                        }
                     </div>
                 </div>
             </div>

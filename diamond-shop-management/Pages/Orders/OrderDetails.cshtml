@@ -30,6 +30,14 @@
                             </li>
                         }
                     </ul>
+                    
+                    @if (Model.Order.Description != null)
+                    {
+                        <div class="mt-2">
+                            <h3 class="">Cancel reason</h3>
+                            <p>@Model.Order.Description</p>
+                        </div>
+                    }
 
                     @if (User.IsInRole("Manager"))
                     {
@@ -45,10 +53,7 @@
                             }
                             @if (Model.Order.Status != "Cancelled" && Model.Order.Status != "Delivered")
                             {
-                                <form method="post">
-                                    <input type="hidden" name="orderId" asp-for="Order.Id"/>
-                                    <button type="submit" class="btn btn-danger m-2" asp-page-handler="CancelOrder">Cancel Order</button>
-                                </form>
+                                <a asp-page="/Orders/CancelOrder" asp-route-id="@Model.Order.Id" class="btn btn-danger m-2">Cancel Order</a>
                             }
                             @if(Model.Order.Status != "Pending")
                             {
@@ -62,10 +67,7 @@
                         <a asp-page="/Orders/SelfOrder" class="btn btn-info m-2">Return to Orders</a>
                         @if (Model.Order.Status == "Pending")
                         {
-                            <form method="post" >
-                                <input type="hidden" name="orderId" asp-for="Order.Id"/>
-                                <button type="submit" class="btn btn-danger" asp-page-handler="CancelOrder">Cancel Order</button>
-                            </form>
+                               <a asp-page="/Orders/CancelOrder" asp-route-id="@Model.Order.Id" class="btn btn-danger m-2">Cancel Order</a>
                         }
                         @if (Model.Order.Status != "Pending")
                         {

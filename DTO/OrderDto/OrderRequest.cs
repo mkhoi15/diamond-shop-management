@@ -19,6 +19,8 @@ public class OrderRequest
     [StringLength(50)]
     //[EnumDataType(typeof(OrderStatus), ErrorMessage = "Invalid order status.")]
     public string? Status { get; set; }
+    
+    public string? Description { get; set; }
         
     [Required]
     public DateTime Date { get; set; } = DateTime.Now;
