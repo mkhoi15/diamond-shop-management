@@ -9,7 +9,11 @@
     ViewBag.Title = "Revenue";
     var labels = string.Join(",", Model.RevenueResponses.Select(x => $"'{x.Month}'"));
     var data = string.Join(",", Model.RevenueResponses.Select(x => x.TotalRevenue));
+    var buyOrders = string.Join(",", Model.RevenueResponses.Select(x => x.TotalOrder));
+    var revenueGrowth = string.Join(",", Model.RevenueResponses.Select(x => x.RevenueGrowth));
+    var newUsers = string.Join(",", Model.UserStatistics.Select(x => x.NewUsers));
     var maxDataValue = (decimal)0;
+    var maxOrderValue = 0;
     if (Model.RevenueResponses.Count == 0)
     {
         labels = "''";
@@ -17,8 +21,11 @@
     }
     else
     {
+        maxOrderValue = Model.RevenueResponses.Max(x => x.TotalOrder);
         maxDataValue = Model.RevenueResponses.Max(x => x.TotalRevenue);
     }
+    var diamondSold = Model.DiamondStatistic.TotalDiamondSold;
+    var diamondInStock = Model.DiamondStatistic.TotalDiamondInStock;
 }
 
 <div class="container mt-5 pt-5">
@@ -31,7 +38,7 @@
     <div class="row d-flex">
         <div class="row mt-5">
             <div class="d-flex flex-row justify-content-between">
-                <h3>Revenue: @Model.TotalRevenue $</h3>
+                <h3>Total Revenue: @Model.TotalRevenue $</h3>
                 <form method="get" class="form-inline">
                     <div class="form-group mx-sm-3 mb-2">
                         <label asp-for="Year" class="sr-only">Year</label>
@@ -47,17 +54,29 @@
                     <button type="submit" class="btn btn-secondary">Export Excel</button>
                 </form>
             </div>
-            <div class="col-md-12">
-                <canvas id="myChart" width="400" height="200"></canvas>
+            <div class="col-md-6 pt-5">
+                <canvas id="revenueChart" width="400" height="200"></canvas>
+            </div>
+            <div class="col-md-6 pt-5">
+                <canvas id="growthChart" width="400" height="200"></canvas>
+            </div>
+            <div class="col-md-6 pt-5 pb-5">
+                <canvas id="userChart" width="400" height="200"></canvas>
+            </div>
+            <div class="col-md-6 pt-5 pb-5">
+                <canvas id="diamondDonutChart" width="400" height="200"></canvas>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    const ctx = document.getElementById("myChart").getContext('2d');
+    
+    // Revenue and Total Orders Chart
+    const revenueCtx = document.getElementById("revenueChart").getContext('2d');
     const maxYValue = Math.ceil(@Html.Raw(maxDataValue) / 1000) * 1200;
-    const myChart = new Chart(ctx, {
+    const maxOrderValue = Math.ceil(@Html.Raw(maxOrderValue) * 1.2);
+    const revenueChart = new Chart(revenueCtx, {
         type: 'bar',
         data: {
             labels: [@Html.Raw(labels)],
@@ -68,38 +87,266 @@
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1,
-                    order: 2
+                    yAxisID: 'y-axis-1',
+                    order: 2 // Ensure this dataset is drawn second
+                },
+                {
+                    label: 'Total Orders',
+                    data: [@Html.Raw(buyOrders)],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y-axis-2',
+                    type: 'bar',
+                    order: 1 // Ensure this dataset is drawn first
                 },
                 {
                     type: 'line',
-                    label: 'line dataset',
+                    label: 'Revenue Trend',
                     fill: false,
                     data: [@Html.Raw(data)],
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                    order: 1
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    yAxisID: 'y-axis-1',
+                    order: 3 // Ensure this dataset is drawn last
                 }
             ]
         },
         options: {
+            title: {
+                display: true,
+                text: 'Revenue and Total Orders',
+                position: 'bottom',
+                padding: 20
+            },
+            responsive: true,
             tooltips: {
-                callbacks: {
-                    label: function(tooltipItem, data) {
-                        return '$' + tooltipItem.yLabel.toLocaleString();
-                    }
-                }
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
             },
             scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        callback: function(value, index, values) {
-                            return '$' + value.toLocaleString();
+                yAxes: [
+                    {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        id: 'y-axis-1',
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(value, index, values) {
+                                return '$' + value.toLocaleString();
+                            },
+                            max: maxYValue
                         },
-                        max: maxYValue
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Revenue ($)'
+                        }
+                    },
+                    {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        id: 'y-axis-2',
+                        ticks: {
+                            beginAtZero: true,
+                            max: maxOrderValue,
+                            callback: function(value, index, values) {
+                                return value.toLocaleString();
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Total Orders'
+                        },
+                        gridLines: {
+                            drawOnChartArea: false,
+                        },
                     }
-                }]
+                ],
+                xAxes: [
+                    {
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Month'
+                        },
+                        gridLines: {
+                            drawOnChartArea: false,
+                        }
+                    }
+                ]
             }
         }
     });
+
+    // Revenue Growth Chart
+    const growthCtx = document.getElementById("growthChart").getContext('2d');
+    const growthChart = new Chart(growthCtx, {
+        type: 'line',
+        data: {
+            labels: [@Html.Raw(labels)],
+            datasets: [
+                {
+                    type: 'line',
+                    label: 'Revenue Growth (%)',
+                    fill: false,
+                    data: [@Html.Raw(revenueGrowth)],
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Revenue Growth',
+                position: 'bottom',
+                padding: 20
+            },
+            responsive: true,
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                yAxes: [
+                    {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(value, index, values) {
+                                return value + '%';
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Revenue Growth (%)'
+                        }
+                    }
+                ],
+                xAxes: [
+                    {
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Month'
+                        },
+                        gridLines: {
+                            drawOnChartArea: false,
+                        }
+                    }
+                ]
+            }
+        }
+    });
+
+    // User Chart
+    const userCtx = document.getElementById("userChart").getContext('2d');
+    const userChart = new Chart(userCtx, {
+        type: 'bar',
+        data: {
+            labels: [@Html.Raw(labels)],
+            datasets: [
+                {
+                    label: 'New Users',
+                    data: [@Html.Raw(newUsers)],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Customer',
+                position: 'bottom',
+                padding: 20
+            },
+            responsive: true,
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                yAxes: [
+                    {
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(value, index, values) {
+                                return value.toLocaleString();
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'New Users'
+                        },
+                        gridLines: {
+                            drawOnChartArea: false,
+                        }
+                    }
+                ],
+                xAxes: [
+                {
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Month'
+                    },
+                    gridLines: {
+                        drawOnChartArea: false,
+                    }
+                }
+                ]
+            }
+        }
+    });
+
+    // Diamond Donut Chart
+    const diamondDonutCtx = document.getElementById("diamondDonutChart").getContext('2d');
+    const diamondDonutChart = new Chart(diamondDonutCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Sold', 'In Stock'],
+            datasets: [
+                {
+                    label: 'Diamonds',
+                    data: [@diamondSold, @diamondInStock],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                    borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Total Diamonds',
+                position: 'bottom',
+                padding: 20
+            },
+            responsive: true,
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            }
+        }
+    });
+
 </script>

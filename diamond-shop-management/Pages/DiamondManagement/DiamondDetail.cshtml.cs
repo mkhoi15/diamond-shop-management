@@ -42,24 +42,33 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
         public async Task<IActionResult> OnGetAsync(Guid diamondId, int? pageNumber, CancellationToken cancellationToken)
         {
-            Diamond = await _diamondService.GetByIdAsync(diamondId, default);
-
-            if (Diamond == null)
+            try
             {
-                Message = "Diamond is not found";
-                ModelState.AddModelError(string.Empty, Message);
+                Diamond = await _diamondService.GetByIdAsync(diamondId, default);
+
+                if (Diamond == null)
+                {
+                    Message = "Diamond is not found";
+                    ModelState.AddModelError(string.Empty, Message);
+                    return Page();
+                }
+
+                PageNumber = pageNumber ?? 1;
+
+                var pagedResult = await _paperworkService.GetAllAsync(
+                    paper => paper.DiamondId == diamondId && paper.IsDeleted != true, PageNumber, PageSize, cancellationToken);
+
+                Paperworks = _mapper.Map<List<PaperworkResponse>>(pagedResult.Items);
+                TotalItems = pagedResult.TotalItems;
+
                 return Page();
             }
-
-            PageNumber = pageNumber ?? 1;
-
-            var pagedResult = await _paperworkService.GetAllAsync(
-                paper => paper.DiamondId == diamondId && paper.IsDeleted != true, PageNumber, PageSize, cancellationToken);
-
-            Paperworks = _mapper.Map<List<PaperworkResponse>>(pagedResult.Items);
-            TotalItems = pagedResult.TotalItems;
-
-            return Page();
+            catch (Exception ex)
+            {
+                Message = "Get Diamond info failed!\n" + ex.Message;
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return Page();
+            }
         }
     }
 }
