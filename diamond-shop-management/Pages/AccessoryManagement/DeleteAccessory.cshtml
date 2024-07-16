@@ -15,11 +15,11 @@
                         <div class="form-group text-center">
                             @if (@Model.Accessory != null && Model.Accessory.Media != null)
                             {
-                                <img src="~/@Model.Accessory.Media.Url" alt="Accessory Image" width="30%">
+                                <img src="~/@Model.Accessory.Media.Url" alt="Accessory Image" width="15%">
                             }
                             else
                             {
-                                <img src="" alt="No image">
+                                <img src="" alt="No image" width="30%">
                             }
                         </div>
                         @if (!string.IsNullOrEmpty(Model.Message))

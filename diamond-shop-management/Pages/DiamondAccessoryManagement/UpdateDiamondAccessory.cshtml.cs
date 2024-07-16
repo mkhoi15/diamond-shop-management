@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Abstraction;
+using System.Threading;
 
 namespace diamond_shop_management.Pages.DiamondAccessoryManagement
 {
@@ -34,44 +35,80 @@ namespace diamond_shop_management.Pages.DiamondAccessoryManagement
 
         public async Task<IActionResult> OnGetAsync(Guid id, CancellationToken cancellationToken)
         {
-            var diamondAccessory = await _diamondAccessoryService.GetDiamondAccessoryByIdAsync(id, cancellationToken);
-            if (diamondAccessory == null)
+            try
             {
-                Message = "Accessory not found";
+                var diamondAccessory = await _diamondAccessoryService.GetDiamondAccessoryByIdAsync(id, cancellationToken);
+                if (diamondAccessory == null)
+                {
+                    Message = "Accessory not found";
+                    ModelState.AddModelError(string.Empty, Message);
+                    return Page();
+                }
+
+                DiamondAccessory = _mapper.Map<DiamondAccessoryRequest>(diamondAccessory);
+
+                var diamonds = _diamondService.GetAllAsync(cancellationToken);
+                Diamonds = diamonds.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = $"{d.Origin} {d.Color} {d.Cut}" 
+                }).ToList();
+
+                var accessories = await _accessoryService.GetActiveAccessoriesAsync(a => a.IsDeleted != true, cancellationToken);
+                Accessories = accessories.Select(a => new SelectListItem
+                {
+                    Value = a.Id.ToString(),
+                    Text = a.Name
+                }).ToList();
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                Message = "Error loading accessory: " + ex.Message;
                 ModelState.AddModelError(string.Empty, Message);
                 return Page();
             }
-
-            DiamondAccessory = _mapper.Map<DiamondAccessoryRequest>(diamondAccessory);
-
-            var diamonds = _diamondService.GetAllAsync(cancellationToken);
-            Diamonds = diamonds.Select(d => new SelectListItem { Value = d.Id.ToString() });
-
-            var accessories = await _accessoryService.GetActiveAccessoriesAsync(a => a.IsDeleted != true,cancellationToken);
-            Accessories = accessories.Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.Name });
-
-            return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(Guid id)
+        public async Task<IActionResult> OnPostAsync(Guid id, CancellationToken cancellationToken)
         {
+            if (!ModelState.IsValid)
+            {
+                await PopulateSelectLists(cancellationToken);
+                return Page();
+            }
+
             try
             {
                 await _diamondAccessoryService.UpdateDiamondAccessoryAsync(id, DiamondAccessory);
-
                 Message = "DiamondAccessory updated successfully";
-                ModelState.AddModelError(string.Empty, Message);
                 return RedirectToPage("/DiamondAccessoryManagement/ViewDiamondAccessory");
             }
             catch (Exception ex)
             {
-
                 Message = "Update failed: " + ex.Message;
                 ModelState.AddModelError(string.Empty, Message);
+                await PopulateSelectLists(cancellationToken);
                 return Page();
             }
+        }
 
-            
+        private async Task PopulateSelectLists(CancellationToken cancellationToken)
+        {
+            var diamonds = _diamondService.GetAllAsync(cancellationToken);
+            Diamonds = diamonds.Select(d => new SelectListItem
+            {
+                Value = d.Id.ToString(),
+                Text = $"{d.Origin} {d.Color} {d.Cut}"
+            }).ToList();
+
+            var accessories = await _accessoryService.GetActiveAccessoriesAsync(a => a.IsDeleted != true, cancellationToken);
+            Accessories = accessories.Select(a => new SelectListItem
+            {
+                Value = a.Id.ToString(),
+                Text = a.Name
+            }).ToList();
         }
     }
 }

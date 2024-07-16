@@ -124,9 +124,9 @@ namespace Services
                 {
                     product.IsDeleted = true;
                 }
-                
+
             }
-            
+
             await _unitOfWork.SaveChangeAsync();
         }
 
@@ -134,7 +134,7 @@ namespace Services
         {
             int skip = (pageNumber - 1) * pageSize;
 
-            var diamondAccessories = await _diamondAccessoryRepository.FindPaged(skip, pageSize, da => true, cancellationToken, da => da.Diamond, da => da.Accessory);
+            var diamondAccessories = await _diamondAccessoryRepository.FindPaged(skip, pageSize, da => da.IsDeleted != true , cancellationToken, da => da.Diamond, da => da.Accessory);
 
             var diamondAccessoryResponses = _mapper.Map<IEnumerable<DiamondAccessoryResponse>>(diamondAccessories);
 
@@ -153,13 +153,32 @@ namespace Services
 
         public async Task<DiamondAccessoryResponse> GetDiamondAccessoryByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var diamondAccessory = await _diamondAccessoryRepository.FindById(id, cancellationToken);
+            var diamondAccessory = await _diamondAccessoryRepository.FindAll()
+                .Include(da => da.Diamond) 
+                .Include(da => da.Accessory)
+                .Include(da => da.OrderDetail)
+                .ThenInclude(od => od.Order.Customer)
+                .Where(x => x.Id == id && x.IsDeleted == false)
+                .FirstOrDefaultAsync(cancellationToken);
+
             if (diamondAccessory == null)
             {
-                throw new Exception("Diamond Accessory not found.");
+                return null;
             }
 
-            return _mapper.Map<DiamondAccessoryResponse>(diamondAccessory);
+            var response = _mapper.Map<DiamondAccessoryResponse>(diamondAccessory);
+            if (diamondAccessory.Diamond != null)
+            {
+                response.Origin = diamondAccessory.Diamond.Origin;
+                response.Color = diamondAccessory.Diamond.Color;
+                response.Cut = diamondAccessory.Diamond.Cut;
+                response.Clarity = diamondAccessory.Diamond.Clarity;
+                response.Weight = diamondAccessory.Diamond.Weight;
+            }
+            response.DiamondDetails = $"{diamondAccessory.Diamond.Origin} {diamondAccessory.Diamond.Color} {diamondAccessory.Diamond.Cut}";
+            response.AccessoryName = diamondAccessory.Accessory.Name;
+            response.CustomerName = diamondAccessory.OrderDetail?.Order?.Customer.FullName;
+            return response;
         }
     }
 }

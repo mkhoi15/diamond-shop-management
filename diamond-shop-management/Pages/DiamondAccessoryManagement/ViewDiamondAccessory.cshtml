@@ -10,12 +10,16 @@
             <div class="text-right mb-3">
                 <a asp-page="/DiamondAccessoryManagement/CreateDiamondAccessory" class="btn btn-primary">Create New DiamondAccessory</a>
             </div>
+            @if (!string.IsNullOrEmpty(Model.Message))
+            {
+                <div class="alert alert-danger">@Model.Message</div>
+            }
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Diamond ID</th>
-                        <th>Accessory ID</th>
-                        <th>Customer ID</th>
+                        <th>Diamond</th>
+                        <th>Accessory Name</th>
+                        <th>IsDeleted</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -23,13 +27,13 @@
                     @foreach (var item in Model.DiamondAccessories)
                     {
                         <tr>
-                            <td>@item.DiamondId</td>
-                            <td>@item.AccessoryId</td>
-                            <td>@item.CustomerId</td>
+                            <td>@item.DiamondDetails</td>
+                            <td>@item.AccessoryName</td>
+                            <td>@item.IsDeleted</td>
                             <td>
-                                <a asp-page="/DiamondAccessoryManagement/AccessoryDetail" asp-route-accessoryId="@item.Id" class="btn btn-info btn-sm me-1">Detail</a>
-                                <a asp-page="/DiamondAccessoryManagement/UpdateAccessory" asp-route-accessoryId="@item.Id" class="btn btn-warning btn-sm me-1">Update</a>
-                                <a asp-page="/DiamondAccessoryManagement/DeleteAccessory" asp-route-accessoryId="@item.Id" class="btn btn-danger btn-sm me-1">Delete</a>
+                                <a asp-page="/DiamondAccessoryManagement/DiamondAccessoryDetail" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">Detail</a>
+                                <a asp-page="/DiamondAccessoryManagement/UpdateDiamondAccessory" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1">Update</a>
+                                <a asp-page="/DiamondAccessoryManagement/DeleteDiamondAccessory" asp-route-id="@item.Id" class="btn btn-danger btn-sm me-1">Delete</a>
                             </td>
                         </tr>
                     }
@@ -41,16 +45,16 @@
                         @if (Model.PageNumber > 1)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                                <a class="page-link" asp-page="./ViewDiamondAccessory" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
                             </li>
                         }
                         <li class="page-item active">
-                            <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                            <a class="page-link" asp-page="./ViewDiamondAccessory" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
                         </li>
                         @if (Model.PageNumber < Model.TotalPages)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="./ViewAccessory" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                                <a class="page-link" asp-page="./ViewDiamondAccessory" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
                             </li>
                         }
                     </ul>

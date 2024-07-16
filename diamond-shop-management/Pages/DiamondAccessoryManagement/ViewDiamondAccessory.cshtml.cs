@@ -25,12 +25,19 @@ namespace diamond_shop_management.Pages.DiamondAccessoryManagement
         public int PageSize { get; set; }
         public int TotalItems { get; set; }
         public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
+        public string Message { get; set; }
 
         public async Task OnGetAsync(int? pageNumber, CancellationToken cancellationToken)
         {
             PageNumber = pageNumber ?? 1;
 
             var pageResult = await _diamondAccessoryService.GetDiamondAccessoriesAsync(PageNumber, PageSize, cancellationToken);
+
+            if (pageResult == null)
+            {
+                Message = "Failed to retrieve diamond accessories.";
+                return;
+            }
 
             DiamondAccessories = _mapper.Map<List<DiamondAccessoryResponse>>(pageResult.Items);
             TotalItems = pageResult.TotalItems;
