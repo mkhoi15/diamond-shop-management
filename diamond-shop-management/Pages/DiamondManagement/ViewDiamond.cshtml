@@ -62,7 +62,9 @@
                                 <td>@diamond.Clarity</td>
                                 <td>@diamond.Weight carats</td>
                                 <td>@diamond.Price $</td>
-                                @if (@diamond != null && diamond.Promotion is not null)
+                                @if (@diamond != null 
+                                && diamond.Promotion is not null 
+                                && diamond.Promotion.EndDate!.Value >= DateTime.Now)
                                 {
                                     <td>@(diamond.Promotion.DiscountRate * 100) %</td>
                                 }
@@ -70,7 +72,7 @@
                                 {
                                     <td></td>
                                 }
-                                <td>@diamond.IsSold</td>
+                                <td>@diamond!.IsSold</td>
                                 <td>
                                     <a asp-page="/DiamondManagement/DiamondDetail" asp-route-diamondId="@diamond.Id" class="btn btn-info btn-sm me-1">Detail</a>
                                     <a asp-page="/DiamondManagement/Update" asp-route-diamondId="@diamond.Id" class="btn btn-warning btn-sm me-1">Update</a>

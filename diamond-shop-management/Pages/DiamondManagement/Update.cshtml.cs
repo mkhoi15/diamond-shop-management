@@ -75,6 +75,10 @@ namespace diamond_shop_management.Pages.DiamondManagement
 
                 TempData["Media"] = JsonSerializer.Serialize(Diamond.Media);
 
+                if (Diamond.Promotion != null && Diamond.Promotion.EndDate < DateTime.Now)
+                {
+                    Diamond.PromotionId = null;
+                }    
                 PageNumber = pageNumber ?? 1;
 
                 var pagedResult = await _paperworkService.GetAllAsync(
