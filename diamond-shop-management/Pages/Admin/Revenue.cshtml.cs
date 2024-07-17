@@ -26,12 +26,19 @@ public class Revenue : PageModel
     
     public async Task OnGet(int? year = 2024)
     {
-        Year = year ?? DateTime.Now.Year;
-        CurrentYear = Year;
-        RevenueResponses = await _revenueServices.GetRevenueByYear(year);
-        TotalRevenue = RevenueResponses.Sum(revenue => revenue.TotalRevenue);
-        UserStatistics = await _revenueServices.GetUserStatisticsByYear(year);
-        DiamondStatistic = await _revenueServices.GetDiamondStatistics();
+        try
+        {
+            Year = year ?? DateTime.Now.Year;
+            CurrentYear = Year;
+            RevenueResponses = await _revenueServices.GetRevenueByYear(year);
+            TotalRevenue = RevenueResponses.Sum(revenue => revenue.TotalRevenue);
+            UserStatistics = await _revenueServices.GetUserStatisticsByYear(year);
+            DiamondStatistic = await _revenueServices.GetDiamondStatistics();
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error while getting revenue data");
+        }
     }
     
     public async Task<IActionResult> OnPost()

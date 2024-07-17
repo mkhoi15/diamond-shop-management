@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -11,6 +12,7 @@ public class ErrorModel : PageModel
     public string? RequestId { get; set; }
 
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+    public string? ExceptionMessage { get; set; }
 
     private readonly ILogger<ErrorModel> _logger;
 
@@ -22,5 +24,11 @@ public class ErrorModel : PageModel
     public void OnGet()
     {
         RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        
+        var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+        if (exceptionHandlerPathFeature?.Error is null) return;
+        HttpContext.Response.StatusCode = 500;
+        ExceptionMessage = exceptionHandlerPathFeature.Error.Message;
     }
 }
