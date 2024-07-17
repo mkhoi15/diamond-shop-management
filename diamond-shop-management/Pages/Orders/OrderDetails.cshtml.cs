@@ -1,13 +1,18 @@
 using AutoMapper;
+using BusinessObject.Enum;
 using BusinessObject.Models;
 using DTO.DiamondAccessoryDto;
+using DTO.DiamondDto;
 using DTO.OrderDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.Orders;
 
+
+[Authorize(Roles = $"{nameof(Roles.Manager)},{nameof(Roles.User)}")]
 public class OrderDetails : PageModel
 {
     private readonly IOrderServices _orderServices;
@@ -27,6 +32,8 @@ public class OrderDetails : PageModel
     
     public OrderResponse Order { get; set; }
     
+    public List<DiamondResponse> DiamondResponses { get; set; }
+    
 
     public async Task<IActionResult> OnGetAsync(Guid id, CancellationToken cancellationToken)
     {
@@ -41,6 +48,8 @@ public class OrderDetails : PageModel
             var customer = await _userServices.GetUserByIdAsync(orderResponse.CustomerId.ToString());
             orderResponse.CustomerName = customer.FullName;
             orderResponse.PhoneNumber = customer.PhoneNumber;
+
+            DiamondResponses = await _orderServices.GetDiamondsByOrderId(id, cancellationToken);
             
             Order = orderResponse;
 
