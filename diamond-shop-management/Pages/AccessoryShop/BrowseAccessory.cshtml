@@ -12,11 +12,11 @@
                     Browse Accessories
                 </h2>
             </div>
-            <div class="container">
+            @* <div class="container">
                 <div class="d-flex justify-content-end">
                     <a asp-page="/Card/Card" class="btn btn-success">Go To Cart</a>
                 </div>
-            </div>
+            </div> *@
 
             <form method="get">
                 <div class="row mt-5">
@@ -73,12 +73,12 @@
                                         <div>Discounted Price: @($"{accessory.Price - ((decimal)accessory.Promotion.DiscountRate * accessory.Price):N}") $</div>
                                     }
                                 </div>
-                                <div>
+                                @* <div>
                                     <form method="post" asp-page-handler="AddToCart">
                                         <input type="hidden" name="accessoryId" value="@accessory.Id" />
                                         <button type="submit" class="btn btn-primary">Add to Cart</button>
                                     </form>
-                                </div>
+                                </div> *@
                             </div>
                         </div>
                     }
