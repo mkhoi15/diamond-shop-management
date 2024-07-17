@@ -45,16 +45,16 @@ public class DeliveryServices : IDeliveryServices
         return _mapper.Map<DeliveryResponse>(delivery);
     }
 
-    public async Task<DeliveryResponse> UpdateDeliveryAsync(DeliveryRequest deliveryRequest)
+    public async Task<DeliveryResponse> UpdateDeliveryAsync(DeliveryResponse deliveryRequest)
     {
-        var updatedDelivery = _mapper.Map<Delivery>(deliveryRequest);
+        var updatedDelivery = await _deliveryRepository.FindById(deliveryRequest.Id);
 
         if (updatedDelivery is null)
         {
             throw new ArgumentException("Not found delivery to update");
         }
         
-        updatedDelivery.Location = deliveryRequest.Location;
+        //updatedDelivery.Location = deliveryRequest.Location;
         updatedDelivery.Status = deliveryRequest.Status;
         
         _deliveryRepository.Update(updatedDelivery);
