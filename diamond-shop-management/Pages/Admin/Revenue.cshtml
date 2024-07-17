@@ -72,13 +72,13 @@
 </div>
 
 <script>
-
     $(document).ready(function() {
         // Function to toggle chart size on click
         $(".chart-container").on("click", function() {
             if ($(this).hasClass("col-md-12")) {
                 // If the chart is expanded, collapse it back to col-6
                 $(".chart-container").removeClass("col-md-4").addClass("col-md-6");
+                $(this).removeClass("col-md-12");
             } else {
                 // If the chart is not expanded, expand it and collapse others
                 $(".chart-container").removeClass("col-md-12").addClass("col-md-4");
@@ -86,7 +86,8 @@
             }
         });
     });
-    
+
+
     // Revenue and Total Orders Chart
     const revenueCtx = document.getElementById("revenueChart").getContext('2d');
     const maxYValue = Math.ceil(@Html.Raw(maxDataValue) / 1000) * 1200;

@@ -4,9 +4,12 @@ using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO.AccessoryDto;
 using DTO.Media;
+using DTO.PromotionDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Services;
 using Services.Abstraction;
 using System.Text.Json;
 
@@ -18,17 +21,19 @@ namespace diamond_shop_management.Pages.AccessoryManagement
     {
         private readonly IAccessoryServices _accessoryService;
         private readonly IMediaServices _mediaServices;
+        private readonly IPromotionServices _promotionService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _environment;
         private readonly IMapper _mapper;
 
-        public UpdateAccessoryModel(IAccessoryServices accessoryService, IMediaServices mediaServices, IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IMapper mapper)
+        public UpdateAccessoryModel(IAccessoryServices accessoryService, IMediaServices mediaServices, IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IMapper mapper, IPromotionServices promotionService)
         {
             _accessoryService = accessoryService;
             _mediaServices = mediaServices;
             _unitOfWork = unitOfWork;
             _environment = webHostEnvironment;
             _mapper = mapper;
+            _promotionService = promotionService;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -43,6 +48,7 @@ namespace diamond_shop_management.Pages.AccessoryManagement
         {
             try
             {
+                await PopulateSelectListsAsync();
                 var accessory = await _accessoryService.GetAccessoryByIdAsync(accessoryId, default);
                 if (accessory == null)
                 {
@@ -148,6 +154,15 @@ namespace diamond_shop_management.Pages.AccessoryManagement
             {
                 throw new Exception("Failed to save media: " + ex.Message, ex);
             }
+        }
+
+        private async Task PopulateSelectListsAsync()
+        {
+            IEnumerable<PromotionResponse> promotions = await _promotionService.GetPromotionsByCondition(
+                    p => p.IsDeleted != true
+                    && p.StartDate <= DateTime.Now
+                    && p.EndDate >= DateTime.Now, default);
+            ViewData["Promotions"] = new SelectList(promotions, "Id", "Name");
         }
     }
 }
