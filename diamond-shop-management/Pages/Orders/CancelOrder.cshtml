@@ -11,8 +11,7 @@
     }
     
 </style>
-
-@if ((User.Identity?.IsAuthenticated ?? false && (User.IsInRole("Manager") || User.IsInRole("User"))))
+@if ((User.Identity?.IsAuthenticated ?? false) && (User.IsInRole("Manager") || User.IsInRole("User")))
 {
     
     <div class="container mt-5">
