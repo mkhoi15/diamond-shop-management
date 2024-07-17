@@ -1,55 +1,13 @@
 ﻿@page
-@model diamond_shop_management.Pages.DiamondShop.DetailModel
+@model diamond_shop_management.Pages.Orders.DiamondDetailModel
 @{
-    ViewData["Title"] = "Detail";
+    ViewData["Title"] = "Diamond Detail";
 }
 
 <section class="shop_section layout_padding">
     <div class="container">
-        @*  <div class="heading_container heading_center">
-        <h2>
-        Detail
-        </h2>
-        </div>
-        <div class="row">
-        <form>
-        <div class="form-group">
-        <label asp-for="Diamond.Origin"></label>
-        <input asp-for="Diamond.Origin" class="form-control" readonly style="pointer-events:none" />
-        </div>
-        <div class="form-group">
-        <label asp-for="Diamond.Color"></label>
-        <input asp-for="Diamond.Color" class="form-control" readonly style="pointer-events:none" />
-        </div>
-        <div class="form-group">
-        <label asp-for="Diamond.Cut"></label>
-        <input asp-for="Diamond.Cut" class="form-control" readonly style="pointer-events:none" />
-        </div>
-        <div class="form-group">
-        <label asp-for="Diamond.Clarity"></label>
-        <input asp-for="Diamond.Clarity" class="form-control" readonly style="pointer-events:none" />
-        </div>
-        <div class="form-group">
-        <label asp-for="Diamond.Weight"></label>
-        <input asp-for="Diamond.Weight" class="form-control" readonly style="pointer-events:none" />
-        </div>
-        <div class="form-group">
-        <label asp-for="Diamond.Price"></label>
-        <input asp-for="Diamond.Price" class="form-control" readonly style="pointer-events:none" />
-        </div>
-        <div class="form-group">
-        <a asp-page="/DiamondManagement/ViewDiamond" class="btn btn-secondary">Back to List</a>
-        <a asp-page="/PaperworkManagement/View" asp-route-diamondId="@Model.Diamond.Id" class="btn btn-primary">Paperwork</a>
-        </div>
-        @if (!string.IsNullOrEmpty(Model.Message))
-        {
-        <div style="color: red" id="error-message">@Model.Message</div>
-        }
-        </form>
-        </div> *@
         <div class="text-Left mb-3">
             <a asp-page="/DiamondShop/BrowseDiamond" asp-route-diamondId="@Model.Diamond.Id" class="btn btn-secondary">Back</a>
-            @* <a asp-page="/PaperworkManagement/Create" asp-route-diamondId="@Model.Diamond.Id" class="btn btn-primary">Create New Paperwork</a> *@
         </div>
         <div class="heading_container heading_center">
             <h2>
@@ -141,18 +99,18 @@
                     @if (Model.PageNumber > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-page="/DiamondShop/Detail" asp-route-diamondId="@Model.Diamond.Id" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                            <a class="page-link" asp-page="/Orders/DiamondDetail" asp-route-diamondId="@Model.Diamond.Id" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
                         </li>
                     }
 
                     <li class="page-item active">
-                        <a class="page-link" asp-page="/DiamondShop/Detail" asp-route-diamondId="@Model.Diamond.Id" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                        <a class="page-link" asp-page="/Orders/DiamondDetail" asp-route-diamondId="@Model.Diamond.Id" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
                     </li>
 
                     @if (Model.PageNumber < Model.TotalPages)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-page="/DiamondShop/Detail" asp-route-diamondId="@Model.Diamond.Id" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                            <a class="page-link" asp-page="/Orders/DiamondDetail" asp-route-diamondId="@Model.Diamond.Id" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
                         </li>
                     }
                 </ul>
