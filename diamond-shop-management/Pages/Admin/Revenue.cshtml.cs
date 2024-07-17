@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using BusinessObject.Enum;
 using DTO.Revenue;
 using DTO.UserDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OfficeOpenXml;
@@ -9,6 +11,7 @@ using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.Admin;
 
+[Authorize(Roles = nameof(Roles.Admin))]
 public class Revenue : PageModel
 {
     private readonly IRevenueServices _revenueServices;
@@ -26,12 +29,19 @@ public class Revenue : PageModel
     
     public async Task OnGet(int? year = 2024)
     {
-        Year = year ?? DateTime.Now.Year;
-        CurrentYear = Year;
-        RevenueResponses = await _revenueServices.GetRevenueByYear(year);
-        TotalRevenue = RevenueResponses.Sum(revenue => revenue.TotalRevenue);
-        UserStatistics = await _revenueServices.GetUserStatisticsByYear(year);
-        DiamondStatistic = await _revenueServices.GetDiamondStatistics();
+        try
+        {
+            Year = year ?? DateTime.Now.Year;
+            CurrentYear = Year;
+            RevenueResponses = await _revenueServices.GetRevenueByYear(year);
+            TotalRevenue = RevenueResponses.Sum(revenue => revenue.TotalRevenue);
+            UserStatistics = await _revenueServices.GetUserStatisticsByYear(year);
+            DiamondStatistic = await _revenueServices.GetDiamondStatistics();
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error while getting revenue data");
+        }
     }
     
     public async Task<IActionResult> OnPost()

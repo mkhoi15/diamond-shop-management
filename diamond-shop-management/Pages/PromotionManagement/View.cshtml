@@ -14,7 +14,7 @@
                 </h2>
             </div>
             @* <div class="text-right mb-3">
-                <a asp-page="/PromotionManagement/Create" class="btn btn-primary">Create New Promotion</a>
+            <a asp-page="/PromotionManagement/Create" class="btn btn-primary">Create New Promotion</a>
             </div> *@
             <div class="d-flex justify-content-between">
                 <a class="btn btn-primary" asp-page="./Create" style="margin-top: 40px; height: 40px">
@@ -75,18 +75,24 @@
                         @if (Model.PageNumber > 1)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="/PromotionManagement/View" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                                <a class="page-link" asp-page="/PromotionManagement/View"
+                                   asp-route-pageNumber="@(Model.PageNumber - 1)"
+                                   asp-route-Search="@(Model.Search)">Previous</a>
                             </li>
                         }
 
                         <li class="page-item active">
-                            <a class="page-link" asp-page="/PromotionManagement/View" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                            <a class="page-link" asp-page="/PromotionManagement/View"
+                               asp-route-pageNumber="@Model.PageNumber"
+                               asp-route-Search="@(Model.Search)">@Model.PageNumber</a>
                         </li>
 
                         @if (Model.PageNumber < Model.TotalPages)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="/PromotionManagement/View" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                                <a class="page-link" asp-page="/PromotionManagement/View"
+                                   asp-route-pageNumber="@(Model.PageNumber + 1)"
+                                   asp-route-Search="@(Model.Search)">Next</a>
                             </li>
                         }
                     </ul>

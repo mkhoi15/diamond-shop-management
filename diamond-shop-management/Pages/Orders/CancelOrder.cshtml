@@ -5,6 +5,13 @@
     ViewData["Title"] = "CancelOrder";
 }
 
+<style>
+    .un-auth {
+        margin: 300px;
+    }
+    
+</style>
+
 @if ((User.Identity?.IsAuthenticated ?? false && (User.IsInRole("Manager") || User.IsInRole("User"))))
 {
     
@@ -60,6 +67,14 @@
         }
     </div>
 }
+else
+{
+    <div class="un-auth">
+        <h2 class="text-center">You are not authorized to view this page.</h2>
+    </div>
+}
+
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

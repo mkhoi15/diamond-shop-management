@@ -55,9 +55,13 @@
                             {
                                 <a asp-page="/Orders/CancelOrder" asp-route-id="@Model.Order.Id" class="btn btn-danger m-2">Cancel Order</a>
                             }
-                            @if(Model.Order.Status != "Pending")
+                            @if(Model.Order.Status != "Pending" && Model.Order.Status != "Cancelled")
                             {
                                 <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@Model.Order.Id" class="btn btn-light m-2">See Delivery Details</a>
+                            }
+                            @if ((Model.Order.Status == "Cancelled" && Model.Order.Deliveries.Count > 0 ))
+                            {
+                                <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@Model.Order.Id" class="btn btn-light mt-2">See Delivery Details</a>
                             }
                         </div>
                     }

@@ -58,7 +58,7 @@
                             <input asp-for="Diamond.Price" class="form-control" readonly style="pointer-events: none" />
                             <span asp-validation-for="Diamond.Price" class="text-danger"></span>
                         </div>
-                        @if (@Model.Diamond != null && Model.Diamond.Promotion is not null)
+                        @if (@Model.Diamond != null && Model.Diamond.Promotion is not null && Model.Diamond.Promotion.EndDate!.Value >= DateTime.Now)
                         {
                             <div class="form-group">
                                 <label asp-for="Diamond.PromotionId">Promotion</label>
