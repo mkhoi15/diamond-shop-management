@@ -93,7 +93,7 @@
         <script>
         function filterOrders() {
             var selectedStatus = document.getElementById("orderStatusFilter").value;
-            var url = '@Url.Page("/Orders/OrdersList")' + '?SelectedStatus=' + selectedStatus;
+            var url = '@Url.Page("/Orders/SelfOrder")' + '?SelectedStatus=' + selectedStatus;
             window.location.href = url;
         }
     </script>
