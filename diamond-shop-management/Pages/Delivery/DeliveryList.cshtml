@@ -1,0 +1,62 @@
+@page
+@model diamond_shop_management.Pages.Delivery.DeliveryList
+
+@{
+    ViewData["Title"] = "Delivery List";
+}
+
+<style>
+    .container {
+        margin-top: 100px;
+    }
+    h1, h2 {
+        margin-bottom: 30px;
+    }
+    table {
+        margin-bottom: 50px;
+    }
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+
+<div class="container">
+    <h2>Deliveries</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Order ID</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.DeliveryResponses != null && Model.DeliveryResponses.Any())
+        {
+            foreach (var delivery in Model.DeliveryResponses)
+            {
+                <tr>
+                    <td>@(Model.DeliveryResponses.IndexOf(delivery) + 1)</td>
+                    <td>@delivery.OrderId</td>
+                    <td>@delivery.Location</td>
+                    <td>@delivery.Status</td>
+                    <td>@delivery.CreatedAt.ToString("MM/dd/yyyy")</td>
+                    <td>
+                        <a asp-page="/Delivery/Details" asp-route-id="@delivery.Id" class="btn btn-primary">Details</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No deliveries found.</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

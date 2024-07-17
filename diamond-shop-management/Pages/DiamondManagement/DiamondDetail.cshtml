@@ -76,7 +76,9 @@
                         <div>Clarity: @Model.Diamond.Clarity</div>
                         <div>Weight: @Model.Diamond.Weight carats</div>
                         <div>Price: @Model.Diamond.Price $</div>
-                        @if (@Model.Diamond != null && Model.Diamond.Promotion is not null)
+                        @if (@Model.Diamond != null 
+                        && Model.Diamond.Promotion is not null
+                        && Model.Diamond.Promotion.EndDate!.Value >= DateTime.Now)
                         {
                             <div>Promotion: @(Model.Diamond.Promotion.DiscountRate * 100) %</div>
                         }

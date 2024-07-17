@@ -10,6 +10,8 @@ public class RegisterDto
     [EmailAddress]
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; } = null!;
+    
+    public string? FullName { get; set; }
 
     [Required]
     [DataType(DataType.Password)]
