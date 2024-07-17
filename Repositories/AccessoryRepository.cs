@@ -21,8 +21,7 @@ namespace Repositories
 		{
 			_accessoryDAO.AddRange(entities);
 		}
-
-		public async Task<IEnumerable<Accessory>> Find(Expression<Func<Accessory, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<Accessory, object?>>[] includeProperties)
+        public async Task<IEnumerable<Accessory>> Find(Expression<Func<Accessory, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<Accessory, object?>>[] includeProperties)
 		{
 			return await _accessoryDAO.Find(predicate,cancellationToken,includeProperties);
 		}

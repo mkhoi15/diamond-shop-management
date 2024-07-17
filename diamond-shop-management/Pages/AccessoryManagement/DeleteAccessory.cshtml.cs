@@ -67,7 +67,6 @@ namespace diamond_shop_management.Pages.AccessoryManagement
 
                 Message = "Accessory deleted successfully";
                 ModelState.AddModelError(string.Empty, Message);
-                await Task.Delay(3000, cancellationToken);
                 return RedirectToPage("/AccessoryManagement/ViewAccessory");
             }
             catch (Exception ex)

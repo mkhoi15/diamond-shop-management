@@ -20,12 +20,12 @@
                     </div>
                 }
                 <div class="form-group">
-                    <label asp-for="DiamondAccessory.DiamondId" class="control-label"></label>
+                    <label asp-for="DiamondAccessory.DiamondId" class="control-label">Diamond</label>
                     <select asp-for="DiamondAccessory.DiamondId" class="form-control" asp-items="Model.Diamonds"><</select>
                     <span asp-validation-for="DiamondAccessory.DiamondId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="DiamondAccessory.AccessoryId" class="control-label"></label>
+                    <label asp-for="DiamondAccessory.AccessoryId" class="control-label">Accessory</label>
                     <select asp-for="DiamondAccessory.AccessoryId" class="form-control" asp-items="Model.Accessories"></select>
                     <span asp-validation-for="DiamondAccessory.AccessoryId" class="text-danger"></span>
                 </div>

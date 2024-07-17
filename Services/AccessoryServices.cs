@@ -3,6 +3,7 @@ using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO;
 using DTO.AccessoryDto;
+using DTO.DiamondAccessoryDto;
 using DTO.DiamondDto;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
@@ -25,6 +26,12 @@ namespace Services
             _AccessoryRepository = accessoryRepository;
             _DiamondAccessoryRepository = diamondAccessoryRepository;
             _mapper = mapper;
+        }
+
+        public async Task<bool> AccessoryNameExistsAsync(string name, CancellationToken cancellationToken)
+        {
+            var accessories = await _AccessoryRepository.Find(a => a.Name == name, cancellationToken);
+            return accessories.Any();
         }
 
         public async Task AddDiamondToAccessoryAsync(Guid accessoryId, Guid diamondId)
@@ -60,11 +67,15 @@ namespace Services
             return true;
         }
 
-        public async Task<PagedResult<AccessoryResponse>> GetAccessoriesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        public async Task<PagedResult<AccessoryResponse>> GetAccessoriesAsync(Expression<Func<Accessory, bool>> predicate, int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             int skip = (pageNumber - 1) * pageSize;
 
-            var accessories = await _AccessoryRepository.FindPaged(skip, pageSize, a => a.IsDeleted != true, cancellationToken, a => a.Promotion);
+            var accessories = await _AccessoryRepository.FindPaged(skip, pageSize, predicate, cancellationToken, a => a.Promotion);
+
+            var totalItems = await _AccessoryRepository.FindAll()
+                                                       .Where(predicate)
+                                                       .CountAsync(cancellationToken);
 
             var accessoryResponses = _mapper.Map<IEnumerable<AccessoryResponse>>(accessories);
 
@@ -73,8 +84,7 @@ namespace Services
                 Items = accessoryResponses,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalItems = GetAllAccessoriesAsync(cancellationToken).Count(),
-
+                TotalItems = totalItems
             };
 
             return pagedResult;

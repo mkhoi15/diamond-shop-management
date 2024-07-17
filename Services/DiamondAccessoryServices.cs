@@ -2,10 +2,12 @@
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
 using DTO;
+using DTO.AccessoryDto;
 using DTO.DiamondAccessoryDto;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Abstraction;
 using Services.Abstraction;
+using System.Linq.Expressions;
 
 namespace Services
 {
@@ -130,11 +132,11 @@ namespace Services
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<PagedResult<DiamondAccessoryResponse>> GetDiamondAccessoriesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        public async Task<PagedResult<DiamondAccessoryResponse>> GetDiamondAccessoriesAsync(Expression<Func<DiamondAccessory, bool>> predicate, int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             int skip = (pageNumber - 1) * pageSize;
 
-            var diamondAccessories = await _diamondAccessoryRepository.FindPaged(skip, pageSize, da => da.IsDeleted != true , cancellationToken, da => da.Diamond, da => da.Accessory);
+            var diamondAccessories = await _diamondAccessoryRepository.FindPaged(skip, pageSize, predicate, cancellationToken, da => da.Diamond, da => da.Accessory);
 
             var diamondAccessoryResponses = _mapper.Map<IEnumerable<DiamondAccessoryResponse>>(diamondAccessories);
 
@@ -145,7 +147,7 @@ namespace Services
                 Items = diamondAccessoryResponses,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalItems = totalItems
+                TotalItems = totalItems,
             };
 
             return pagedResult;
@@ -175,7 +177,7 @@ namespace Services
                 response.Clarity = diamondAccessory.Diamond.Clarity;
                 response.Weight = diamondAccessory.Diamond.Weight;
             }
-            response.DiamondDetails = $"{diamondAccessory.Diamond.Origin} {diamondAccessory.Diamond.Color} {diamondAccessory.Diamond.Cut}";
+            response.DiamondDetails = $"{diamondAccessory.Diamond.Origin}, {diamondAccessory.Diamond.Color}, {diamondAccessory.Diamond.Cut}";
             response.AccessoryName = diamondAccessory.Accessory.Name;
             response.CustomerName = diamondAccessory.OrderDetail?.Order?.Customer.FullName;
             return response;
