@@ -70,13 +70,13 @@
                                                 <text>style="text-decoration: line-through;"</text>
                                             }
                                         >
-                                            $@diamond.Price
+                                            $@($"{diamond.Price:F2}")
                                         </span>
                                         @if (diamond.Promotion != null && diamond.Promotion.EndDate >= DateTime.Now)
                                         {
                                             <br>
                                             <span>
-                                                $@(diamond.Price - (diamond.Price * (decimal)diamond.Promotion.DiscountRate))
+                                                $@($"{diamond.Price - (diamond.Price * (decimal)diamond.Promotion.DiscountRate):F2}")
                                             </span>
                                         }
                                     </h6>
