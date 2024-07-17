@@ -4,6 +4,7 @@ using BusinessObject.Enum;
 using BusinessObject.Models;
 using DTO.DeliveryDto;
 using DTO.OrderDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,6 +12,7 @@ using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.Delivery;
 
+[Authorize(Roles = nameof(Roles.Delivery))]
 public class DeliveryList : PageModel
 {
     private readonly IDeliveryServices _deliveryServices;

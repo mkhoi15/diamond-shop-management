@@ -42,7 +42,9 @@ public class OrderServices : IOrderServices
 
     public async Task<List<OrderResponse>> GetAllOrdersAsync()
     {
-        var orders = await _orderRepository.FindAll().ToListAsync();
+        var orders = await _orderRepository.FindAll()
+            .OrderByDescending(o => o.Date)
+            .ToListAsync();
             
         return _mapper.Map<List<OrderResponse>>(orders);
         
@@ -57,6 +59,12 @@ public class OrderServices : IOrderServices
             o => o.Deliveries,
             o => o.Customer
             );
+        if (order == null)
+        {
+            throw new ArgumentException("Not found order with this id");
+        }
+        
+        order.Deliveries = order.Deliveries.OrderByDescending(d => d.CreatedAt).ToList();
         
         return _mapper.Map<OrderResponse>(order);
     }

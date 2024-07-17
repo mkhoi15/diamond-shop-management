@@ -74,13 +74,13 @@
             }
             @if (User.IsInRole("Manager") && Model.OrderResponse.Status != "Delivered" && Model.OrderResponse.Status != "Cancelled")
             {
-                @if (Model.OrderResponse.Deliveries.LastOrDefault().Status == "Completed")
+                @if (Model.OrderResponse.Deliveries.OrderByDescending(d => d.CreatedAt).FirstOrDefault().Status == "Completed")
                 {
                     <div>
                         <a asp-page="/Delivery/CreateDelivery" asp-route-id="@Model.OrderResponse.Id" class="btn btn-warning mr-2">Update Delivery</a>
                     </div>
                 }
-                @if(!Model.OrderResponse.Deliveries.Any() || Model.OrderResponse.Deliveries.LastOrDefault().Status == "Completed")
+                @if(!Model.OrderResponse.Deliveries.Any() || Model.OrderResponse.Deliveries.OrderByDescending(d => d.CreatedAt).FirstOrDefault().Status == "Completed")
                 {
                     <div>
                         <form method="post" asp-page-handler="UpdateStatus">

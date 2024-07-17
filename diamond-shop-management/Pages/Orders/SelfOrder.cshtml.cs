@@ -1,5 +1,7 @@
 using System.Security.Claims;
+using BusinessObject.Enum;
 using DTO.OrderDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,6 +9,7 @@ using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.Orders;
 
+[Authorize(Roles = nameof(Roles.User))]
 public class SelfOrder : PageModel
 {
     private readonly IOrderServices _orderServices;
