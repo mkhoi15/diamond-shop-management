@@ -1,9 +1,13 @@
 using AutoMapper;
 using BusinessObject.Enum;
+using BusinessObject.Models;
 using DTO.DiamondAccessoryDto;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Services;
 using Services.Abstraction;
+using System.Linq.Expressions;
 
 namespace diamond_shop_management.Pages.DiamondAccessoryManagement
 {
@@ -26,21 +30,43 @@ namespace diamond_shop_management.Pages.DiamondAccessoryManagement
         public int TotalItems { get; set; }
         public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
         public string Message { get; set; }
-
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; }
         public async Task OnGetAsync(int? pageNumber, CancellationToken cancellationToken)
         {
-            PageNumber = pageNumber ?? 1;
-
-            var pageResult = await _diamondAccessoryService.GetDiamondAccessoriesAsync(PageNumber, PageSize, cancellationToken);
-
-            if (pageResult == null)
+            try
             {
-                Message = "Failed to retrieve diamond accessories.";
+                PageNumber = pageNumber ?? 1;
+
+                Expression<Func<DiamondAccessory, bool>> searchPredicate = da =>
+                    (string.IsNullOrEmpty(Search) ||
+                    da.Diamond.Origin.Contains(Search) ||
+                    da.Diamond.Color.Contains(Search) ||
+                    da.Diamond.Cut.Contains(Search) ||
+                    da.Accessory.Name.Contains(Search));
+
+                var pageResult = await _diamondAccessoryService.GetDiamondAccessoriesAsync(
+                    searchPredicate,
+                    PageNumber, PageSize, cancellationToken);
+
+
+                if (pageResult == null)
+                {
+                    Message = "Failed to retrieve diamond accessories.";
+                    return;
+                }
+
+                DiamondAccessories = _mapper.Map<List<DiamondAccessoryResponse>>(pageResult.Items);
+                TotalItems = pageResult.TotalItems;
+            }
+            catch (Exception e)
+            {
+
+                Message = e.Message;
+                ModelState.AddModelError(string.Empty, e.Message);
                 return;
             }
-
-            DiamondAccessories = _mapper.Map<List<DiamondAccessoryResponse>>(pageResult.Items);
-            TotalItems = pageResult.TotalItems;
+            
         }
     }
 }
