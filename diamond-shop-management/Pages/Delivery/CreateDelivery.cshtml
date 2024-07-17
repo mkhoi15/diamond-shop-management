@@ -111,7 +111,11 @@
             </div>
             <div class="form-group">
                 <label for="Status">Status</label>
-                <input type="text" class="form-control" id="Status" name="DeliveryRequest.Status" />
+                <select class="form-control" id="Status" name="DeliveryRequest.Status" required>
+                    <option value="In Progress" selected>In Progress</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Shipped">Shipped</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-primary">Create Delivery</button>
         </form>    
