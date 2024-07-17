@@ -1,0 +1,120 @@
+@page
+@using System.Security.Claims
+@model diamond_shop_management.Pages.Delivery.DeliveryOrderDetails
+
+@{
+    ViewData["Title"] = "Delivery Order Details";
+}
+
+<style>
+    .container {
+        margin-top: 100px;
+    }
+    .card {
+        margin-bottom: 30px;
+    }
+    .card-body {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .card-body .info {
+        flex: 1 0 50%; /* 50% width */
+        margin-bottom: 15px;
+    }
+</style>
+
+@if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Delivery"))
+{
+   <div class="container">
+    <div class="card">
+        <div class="card-header">
+            Order Details
+        </div>
+        <div class="card-body">
+            <div class="info">
+                <h6>Order ID: <span>@Model.Order.Id</span> </h6>
+            </div>
+            <div class="info">
+                <h6>Customer Name: <span>@Model.Order.Customer?.FullName</span></h6>
+            </div>
+            <div class="info">
+                <h6>Address: <span>@Model.Order.Address</span></h6>
+            </div>    
+            <div class="info">
+                <h6>Phone Number: <span>@Model.Order.Customer?.PhoneNumber</span></h6>
+            </div>
+            <div class="info">
+                <h6>Total Price: <span>@Model.Order.TotalPrice</span></h6>
+            </div>
+            <div class="info">
+                <h6>Status: <span>@Model.Order.Status</span></h6>
+                
+            </div>
+            <div class="info">
+                <h6>Order Date: <span>@Model.Order.Date.ToString("MM/dd/yyyy")</span></h6>
+            </div>
+            <div class="info">
+                <a asp-page="/Delivery/DeliveryList" class="btn btn-primary">Return to Delivery</a>
+            </div>
+        </div>
+    </div>
+
+    <h2>Deliveries</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Order.Deliveries != null && Model.Order.Deliveries.Any())
+        {
+            var count = 0;
+            foreach (var delivery in Model.Order.Deliveries)
+            {
+                count++;
+                var latestDelivery = Model.Order.Deliveries.LastOrDefault();
+                var deliveryManId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                <tr>
+                    <td>@count</td>
+                    <td>@delivery.Location</td>
+                    <td>@delivery.Status</td>
+                    <td>@delivery.CreatedAt.ToString("MM/dd/yyyy")</td>
+                    <td>
+                        @if (delivery.Id == latestDelivery.Id && delivery.Status != "Completed" && delivery.Status != "Cancelled" && delivery.DeliveryManId == Guid.Parse(deliveryManId) && Model.Order.Status != "Cancelled") 
+                        { 
+                            <a asp-page="/Delivery/UpdateStatus" asp-route-id="@delivery.Id" class="btn btn-warning">Update Status</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">No deliveries found.</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div> 
+}
+else
+{
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-danger text-center">Access Deny</h1>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+

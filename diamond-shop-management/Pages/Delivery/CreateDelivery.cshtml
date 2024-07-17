@@ -78,46 +78,68 @@
                     <td>@diamond.Clarity</td>
                     <td>@diamond.Weight</td>
                     <td>@diamond.Price</td>
-                    <td>
-                        @if (diamond.WarrantyId != null)
-                        {
-                            @diamond.WarrantyId
-                        }
-                        else
-                        {
-                            <a asp-page="/PaperworkManagement/CreateDiamondWarranty" asp-route-diamondId="@diamond.Id" asp-route-orderId="@Model.OrderResponse.Id" class="btn btn-primary">Create Warranty</a>
-                        }
-                    </td>
+                    @if (@Model.OrderResponse.Status == "Delivered")
+                    {
+                        <td>
+                            @if (diamond.WarrantyId != null)
+                            {
+                                @diamond.WarrantyId
+                            }
+                            else
+                            {
+                                <a asp-page="/PaperworkManagement/CreateDiamondWarranty" asp-route-diamondId="@diamond.Id" asp-route-orderId="@Model.OrderResponse.Id" class="btn btn-primary">Create Warranty</a>
+                            }
+                        </td> 
+                    }
                 </tr>
             }
             </tbody>
         </table>
         
-        
-    <h2>Create New Delivery</h2>
-        <form method="post">
-            <div class="form-group">
-                <label for="DeliveryManId">Delivery Man</label>
-                <select class="form-control" id="DeliveryManId" name="DeliveryRequest.DeliveryManId" required>
-                    @foreach (var deliveryMan in Model.DeliveryMen)
-                    {
-                        <option value="@deliveryMan.Id">@deliveryMan.FullName</option>
+        @if (Model.OrderResponse.Status != "Delivered")
+        {
+            <h2>Create New Delivery</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="DeliveryManId">Delivery Man</label>
+                    <select class="form-control" id="DeliveryManId" name="DeliveryRequest.DeliveryManId" required>
+                        @foreach (var deliveryMan in Model.DeliveryMen)
+                        {
+                            <option value="@deliveryMan.Id">@deliveryMan.FullName</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Location">Location</label>
+                    <input type="text" class="form-control" id="Location" name="DeliveryRequest.Location" required />
+                </div>
+                <div class="form-group">
+                    <label for="Status">Status</label>
+                    <select class="form-control" id="Status" name="DeliveryRequest.Status" required>
+                        <option value="In Progress" selected>In Progress</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            
+                <div class="d-flex flex-wrap">
+                    @if (!Model.OrderResponse.Deliveries.Any() || Model.OrderResponse.Deliveries.LastOrDefault().Status == "Completed")
+                    { 
+                        <button type="submit" class="btn btn-primary mr-2">Create Delivery</button>
                     }
-                </select>
+                    <div>
+                        <a asp-page="/Orders/OrderDetails" asp-route-id="@Model.OrderResponse.Id" class="btn btn-success mr-2">Return to Order details</a>
+                    </div>
+                </div>
+            </form>  
+        }
+        else
+        {
+            <div>
+                <a asp-page="/Orders/OrderDetails" asp-route-id="@Model.OrderResponse.Id" class="btn btn-success mr-2">Return to Order details</a>
             </div>
-            <div class="form-group">
-                <label for="Location">Location</label>
-                <input type="text" class="form-control" id="Location" name="DeliveryRequest.Location" required />
-            </div>
-            <div class="form-group">
-                <label for="Status">Status</label>
-                <select class="form-control" id="Status" name="DeliveryRequest.Status" required>
-                    <option value="In Progress" selected>In Progress</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Shipped">Shipped</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Create Delivery</button>
-        </form>    
+        } 
+        
     </div>
 
