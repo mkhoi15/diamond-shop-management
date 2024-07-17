@@ -44,6 +44,7 @@ public class UserServices : IUserServices
         
         var users = await query
             .OrderByDescending(u => u.CreatedAt)
+            .ThenByDescending(u => u.UpdatedAt)
             .Skip((page - 1) * limit)
             .Take(limit)
             .ToListAsync();
@@ -105,7 +106,7 @@ public class UserServices : IUserServices
         await _signInManager.SignOutAsync();
     }
 
-    public async Task<UserResponse> RegisterAsync(string username, string password, string fullname,
+    public async Task<UserResponse> RegisterAsync(string username, string password, string? fullname,
         string email, string? phone, Roles roles)
     {
         var user = await _userManager.FindByNameAsync(username);
