@@ -1,6 +1,10 @@
 using System.Security.Claims;
 using Azure;
+using BusinessObject.Enum;
+using BusinessObject.Models;
 using DTO.DeliveryDto;
+using DTO.OrderDto;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
@@ -11,15 +15,17 @@ public class DeliveryList : PageModel
 {
     private readonly IDeliveryServices _deliveryServices;
     private readonly IUserServices _userServices;
+    private readonly IOrderServices _orderServices;
 
-    public DeliveryList(IDeliveryServices deliveryServices, IUserServices userServices)
+    public DeliveryList(IDeliveryServices deliveryServices, IUserServices userServices, IOrderServices orderServices)
     {
         _deliveryServices = deliveryServices;
         _userServices = userServices;
+        _orderServices = orderServices;
     }
     
-    public List<DeliveryResponse> DeliveryResponses { get; set; }
 
+    public List<OrderResponse> Orders { get; set; }
     public async Task<IActionResult> OnGetAsync(CancellationToken cancellationToken)
     {
         try
@@ -28,12 +34,18 @@ public class DeliveryList : PageModel
 
             var user = await _userServices.GetUserByIdAsync(deliveryStaffId);
 
+            if (user.Role != Roles.Delivery.ToString())
+            {
+                return NotFound("You are not a delivery staff.");
+            }
+
             if (user is null)
             {
                 return NotFound("Delivery Staff not exist");
             }
             
-            DeliveryResponses = await _deliveryServices.GetDeliveriesByDeliveryManId(Guid.Parse(deliveryStaffId), cancellationToken);
+            var orders = await _orderServices.GetAllOrdersAsync();
+            Orders = orders.Where(order => order.Deliveries.Any(delivery => delivery.DeliveryManId == Guid.Parse(deliveryStaffId))).ToList();
 
             return Page();
 

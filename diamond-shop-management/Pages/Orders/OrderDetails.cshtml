@@ -47,7 +47,7 @@
                             {
                                 <a asp-page="/Delivery/CreateDelivery" asp-route-id="@Model.Order.Id" class="btn btn-primary m-2">Create Delivery</a>
                             }
-                            @if (Model.Order.Status == "Shipped")
+                            @if (Model.Order.Status == "Shipped" && (Model.Order.Deliveries.LastOrDefault().Status == "Completed"))
                             {
                                 <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@Model.Order.Id" class="btn btn-primary m-2">Update Delivery</a>
                             }
@@ -63,6 +63,11 @@
                             {
                                 <a asp-page="/Orders/OrderDeliveries" asp-route-orderId="@Model.Order.Id" class="btn btn-light mt-2">See Delivery Details</a>
                             }
+                            @if (Model.Order.Status == "Delivered")
+                            {
+                                <a asp-page="/Delivery/CreateDelivery" asp-route-id="@Model.Order.Id" class="btn btn-success m-2">Update Warranty</a>
+                            }
+                            
                         </div>
                     }
                     

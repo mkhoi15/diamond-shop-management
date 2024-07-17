@@ -54,7 +54,8 @@ public class OrderServices : IOrderServices
             orderId,
             cancellationToken,
             o => o.OrderDetails,
-            o => o.Deliveries
+            o => o.Deliveries,
+            o => o.Customer
             );
         
         return _mapper.Map<OrderResponse>(order);
@@ -140,5 +141,14 @@ public class OrderServices : IOrderServices
         
         return _mapper.Map<List<OrderResponse>>(orders);
         
+    }
+
+    public async Task<List<OrderResponse>> GetOrdersByDeliveryManId(Guid deliveryManId, CancellationToken cancellationToken)
+    {
+        var orders = await _orderRepository.FindAll()
+            .Where(o => o.Deliveries.Any(d => d.DeliveryManId == deliveryManId))
+            .ToListAsync(cancellationToken);
+
+        return _mapper.Map<List<OrderResponse>>(orders);
     }
 }

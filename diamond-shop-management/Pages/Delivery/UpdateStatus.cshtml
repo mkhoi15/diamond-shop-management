@@ -1,0 +1,78 @@
+@page
+@model diamond_shop_management.Pages.Delivery.UpdateStatus
+
+@{
+    ViewData["Title"] = "Update Status";
+}
+
+<style>
+    .container {
+        margin-top: 100px;
+    }
+    .card {
+        margin-bottom: 30px;
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+</style>
+
+@if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Delivery"))
+{
+    <div class="container">
+    <div class="card">
+        <div class="card-header">
+            Update Delivery Status
+        </div>
+        <div class="card-body">
+            <h6>Delivery ID: @Model.Delivery.Id</h6>
+            <h6>Location: @Model.Delivery.Location</h6>
+            <h6>Status: @Model.Delivery.Status</h6>
+            <h6>Created At: @Model.Delivery.CreatedAt.ToString("MM/dd/yyyy")</h6>
+
+            <form method="post">
+                <div class="form-group">
+                    <label for="Status">Status</label>
+                    <select class="form-control" id="Status" name="Status" asp-for="Status" required>
+                        <option value="In Progress" selected>In Progress</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+                @* <button type="submit" class="btn btn-primary">Update Status</button> *@
+                @if (Model.Order.Status != "Cancelled" && Model.Order.Status != "Delivered")
+                { 
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                }
+            </form>
+            
+            <div class="d-flex justify-content-between">
+                <a asp-page="/Delivery/DeliveryOrderDetails" asp-route-id="@Model.Delivery.OrderId" class="btn btn-secondary">Return to Order Detail</a>
+            </div>
+            
+            <div class="text-danger mt-2">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                { 
+                    <div>@error.ErrorMessage</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}
+else
+{
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-danger text-center">Access Deny</h1>
+            </div>
+        </div>
+    </div>
+}
+
+
