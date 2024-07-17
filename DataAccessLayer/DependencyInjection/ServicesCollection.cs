@@ -1,5 +1,6 @@
 using BusinessObject.Models;
 using DataAccessLayer.Abstraction;
+using DataAccessLayer.Interceptor;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ public static class ServicesCollection
 {
     public static IServiceCollection AddDataAccessLayer(this IServiceCollection collection, IConfiguration configuration)
     {
+        collection.AddSingleton<UpdateUserInterceptor>();
         collection.AddScoped<IUnitOfWork, UnitOfWork>();
         collection.AddScoped<IOrderDAO, OrderDAO>();
         collection.AddScoped<IOrderDetailDAO, OrderDetailDAO>();
@@ -23,9 +25,13 @@ public static class ServicesCollection
         collection.AddScoped<IMediaDAO, MediaDAO>();
         collection.AddScoped<IDeliveryDAO, DeliveryDAO>();
         AddIdentity(collection);
-        collection.AddDbContext<DiamondShopDbContext>(options =>
+        collection.AddDbContext<DiamondShopDbContext>((provider, options) =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            var updateInterceptor = provider.GetRequiredService<UpdateUserInterceptor>();
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                    sqlServerOptionsAction: builder
+                        => builder.MigrationsAssembly(typeof(DiamondShopDbContext).Assembly.FullName))
+                .AddInterceptors(updateInterceptor);
         });
         return collection;
     }
