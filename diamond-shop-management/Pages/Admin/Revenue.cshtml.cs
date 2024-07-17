@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using BusinessObject.Enum;
 using DTO.Revenue;
 using DTO.UserDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OfficeOpenXml;
@@ -9,6 +11,7 @@ using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.Admin;
 
+[Authorize(Roles = nameof(Roles.Admin))]
 public class Revenue : PageModel
 {
     private readonly IRevenueServices _revenueServices;
