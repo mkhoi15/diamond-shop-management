@@ -101,7 +101,7 @@ public class Create : PageModel
                 var isExistOrderdetail = await _orderDetailServices.GetOrderDetailByProductId(productId, cancellationToken);
                 if (isExistOrderdetail != null)
                 {
-                    ModelState.AddModelError("", "Product already exist in order.");
+                    ModelState.AddModelError("", "Product has been bought!!!");
                     return Page();
                 }
             }
