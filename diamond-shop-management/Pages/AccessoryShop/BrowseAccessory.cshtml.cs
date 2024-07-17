@@ -52,16 +52,16 @@ namespace diamond_shop_management.Pages.AccessoryShop
             CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();*/
         }
 
-        public async Task<IActionResult> OnPostAddToCart(Guid accessoryId, CancellationToken cancellationToken)
+        /*public async Task<IActionResult> OnPostAddToCart(Guid accessoryId, CancellationToken cancellationToken)
         {
-            /*var cart = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();*/
+            *//*var cart = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();*//*
 
             if (accessoryId != Guid.Empty)
             {
                 var accessory = await _accessoryServices.GetAccessoryByIdAsync(accessoryId, cancellationToken);
                 var accessoryResponse = _mapper.Map<AccessoryResponse>(accessory);
 
-                /*// Check if the accessory already exists in the cart
+                *//*// Check if the accessory already exists in the cart
                 var existingAccessory = cart.Accessories.FirstOrDefault(a => a.Accessory.Id == accessoryResponse.Id);
 
                 if (existingAccessory != null)
@@ -74,10 +74,10 @@ namespace diamond_shop_management.Pages.AccessoryShop
                 }
 
                 // Save the cart back to the session
-                HttpContext.Session.SetObjectAsJson("Cart", cart);*/
+                HttpContext.Session.SetObjectAsJson("Cart", cart);*//*
             }
 
             return RedirectToPage();
-        }
+        }*/
     }
 }
