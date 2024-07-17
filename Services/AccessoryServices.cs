@@ -117,12 +117,16 @@ namespace Services
 
             var accessoryResponse = _mapper.Map<IEnumerable<AccessoryResponse>>(accessories);
 
+            var totalItems = await _AccessoryRepository.FindAll()
+                                                       .Where(predicate)
+                                                       .CountAsync(cancellationToken);
+
             var pagedResult = new PagedResult<AccessoryResponse>
             {
                 Items = accessoryResponse,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalItems = GetAllAccessoriesAsync(cancellationToken).Count(),
+                TotalItems = totalItems,
             };
 
             return pagedResult;

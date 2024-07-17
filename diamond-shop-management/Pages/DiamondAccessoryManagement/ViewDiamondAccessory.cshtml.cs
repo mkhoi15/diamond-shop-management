@@ -38,12 +38,11 @@ namespace diamond_shop_management.Pages.DiamondAccessoryManagement
             {
                 PageNumber = pageNumber ?? 1;
 
-                Expression<Func<DiamondAccessory, bool>> searchPredicate = da =>
-                    (string.IsNullOrEmpty(Search) ||
-                    da.Diamond.Origin.Contains(Search) ||
-                    da.Diamond.Color.Contains(Search) ||
-                    da.Diamond.Cut.Contains(Search) ||
-                    da.Accessory.Name.Contains(Search));
+                Expression<Func<DiamondAccessory, bool>> searchPredicate = da => da.Diamond != null && da.Accessory != null &&(string.IsNullOrEmpty(Search) ||
+                da.Diamond.Origin.Contains(Search) ||
+                da.Diamond.Color.Contains(Search) ||
+                da.Diamond.Cut.Contains(Search) ||
+                da.Accessory.Name.Contains(Search));
 
                 var pageResult = await _diamondAccessoryService.GetDiamondAccessoriesAsync(
                     searchPredicate,
@@ -66,7 +65,7 @@ namespace diamond_shop_management.Pages.DiamondAccessoryManagement
                 ModelState.AddModelError(string.Empty, e.Message);
                 return;
             }
-            
+
         }
     }
 }
