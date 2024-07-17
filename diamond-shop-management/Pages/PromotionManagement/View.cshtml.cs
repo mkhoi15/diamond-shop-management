@@ -44,7 +44,7 @@ namespace diamond_shop_management.Pages.PromotionManagement
                 Promotions = await _promotionService.GetPromotionsByCondition(
                     p => p.IsDeleted != true
                     && (string.IsNullOrEmpty(Search) == true ? true : 
-                    p.Name == Search),
+                    p.Name!.Contains(Search)),
                     cancellationToken);
                 TotalItems = Promotions.Count();
                 Promotions = Promotions
