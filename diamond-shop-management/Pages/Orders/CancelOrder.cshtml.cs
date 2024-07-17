@@ -1,11 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using AutoMapper;
+using BusinessObject.Enum;
 using BusinessObject.Models;
 using DTO.DiamondAccessoryDto;
 using DTO.OrderDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
+
 
 namespace diamond_shop_management.Pages.Orders;
 
@@ -117,6 +120,15 @@ public class CancelOrder : PageModel
             {
                 ModelState.AddModelError("", "Failed to cancel the order.");
                 return Page();
+            }
+            
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            var user = await _userServices.GetUserByIdAsync(userId);
+
+            if (user.Role == Roles.User.ToString())
+            {
+                return RedirectToPage("/Orders/SelfOrder");
             }
 
             return RedirectToPage("/Orders/OrdersList");

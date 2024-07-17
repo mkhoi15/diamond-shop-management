@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DTO.DeliveryDto;
 using DTO.UserDto;
 
 namespace DTO.OrderDto;
@@ -31,6 +32,8 @@ public class OrderResponse
     public string? PhoneNumber { get; set; }
     
     public ICollection<OrderDetailResponse> OrderDetails { get; set; } = new List<OrderDetailResponse>();
+    
+    public ICollection<DeliveryResponse> Deliveries { get; set; } = new List<DeliveryResponse>();
     
     public UserResponse? Customer { get; set; }
 }
