@@ -55,7 +55,7 @@
                                     }
                                     else
                                     {
-                                        <img src="/images/Diamond.png" alt="Diamond Image">
+                                        <img src="" alt="No Image">
                                     }
                                 </div>
                                 <div class="detail-box">
@@ -64,9 +64,21 @@
                                     </h6>
                                     <h6>
                                         Price
-                                        <span>
+                                        <span
+                                            @if (diamond.Promotion != null && diamond.Promotion.EndDate >= DateTime.Now)
+                                            {
+                                                <text>style="text-decoration: line-through;"</text>
+                                            }
+                                        >
                                             $@diamond.Price
                                         </span>
+                                        @if (diamond.Promotion != null && diamond.Promotion.EndDate >= DateTime.Now)
+                                        {
+                                            <br>
+                                            <span>
+                                                $@(diamond.Price - (diamond.Price * (decimal)diamond.Promotion.DiscountRate))
+                                            </span>
+                                        }
                                     </h6>
                                 </div>
                                 <div class="new">
