@@ -95,11 +95,11 @@
                                         <div>Cut: @diamond.Cut</div>
                                         <div>Clarity: @diamond.Clarity</div>
                                         <div>Weight: @diamond.Weight carats</div>
-                                        <div>Price: @diamond.Price $</div>
+                                        <div>Price: @($"{diamond.Price:F2}") $</div>
                                         @if (@diamond != null && diamond.Promotion is not null && diamond.Promotion.EndDate >= DateTime.Now)
                                         {
                                             <div>Promotion: @(diamond.Promotion.DiscountRate * 100) %</div>
-                                            <div>Discounted Price: @(diamond.Price - ((decimal)diamond.Promotion.DiscountRate * diamond.Price)) $</div>
+                                            <div>Discounted Price: @($"{diamond.Price - ((decimal)diamond.Promotion.DiscountRate * diamond.Price):F2}") $</div>
                                         }
                                         <div>Status: @(diamond.IsSold.HasValue && diamond.IsSold.Value ? "Sold" : "Available")</div>
                                     </div>
