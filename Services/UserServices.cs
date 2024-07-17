@@ -271,4 +271,33 @@ public class UserServices : IUserServices
 
         return response;
     }
+
+    public async Task<List<UserResponse>> GetAllCustomerAsync(CancellationToken cancellationToken)
+    {
+        var deliveryMenRole = Roles.User.ToString();
+
+        // First, get all users
+        var users = await _userManager.Users
+            .Where(u => u.IsDeleted == false)
+            .ToListAsync(cancellationToken);
+
+        // Then, filter users based on their roles
+        var deliveryMen = new List<User>();
+        foreach (var user in users)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Contains(deliveryMenRole))
+            {
+                deliveryMen.Add(user);
+            }
+        }
+
+        var response = deliveryMen.Select(user => {
+            var userResponse = _mapper.Map<UserResponse>(user);
+            userResponse.Role = deliveryMenRole;
+            return userResponse;
+        }).ToList();
+
+        return response;
+    }
 }

@@ -5,6 +5,7 @@ using BusinessObject.Enum;
 using BusinessObject.Models;
 using DTO.DiamondAccessoryDto;
 using DTO.OrderDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
@@ -12,6 +13,8 @@ using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.Orders;
 
+
+[Authorize(Roles = $"{nameof(Roles.Manager)},{nameof(Roles.User)}")]
 public class CancelOrder : PageModel
 {
     private readonly IOrderServices _orderServices;
