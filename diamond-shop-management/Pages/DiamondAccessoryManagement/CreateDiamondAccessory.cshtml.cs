@@ -51,6 +51,8 @@ namespace diamond_shop_management.Pages.DiamondAccessoryManagement
                 await _diamondAccessoryService.CreateDiamondAccessoryAsync(DiamondAccessory);
 
                 Message = "DiamondAccessory created successfully!";
+                ModelState.AddModelError(string.Empty, Message);
+                await Task.Delay(3000, cancellationToken);
                 return RedirectToPage("/DiamondAccessoryManagement/ViewDiamondAccessory");
             }
             catch (Exception e)

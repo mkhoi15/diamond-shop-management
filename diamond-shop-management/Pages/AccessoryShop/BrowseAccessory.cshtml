@@ -17,6 +17,30 @@
                     <a asp-page="/Card/Card" class="btn btn-success">Go To Cart</a>
                 </div>
             </div>
+
+            <form method="get">
+                <div class="row mt-5">
+                    <div class="col-md-4">
+                        <input type="text" id="nameFilter" class="form-control" placeholder="Name" asp-for="Search" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" id="priceFilter" class="form-control" placeholder="Price" asp-for="SearchPrice" />
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="promotionFilter" asp-for="ShowOnlyPromotions" />
+                            <label class="form-check-label" for="promotionFilter">Only Show Promotions</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-primary ml-2" onclick="filterAccessory()">Search</button>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-secondary" onclick="clearFilters()">Clear</button>
+                    </div>
+                </div>
+            </form>
+             
             @if (Model.Accessories == null || !Model.Accessories.Any())
             {
                 <div class="alert alert-info" role="alert" style="margin-top:2%">
@@ -29,7 +53,7 @@
                     @foreach (var accessory in Model.Accessories)
                     {
                         <div class="col-sm-6 col-md-4 col-lg-3">
-                            <div class="box">
+                            <div class="box d-flex flex-column justify-content-around" style="height: 95%">
                                 <div class="img-box">
                                     @if (@accessory.Media is not null)
                                     {
@@ -42,7 +66,12 @@
                                 </div>
                                 <div>
                                     <div>Name: @accessory.Name</div>
-                                    <div>Price: @accessory.Price</div>
+                                    <div>Price: @($"{accessory.Price:N}") $</div>
+                                    @if (accessory != null && accessory.Promotion is not null && accessory.Promotion.EndDate >= DateTime.Now)
+                                    {
+                                        <div>Promotion: @(accessory.Promotion.DiscountRate * 100) %</div>
+                                        <div>Discounted Price: @($"{accessory.Price - ((decimal)accessory.Promotion.DiscountRate * accessory.Price):N}") $</div>
+                                    }
                                 </div>
                                 <div>
                                     <form method="post" asp-page-handler="AddToCart">
@@ -61,7 +90,7 @@
                         @if (Model.PageNumber > 1)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="./BrowseAccessory" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                                <a class="page-link" asp-page="./BrowseAccessory" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-search="@Model.Search" asp-route-searchPrice="@Model.SearchPrice">Previous</a>
                             </li>
                         }
 
@@ -72,7 +101,7 @@
                         @if (Model.PageNumber < Model.TotalPages)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="./BrowseAccessory" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                                <a class="page-link" asp-page="./BrowseAccessory" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-search="@Model.Search" asp-route-searchPrice="@Model.SearchPrice">Next</a>
                             </li>
                         }
                     </ul>
@@ -81,3 +110,21 @@
         </div>
     </section>
 </div>
+@section Scripts {
+    <script>
+        function filterAccessory() {
+            var search = document.getElementById("nameFilter").value;
+            var searchPrice = document.getElementById("priceFilter").value;
+            var showOnlyPromotions = document.getElementById("promotionFilter").checked;
+            var url = '@Url.Page("/AccessoryShop/BrowseAccessory")' + '?Search=' + encodeURIComponent(search) + '&SearchPrice=' + encodeURIComponent(searchPrice) + '&ShowOnlyPromotions=' + showOnlyPromotions;
+            window.location.href = url;
+        }
+
+        function clearFilters() {
+            document.getElementById("nameFilter").value = "";
+            document.getElementById("priceFilter").value = "";
+            document.getElementById("promotionFilter").checked = false;
+            filterAccessory();
+        }
+    </script>
+}

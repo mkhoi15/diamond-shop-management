@@ -19,6 +19,7 @@
                         @Model.Message
                     </div>
                 }
+
                 <div class="form-group">
                     <label asp-for=" AccessoryRequest.Name "></label>
                     <input asp-for="AccessoryRequest.Name" class="form-control" />
@@ -28,6 +29,12 @@
                     <label asp-for="AccessoryRequest.Price"></label>
                     <input asp-for="AccessoryRequest.Price" class="form-control" />
                     <span asp-validation-for="AccessoryRequest.Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AccessoryRequest.PromotionId" class="control-label">Promotion</label>
+                    <select asp-for="AccessoryRequest.PromotionId" class="form-control" asp-items="ViewBag.Promotions">
+                        <option value="">Select Promotion</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label asp-for="ImageFile">Image</label>

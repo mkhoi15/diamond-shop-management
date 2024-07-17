@@ -18,7 +18,7 @@
                     <div class="img-box">
                         @if (Model.Accessory != null && Model.Accessory.Media != null)
                         {
-                            <img src="~/@Model.Accessory.Media.Url" alt="Accessory Image" width="30%">
+                            <img src="~/@Model.Accessory.Media.Url" alt="Accessory Image" width="auto">
                         }
                         else
                         {
@@ -27,7 +27,15 @@
                     </div>
                     <div class="text-center">
                         <div>Name: @Model.Accessory.Name</div>
-                        <div>Price: @Model.Accessory.Price</div>
+                        <div>Price: @Model.Accessory.Price $</div>
+                        @if (@Model.Accessory != null && Model.Accessory.Promotion is not null && Model.Accessory.Promotion.EndDate!.Value >= DateTime.Now)
+                        {
+                            <div>Promotion: @(Model.Accessory.Promotion.DiscountRate * 100) %</div>
+                        }
+                        else
+                        {
+                            <div>No Promotion</div>
+                        }
                         @if (!string.IsNullOrEmpty(Model.Message))
                         {
                             <div style="color: red" id="error-message">@Model.Message</div>

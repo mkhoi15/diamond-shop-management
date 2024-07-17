@@ -27,12 +27,23 @@ namespace diamond_shop_management.Pages.AccessoryShop
         public int TotalItems { get; set; }
         public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
         public DTO.Card CartItems { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string SearchPrice { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public bool ShowOnlyPromotions { get; set; }
 
         public async Task OnGetAsync(int? pageNumber, CancellationToken cancellationToken)
         {
             PageNumber = pageNumber ?? 1;
 
-            var pagedResult = await _accessoryServices.GetAccessoryShopAsync(a => a.IsDeleted != true, PageNumber, PageSize, cancellationToken);
+            var normalizedSearchPrice = SearchPrice?.Replace(",", "").Trim();
+            var pagedResult = await _accessoryServices.GetAccessoryShopAsync(a => a.IsDeleted != true &&
+                         (string.IsNullOrEmpty(Search) || a.Name.Contains(Search)) &&
+                         (string.IsNullOrEmpty(SearchPrice) || a.Price.ToString().Contains(normalizedSearchPrice)) &&
+                         (!ShowOnlyPromotions || a.PromotionId != null),
+                         PageNumber, PageSize, cancellationToken);
 
             Accessories = _mapper.Map<List<AccessoryResponse>>(pagedResult.Items);
             TotalItems = pagedResult.TotalItems;

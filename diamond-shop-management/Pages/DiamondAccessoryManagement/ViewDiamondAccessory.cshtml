@@ -8,53 +8,77 @@
     <section class="shop_section layout_padding">
         <div class="container">
             <div class="text-right mb-3">
-                <a asp-page="/DiamondAccessoryManagement/CreateDiamondAccessory" class="btn btn-primary">Create New DiamondAccessory</a>
+                <a asp-page="/DiamondAccessoryManagement/CreateDiamondAccessory" class="btn btn-primary">Create New Diamond Accessory</a>
             </div>
+
+            <form method="get">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="input-group col-md-4">
+                        <input type="text" id="searchFilter" class="form-control" placeholder="Search" asp-for="Search">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-primary" onclick="filterDiamondAccessory()">Search</button>
+                        </div>
+                    </div>
+                    <div class="ml-3">
+                        <button type="button" class="btn btn-secondary" onclick="clearFilters()">Clear Filters</button>
+                    </div>
+                </div>
+            </form>
+
             @if (!string.IsNullOrEmpty(Model.Message))
             {
-                <div class="alert alert-danger">@Model.Message</div>
+                <div class="alert alert-danger" id="message" role="alert">
+                    @Model.Message
+                </div>
             }
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Diamond</th>
-                        <th>Accessory Name</th>
-                        <th>IsDeleted</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.DiamondAccessories)
-                    {
+            @if (Model.DiamondAccessories == null || !Model.DiamondAccessories.Any())
+            {
+                <div class="alert alert-info" role="alert">
+                    There are no diamond accessories.
+                </div>
+            }
+            else
+            {
+                <table class="table mt-3">
+                    <thead>
                         <tr>
-                            <td>@item.DiamondDetails</td>
-                            <td>@item.AccessoryName</td>
-                            <td>@item.IsDeleted</td>
-                            <td>
-                                <a asp-page="/DiamondAccessoryManagement/DiamondAccessoryDetail" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">Detail</a>
-                                <a asp-page="/DiamondAccessoryManagement/UpdateDiamondAccessory" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1">Update</a>
-                                <a asp-page="/DiamondAccessoryManagement/DeleteDiamondAccessory" asp-route-id="@item.Id" class="btn btn-danger btn-sm me-1">Delete</a>
-                            </td>
+                            <th>Diamond</th>
+                            <th>Accessory</th>
+                            <th>Actions</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var diamondAccessory in Model.DiamondAccessories)
+                        {
+                            <tr>
+                                <td>@diamondAccessory.DiamondDetails</td>
+                                <td>@diamondAccessory.AccessoryName</td>
+                                <td>
+                                    <a asp-page="/DiamondAccessoryManagement/DiamondAccessoryDetail" asp-route-id="@diamondAccessory.Id" class="btn btn-info btn-sm me-1">Detail</a>
+                                    <a asp-page="/DiamondAccessoryManagement/UpdateDiamondAccessory" asp-route-id="@diamondAccessory.Id" class="btn btn-warning btn-sm me-1">Update</a>
+                                    <a asp-page="/DiamondAccessoryManagement/DeleteDiamondAccessory" asp-route-id="@diamondAccessory.Id" class="btn btn-danger btn-sm me-1">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
             <div class="container">
                 <nav aria-label="Page navigation" style="margin-top: 2%">
                     <ul class="pagination justify-content-center">
                         @if (Model.PageNumber > 1)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="./ViewDiamondAccessory" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                                <a class="page-link" asp-page="/DiamondAccessoryManagement/ViewDiamondAccessory" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-search="@Model.Search">Previous</a>
                             </li>
                         }
                         <li class="page-item active">
-                            <a class="page-link" asp-page="./ViewDiamondAccessory" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
+                            <a class="page-link" asp-page="/DiamondAccessoryManagement/ViewDiamondAccessory" asp-route-pageNumber="@Model.PageNumber">@Model.PageNumber</a>
                         </li>
                         @if (Model.PageNumber < Model.TotalPages)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-page="./ViewDiamondAccessory" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                                <a class="page-link" asp-page="/DiamondAccessoryManagement/ViewDiamondAccessory" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-search="@Model.Search">Next</a>
                             </li>
                         }
                     </ul>
@@ -65,5 +89,16 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function filterDiamondAccessory() {
+            var search = document.getElementById("searchFilter").value;
+            var url = '@Url.Page("/DiamondAccessoryManagement/ViewDiamondAccessory")' + '?Search=' + encodeURIComponent(search);
+            window.location.href = url;
+        }
+
+        function clearFilters() {
+            document.getElementById("searchFilter").value = "";
+            filterDiamondAccessory();
+        }
+    </script>
 }

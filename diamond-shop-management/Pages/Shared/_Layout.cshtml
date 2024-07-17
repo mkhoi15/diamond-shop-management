@@ -69,6 +69,7 @@
                                 else if ((User.Identity?.IsAuthenticated ?? false) && (User.IsInRole("User")))
                                 {
                                     <a asp-page="/DiamondShop/BrowseDiamond">Shop</a>
+                                    <a asp-page="/AccessoryShop/BrowseAccessory">Accessory</a>
                                     <a asp-page="/Orders/SelfOrder">Orders</a>
                                 }
                                 else
