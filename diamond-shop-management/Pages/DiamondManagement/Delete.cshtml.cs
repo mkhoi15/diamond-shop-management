@@ -86,6 +86,15 @@ namespace diamond_shop_management.Pages.DiamondManagement
                     return Page();
                 }
 
+                if (Diamond.IsSold == true)
+                {
+                    Message = "Diamond is already sold";
+                    ModelState.AddModelError(string.Empty, Message);
+                    Diamond.Media = media;
+                    TempData["Media"] = jsonMedia;
+                    return Page();
+                }    
+
                 if (media != null)
                 {
                     media.IsDeleted = true;

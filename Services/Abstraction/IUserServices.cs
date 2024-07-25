@@ -20,4 +20,5 @@ public interface IUserServices
     Task<bool> ResetPassword(string email, string token, string newPassword);
     Task ForgotPassword(string username);
     Task<List<UserResponse>> GetDeliveryMenAsync(CancellationToken cancellationToken);
+    Task<List<UserResponse>> GetAllCustomerAsync(CancellationToken cancellationToken);
 }

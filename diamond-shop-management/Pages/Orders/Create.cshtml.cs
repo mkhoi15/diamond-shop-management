@@ -1,14 +1,12 @@
 using System.Security.Claims;
 using AutoMapper;
-using Azure;
-using BusinessObject.Models;
+using BusinessObject.Enum;
 using DataAccessLayer.Abstraction;
 using DTO.DiamondAccessoryDto;
-using DTO.Enum;
 using DTO.OrderDto;
+using DTO.UserDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Repositories.Abstraction;
 using Services.Abstraction;
 using Services.Helpers;
 
@@ -17,20 +15,18 @@ namespace diamond_shop_management.Pages.Orders;
 public class Create : PageModel
 {
     private readonly IOrderServices _orderServices;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
     private readonly IDiamondAccessoryServices _diamondAccessoryServices;
     private readonly IDiamondServices _diamondServices;
     private readonly IOrderDetailServices _orderDetailServices;
+    private readonly IUserServices _userServices;
 
-    public Create(IOrderServices orderServices, IUnitOfWork unitOfWork, IMapper mapper, IDiamondAccessoryServices diamondAccessoryServices, IDiamondServices diamondServices, IOrderDetailServices orderDetailServices)
+    public Create(IOrderServices orderServices, IUnitOfWork unitOfWork, IMapper mapper, IDiamondAccessoryServices diamondAccessoryServices, IDiamondServices diamondServices, IOrderDetailServices orderDetailServices, IUserServices userServices)
     {
         _orderServices = orderServices;
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
         _diamondAccessoryServices = diamondAccessoryServices;
         _diamondServices = diamondServices;
         _orderDetailServices = orderDetailServices;
+        _userServices = userServices;
     }
 
 
@@ -43,9 +39,15 @@ public class Create : PageModel
     
     public List<Guid> ProductIds { get; set; } = new List<Guid>();
     public List<Guid> DiamondIds { get; set; } = new List<Guid>();
+    
+    public List<UserResponse> Customers { get; set; } = new List<UserResponse>();
+    
+    [BindProperty]
+    public string? CusId { get; set; }
 
-    public async Task<IActionResult> OnGet()
+    public async Task<IActionResult> OnGet(CancellationToken cancellationToken)
     {
+        Customers = await _userServices.GetAllCustomerAsync(cancellationToken);
         var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         if (customerId is null)
         {
@@ -90,7 +92,19 @@ public class Create : PageModel
         {
             CartItems = HttpContext.Session.GetObjectFromJson<DTO.Card>("Cart") ?? new DTO.Card();
             ProductIds = CartItems.Diamond.Select(d => _diamondAccessoryServices.GetProductByDiamondId(d.Id).Result.Id).ToList();
-            var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            string? customerId;
+            
+            if (User.IsInRole(Roles.User.ToString()))
+            {
+                customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            }
+            else
+            {
+                customerId = CusId;
+            }
+            
+             //customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (customerId is null)
             {
                 return RedirectToPage("/User/Login");
@@ -177,5 +191,16 @@ public class Create : PageModel
         return RedirectToPage("/Card/Card");
         
     }
+    
+    public async Task<IActionResult> OnGetSearchCustomerAsync(string email, CancellationToken cancellationToken)
+    {
+        Customers = await _userServices.GetAllCustomerAsync(cancellationToken);
+        if (!string.IsNullOrEmpty(email))
+        { 
+            Customers = Customers.Where(c => c.Email.Contains(email)).ToList();
+        }
+        return Page();
+    }
+    
     
 }

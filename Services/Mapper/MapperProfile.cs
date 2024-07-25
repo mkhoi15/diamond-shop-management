@@ -49,7 +49,6 @@ public class MapperProfile : Profile
         CreateMap<DiamondAccessory, DiamondAccessoryResponse>()
             .ForMember(dest => dest.DiamondDetails, opt => opt.MapFrom(src => $"{src.Diamond.Origin}, {src.Diamond.Color}, {src.Diamond.Cut}"))
             .ForMember(dest => dest.AccessoryName, opt => opt.MapFrom(src => src.Accessory.Name))
-            .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.OrderDetail.Order.Customer.FullName))
             .ReverseMap();
         CreateMap<DiamondAccessoryResponse, DiamondAccessoryRequest>()
             .ReverseMap();

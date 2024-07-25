@@ -12,7 +12,6 @@
         public string? Weight { get; set; }
         public Guid AccessoryId { get; set; }
         public string AccessoryName { get; set; }
-        public string CustomerName { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using DTO;
 using DTO.AccessoryDto;
 using DTO.DiamondAccessoryDto;
 using Microsoft.EntityFrameworkCore;
+using Repositories;
 using Repositories.Abstraction;
 using Services.Abstraction;
 using System.Linq.Expressions;
@@ -140,7 +141,10 @@ namespace Services
 
             var diamondAccessoryResponses = _mapper.Map<IEnumerable<DiamondAccessoryResponse>>(diamondAccessories);
 
-            var totalItems = await _diamondAccessoryRepository.FindAll().CountAsync(cancellationToken);
+            var totalItems = await _diamondAccessoryRepository.FindAll()
+                                                       .Where(predicate)
+                                                       .CountAsync(cancellationToken);
+
 
             var pagedResult = new PagedResult<DiamondAccessoryResponse>
             {
@@ -179,7 +183,6 @@ namespace Services
             }
             response.DiamondDetails = $"{diamondAccessory.Diamond.Origin}, {diamondAccessory.Diamond.Color}, {diamondAccessory.Diamond.Cut}";
             response.AccessoryName = diamondAccessory.Accessory.Name;
-            response.CustomerName = diamondAccessory.OrderDetail?.Order?.Customer.FullName;
             return response;
         }
     }

@@ -1,14 +1,17 @@
+using BusinessObject.Enum;
 using BusinessObject.Models;
 using DTO.DeliveryDto;
 using DTO.DiamondDto;
 using DTO.OrderDto;
 using DTO.UserDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Abstraction;
 
 namespace diamond_shop_management.Pages.Delivery;
 
+[Authorize(Roles = nameof(Roles.Manager))]
 public class CreateDelivery : PageModel
 {
     private readonly IOrderServices _orderServices;

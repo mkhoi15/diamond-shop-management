@@ -8,21 +8,42 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Create Order</h2>
 
+
     <form method="post">
+
+        @if (User.IsInRole("Manager"))
+        {
+            <div class="form-group">
+                @* <label for="customerEmail" class="control-label">Search Customer by Email</label> *@
+                @* <input type="text" id="customerEmail" class="form-control" placeholder="Enter customer email" /> *@
+                @* <button type="button" class="btn btn-primary mt-2" onclick="searchCustomer()">Search</button> *@
+                @* <select id="customerSelect" class="form-control mt-2" name="OrderRequest.CustomerId"> *@
+                @*     <option value="">Select Customer</option> *@
+                @*     @foreach (var customer in Model.Customers) *@
+                @*     { *@
+                @*         <option value="@customer.Id">@customer.Email</option> *@
+                @*     } *@
+                @* </select> *@
+                <input type="text" id="emailSearch" onkeyup="filterEmails()" placeholder="Search for emails..">
+                <select id="emailComboBox" size="10" asp-for="CusId">
+                    @foreach (var customer in Model.Customers)
+                    {
+                        <option value="@customer.Id">@customer.Email</option>
+                    }
+                </select>
+
+            </div>
+        }
+
         <div class="form-group">
             <label asp-for="OrderRequest.Address" class="control-label"></label>
-            <input asp-for="OrderRequest.Address" class="form-control" placeholder="Enter address" />
+            <input asp-for="OrderRequest.Address" class="form-control" placeholder="Enter address" required/>
             <span asp-validation-for="OrderRequest.Address" class="text-danger"></span>
         </div>
 
-        @* <div class="form-group" hidden="hidden"> *@
-        @*     <label asp-for="OrderRequest.Date" class="control-label"></label> *@
-        @*     <input asp-for="OrderRequest.Date" class="form-control" type="datetime-local" /> *@
-        @*     <span asp-validation-for="OrderRequest.Date" class="text-danger"></span> *@
-        @* </div> *@
-        
+
         <!-- Hidden field for Date -->
-        <input type="hidden" asp-for="OrderRequest.Date" value="@Model.OrderRequest.Date.ToString("yyyy-MM-ddTHH:mm:ss")" />
+        <input type="hidden" asp-for="OrderRequest.Date" value="@Model.OrderRequest.Date.ToString("yyyy-MM-ddTHH:mm:ss")"/>
 
         <table class="table table-hover mt-4">
             <thead class="thead-light">
@@ -64,26 +85,46 @@
         <div class="form-group mt-4">
             <label class="font-weight-bold">Total Price: $@Model.Total</label>
         </div>
-        
+
         <!-- Hidden field for TotalPrice -->
-        <input type="hidden" asp-for="OrderRequest.TotalPrice" />
-        
+        <input type="hidden" asp-for="OrderRequest.TotalPrice"/>
+
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-primary btn-lg">Place Order</button>
         </div>
     </form>
-    
+
     <form method="post" asp-page-handler="CancelBooking">
-            <div class="text-center mt-2">
-                <button type="submit" class="btn btn-danger btn-lg">Cancel</button>
-            </div>
-        </form>
-    
+        <div class="text-center mt-2">
+            <button type="submit" class="btn btn-danger btn-lg">Cancel</button>
+        </div>
+    </form>
+
     <div class="text-danger mt-2">
         @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
         {
             <div>@error.ErrorMessage</div>
         }
     </div>
-    
+
 </div>
+
+@section Scripts {
+    <script>
+            function filterEmails() {
+                var input, filter, select, option, i;
+                input = document.getElementById("emailSearch");
+                filter = input.value.toLowerCase();
+                select = document.getElementById("emailComboBox");
+                option = select.getElementsByTagName("option");
+                for (i = 0; i < option.length; i++) {
+                    txtValue = option[i].textContent || option[i].innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        option[i].style.display = "";
+                    } else {
+                        option[i].style.display = "none";
+                    }
+                }
+            }
+        </script>
+}

@@ -1,62 +1,75 @@
-@page
-@model diamond_shop_management.Pages.Delivery.DeliveryList
+    @page
+    @model diamond_shop_management.Pages.Delivery.DeliveryList
 
-@{
-    ViewData["Title"] = "Delivery List";
-}
+    @{
+        ViewData["Title"] = "Delivery List";
+    }
 
-<style>
-    .container {
-        margin-top: 100px;
-    }
-    h1, h2 {
-        margin-bottom: 30px;
-    }
-    table {
-        margin-bottom: 50px;
-    }
-    .table th, .table td {
-        text-align: center;
-        vertical-align: middle;
-    }
-</style>
-
-<div class="container">
-    <h2>Deliveries</h2>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>No.</th>
-            <th>Order ID</th>
-            <th>Location</th>
-            <th>Status</th>
-            <th>Created At</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @if (Model.DeliveryResponses != null && Model.DeliveryResponses.Any())
-        {
-            foreach (var delivery in Model.DeliveryResponses)
+    <style>
+        .container {
+            margin-top: 100px;
+        }
+        h1, h2 {
+            margin-bottom: 30px;
+        }
+        table {
+            margin-bottom: 50px;
+        }
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+@if ((User.Identity?.IsAuthenticated ?? false &&  User.IsInRole("Delivery")))
+{
+    <div class="container">
+        <h2>Orders</h2>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>Customer Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model.Orders != null && Model.Orders.Any())
+            {
+                foreach (var order in Model.Orders)
+                {
+                    <tr>
+                        <td>@(Model.Orders.IndexOf(order) + 1)</td>
+                        <td>@order.Customer?.FullName</td>
+                        <td>@order.Address</td>
+                        <td>@order.Customer?.PhoneNumber</td>
+                        <td>@order.TotalPrice</td>
+                        <td>@order.Status</td>
+                        <td>@order.Date.ToString("MM/dd/yyyy")</td>
+                        <td>
+                            <a asp-page="/Delivery/DeliveryOrderDetails" asp-route-id="@order.Id" class="btn btn-primary">Details</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@(Model.DeliveryResponses.IndexOf(delivery) + 1)</td>
-                    <td>@delivery.OrderId</td>
-                    <td>@delivery.Location</td>
-                    <td>@delivery.Status</td>
-                    <td>@delivery.CreatedAt.ToString("MM/dd/yyyy")</td>
-                    <td>
-                        <a asp-page="/Delivery/Details" asp-route-id="@delivery.Id" class="btn btn-primary">Details</a>
-                    </td>
+                    <td colspan="6">No orders found.</td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="6">No deliveries found.</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="container">
+        <h1>Access Denied</h1>
+    </div>
+}
+    
